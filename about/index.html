@@ -106,7 +106,7 @@
       display: inline-block;
     }
 
-    .typing-cursor{
+    /* .typing-cursor{
       display: inline-block;
       width: 8px;
       height: 8px;
@@ -120,12 +120,18 @@
     @keyframes blink{
       0%, 50% { opacity: 1; }
       51%, 100% { opacity: 0; }
-    }
+    } */
 
     .hero-nav ul{
       list-style: none;
       padding: 0;
       margin: 0;
+      position: relative;
+    }
+
+    .hero-nav li{
+      position: relative;
+      padding-left: 0;
     }
 
     .hero-nav a{
@@ -135,15 +141,29 @@
       line-height: 20px;
       font-weight: 400;
       letter-spacing: .5px;
+      transition: opacity 0.3s ease;
     }
 
     .hero-nav a.active{
-      font-weight: 600;
-      font-style: italic;
+      font-weight: 500;
     }
 
     .hero-nav {
       margin-bottom: 0;
+    }
+
+    /* Nav indicator circle */
+    .nav-indicator{
+      position: absolute;
+      left: -30px;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      background: #000;
+      border-radius: 50%;
+      transform: translate(0, 2px);
+      transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+      pointer-events: none;
     }
 
     .hero-tagline {
@@ -153,6 +173,11 @@
       text-align: right;
       white-space: pre-line;
       margin-top: 0;
+      min-height: 2.4em;
+    }
+
+    .hero-tagline .typed-line {
+      display: inline;
     }
 
     /* =========================
@@ -175,7 +200,33 @@
 }
 
 /* column wrappers */
-.gallery-col{ display: flex; flex-direction: column; gap: 45px; }
+.gallery-col{
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+/* Animation for left column (appears first) */
+.gallery-col:nth-child(1){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.3s;
+}
+
+/* Animation for right column (appears second) */
+.gallery-col:nth-child(2){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.6s;
+}
+
+/* Keyframe animation */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* tiles */
 .gallery-item{
@@ -514,9 +565,10 @@
       </div>
       <nav class="hero-nav" aria-label="Primary">
         <ul>
-          <li><a href="../index.html">→ i design products</a></li>
-          <li><a href="../archive/index.html">→ archive</a></li>
-          <li><a href="index.html" class="active">→ who am i? :p</a></li>
+          <div class="nav-indicator"></div>
+          <li><a href="../index.html">i design products</a></li>
+          <li><a href="../archive/index.html">archive</a></li>
+          <li><a href="index.html" class="active">who am i? :p</a></li>
         </ul>
       </nav>
       <div class="hero-tagline">
@@ -536,10 +588,10 @@
           <div>
             <div class="education-title">Education</div>
             <div class="education-school">New York University</div>
-            <div class="education-degree">BFA, Interactive Media Arts (STEM)</div>
+            <div class="education-degree">BFA, Interactive Media Arts</div>
             <div class="education-minor">Minor in Web Programming and Development</div>
           </div>
-          <div class="education-class">GPA: 3.8/4.0<br>Class of 2026</div>
+          <div class="education-class">Class of 2026</div>
         </div>
 
         <!-- Skills block -->
@@ -602,7 +654,7 @@
           <div class="about-text-top">Bento UI lover, pixel perfect designer, photographer, bedroom DJ
             and… an INFP Scorpio : )</div>
           <div class="about-bottom">
-            <div class="about-text-bottom">more about me</div>
+            <!-- <div class="about-text-bottom">more about me</div> -->
             <div class="about-icons">
               <a href="https://www.instagram.com/mmfi1ms/" target="_blank">
                 <img src="ig.png" alt="Instagram">
@@ -668,6 +720,62 @@
         this.classList.add('active');
       });
     });
+
+    // Nav indicator animation
+    (function navIndicator(){
+      const indicator = document.querySelector('.nav-indicator');
+      const navLinks = document.querySelectorAll('.hero-nav li');
+
+      if(!indicator || navLinks.length === 0) return;
+
+      function updateIndicator(animate = false){
+        const activeLink = document.querySelector('.hero-nav a.active');
+        if(activeLink && activeLink.parentElement){
+          const li = activeLink.parentElement;
+          const topOffset = li.offsetTop;
+          const linkHeight = activeLink.offsetHeight;
+          const circleOffset = (linkHeight / 2) - 8; // Center circle (8px is half of 16px)
+          const targetTop = topOffset + circleOffset;
+
+          if(animate){
+            // Get previous position from sessionStorage
+            const prevTop = sessionStorage.getItem('navIndicatorTop');
+            if(prevTop !== null){
+              // Start from previous position
+              indicator.style.transition = 'none';
+              indicator.style.top = prevTop + 'px';
+              // Force reflow
+              indicator.offsetHeight;
+              // Animate to new position
+              indicator.style.transition = 'all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
+            }
+          }
+
+          indicator.style.top = targetTop + 'px';
+          // Store current position
+          sessionStorage.setItem('navIndicatorTop', targetTop);
+        }
+      }
+
+      // Check if coming from another page
+      const fromNav = sessionStorage.getItem('navTransition');
+      if(fromNav === 'true'){
+        updateIndicator(true);
+        sessionStorage.removeItem('navTransition');
+      } else {
+        updateIndicator(false);
+      }
+
+      // Store transition flag on nav link clicks
+      document.querySelectorAll('.hero-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          sessionStorage.setItem('navTransition', 'true');
+        });
+      });
+
+      // Update on window resize
+      window.addEventListener('resize', () => updateIndicator(false));
+    })();
 
     // Custom cursor
     (function cursor(){
