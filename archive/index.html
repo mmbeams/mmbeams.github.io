@@ -106,7 +106,7 @@
       display: inline-block;
     }
 
-    .typing-cursor{
+    /* .typing-cursor{
       display: inline-block;
       width: 8px;
       height: 8px;
@@ -120,12 +120,18 @@
     @keyframes blink{
       0%, 50% { opacity: 1; }
       51%, 100% { opacity: 0; }
-    }
+    } */
 
     .hero-nav ul{
       list-style: none;
       padding: 0;
       margin: 0;
+      position: relative;
+    }
+
+    .hero-nav li{
+      position: relative;
+      padding-left: 0;
     }
 
     .hero-nav a{
@@ -135,15 +141,29 @@
       line-height: 20px;
       font-weight: 400;
       letter-spacing: .5px;
+      transition: opacity 0.3s ease;
     }
 
     .hero-nav a.active{
-      font-weight: 600;
-      font-style: italic;
+      font-weight: 500;
     }
 
     .hero-nav {
       margin-bottom: 0;
+    }
+
+    /* Nav indicator circle */
+    .nav-indicator{
+      position: absolute;
+      left: -30px;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      background: #000;
+      border-radius: 50%;
+      transform: translate(0, 2px);
+      transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+      pointer-events: none;
     }
 
     .hero-tagline {
@@ -153,6 +173,11 @@
       text-align: right;
       white-space: pre-line;
       margin-top: 0;
+      min-height: 2.4em;
+    }
+
+    .hero-tagline .typed-line {
+      display: inline;
     }
 
     /* =========================
@@ -188,6 +213,42 @@
   display: flex; align-items: center; justify-content: center;
   position: relative;
   transition: transform .3s ease, background-color .4s ease;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+/* Animation for grid items - staggered appearance */
+.gallery-item:nth-child(1){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.gallery-item:nth-child(2){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.45s;
+}
+
+.gallery-item:nth-child(3){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.6s;
+}
+
+.gallery-item:nth-child(4){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.75s;
+}
+
+.gallery-item:nth-child(5){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.9s;
+}
+
+/* Keyframe animation */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* sizes requested */
@@ -208,29 +269,29 @@
   z-index:1;
 }
 
-/* OtherDay: show #3D3B8D on hover */
-.gallery-item.square:nth-child(1):hover a::before{
-  background-color: #3D3B8D;
-  opacity: 1;
-}
-
 /* Google I/O Connect: show google_bg.png on hover */
-.gallery-item.square:nth-child(2):hover a::before{
+.gallery-item.square:nth-child(1):hover a::before{
   background-image: url('google_bg.png');
   background-size: cover;
   background-position: center;
   opacity: 1;
 }
 
-/* letters i couldn't say: dark background on hover */
-.gallery-item.square:nth-child(3):hover a::before{
-  background-color: #181815;
+/* OtherDay: show #3D3B8D on hover */
+.gallery-item.square:nth-child(2):hover a::before{
+  background-color: #3D3B8D;
   opacity: 1;
 }
 
 /* IMA Logo: orange background on hover */
-.gallery-item.square:nth-child(4):hover a::before{
+.gallery-item.square:nth-child(3):hover a::before{
   background-color: #FFB800;
+  opacity: 1;
+}
+
+/* letters i couldn't say: dark background on hover */
+.gallery-item.square:nth-child(4):hover a::before{
+  background-color: #181815;
   opacity: 1;
 }
 
@@ -418,9 +479,10 @@
       </div>
       <nav class="hero-nav" aria-label="Primary">
         <ul>
-          <li><a href="../index.html">→ i design products</a></li>
-          <li><a href="index.html" class="active">→ archive :o</a></li>
-          <li><a href="../about/index.html">→ who am i?</a></li>
+          <div class="nav-indicator"></div>
+          <li><a href="../index.html">i design products</a></li>
+          <li><a href="index.html" class="active">archive :o</a></li>
+          <li><a href="../about/index.html">who am i?</a></li>
         </ul>
       </nav>
       <div class="hero-tagline">
@@ -435,38 +497,38 @@
 
       <!-- Square 1 -->
       <div class="gallery-item square">
-        <a href="selected-huawei/index.html">
+        <a href="../googleIO/index.html">
+          <img src="google.png" alt="Google I/O Connect">
+        </a>
+        <div class="overlay-title">Google I/O Connect</div>
+        <div class="overlay-subtitle">Graphic Design</div>
+      </div>
+
+      <!-- Square 2 -->
+      <div class="gallery-item square">
+        <a href="../otherDay/index.html">
           <img src="otherDay.png" alt="OtherDay">
         </a>
         <div class="overlay-title">OtherDay</div>
         <div class="overlay-subtitle">App Design . Figma Design-a-thon</div>
       </div>
 
-      <!-- Square 2 -->
+      <!-- Square 3 (switched with Square 4) -->
       <div class="gallery-item square">
-        <a href="selected-lkk/index.html">
-          <img src="google.png" alt="Google I/O Connect">
+        <a href="../imaLogo/index.html">
+          <img src="imalogo.png" alt="IMA Logo">
         </a>
-        <div class="overlay-title">Google I/O Connect</div>
-        <div class="overlay-subtitle">UIUX Design & Graphic Design</div>
+        <div class="overlay-title">IMA Logo</div>
+        <div class="overlay-subtitle">Motion Design</div>
       </div>
 
-      <!-- Square 3 -->
+      <!-- Square 4 (switched with Square 3) -->
       <div class="gallery-item square">
-        <a href="selected-reunion/index.html">
+        <a href="../letters/index.html">
           <img src="letters.png" alt="letters i couldn't say">
         </a>
         <div class="overlay-title">letters i couldn't say</div>
         <div class="overlay-subtitle">Creative Coding</div>
-      </div>
-
-      <!-- Square 4 -->
-      <div class="gallery-item square">
-        <a href="#">
-          <img src="imalogo.png" alt="IMA Logo">
-        </a>
-        <div class="overlay-title">IMA Logo</div>
-        <div class="overlay-subtitle">Brand Identity & Motion Design</div>
       </div>
 
       <!-- Bottom block (full width, half height) -->
@@ -534,6 +596,62 @@
       typeChar();
     })();
 
+
+    // Nav indicator animation
+    (function navIndicator(){
+      const indicator = document.querySelector('.nav-indicator');
+      const navLinks = document.querySelectorAll('.hero-nav li');
+
+      if(!indicator || navLinks.length === 0) return;
+
+      function updateIndicator(animate = false){
+        const activeLink = document.querySelector('.hero-nav a.active');
+        if(activeLink && activeLink.parentElement){
+          const li = activeLink.parentElement;
+          const topOffset = li.offsetTop;
+          const linkHeight = activeLink.offsetHeight;
+          const circleOffset = (linkHeight / 2) - 8; // Center circle (8px is half of 16px)
+          const targetTop = topOffset + circleOffset;
+
+          if(animate){
+            // Get previous position from sessionStorage
+            const prevTop = sessionStorage.getItem('navIndicatorTop');
+            if(prevTop !== null){
+              // Start from previous position
+              indicator.style.transition = 'none';
+              indicator.style.top = prevTop + 'px';
+              // Force reflow
+              indicator.offsetHeight;
+              // Animate to new position
+              indicator.style.transition = 'all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
+            }
+          }
+
+          indicator.style.top = targetTop + 'px';
+          // Store current position
+          sessionStorage.setItem('navIndicatorTop', targetTop);
+        }
+      }
+
+      // Check if coming from another page
+      const fromNav = sessionStorage.getItem('navTransition');
+      if(fromNav === 'true'){
+        updateIndicator(true);
+        sessionStorage.removeItem('navTransition');
+      } else {
+        updateIndicator(false);
+      }
+
+      // Store transition flag on nav link clicks
+      document.querySelectorAll('.hero-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          sessionStorage.setItem('navTransition', 'true');
+        });
+      });
+
+      // Update on window resize
+      window.addEventListener('resize', () => updateIndicator(false));
+    })();
 
     // Custom cursor
     (function cursor(){
