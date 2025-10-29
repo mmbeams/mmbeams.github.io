@@ -394,6 +394,12 @@
   letter-spacing: .5px;
 }
 
+.experience-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
 .experience-link {
   font-size: 18px;
   line-height: 22px;
@@ -401,14 +407,7 @@
   color: var(--primary);
   letter-spacing: .5px;
   text-decoration: underline;
-}
-
-.experience-link:first-of-type {
-  margin-top: 8px;
-}
-
-.experience-link + .experience-link {
-  margin-top: 2px;
+  display: inline-block;
 }
 
 /* about block styling */
@@ -421,6 +420,20 @@
   background: var(--bg);
   transition: background-color 0.5s ease;
   position: relative;
+}
+
+/* keep existing text/icons above the decorative image */
+.gallery-item.about-block > *{ position: relative; z-index: 1; }
+
+/* the bottom-right corner image */
+.gallery-item.about-block .corner-art{
+  position: absolute;
+  right: -60px;
+  bottom: -60px;
+  width: 280px;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .gallery-item.about-block:hover {
@@ -622,7 +635,7 @@
 
             <div class="experience-item">
               <div class="experience-company">Publicis Groupe</div>
-              <div class="experience-role">Creative (UIUX)</div>
+              <div class="experience-role">UIUX Creative</div>
               <div class="experience-date">5/2024 - 8/2024</div>
             </div>
 
@@ -634,7 +647,7 @@
 
             <div class="experience-item">
               <div class="experience-company">Freelance Designer</div>
-              <div class="experience-role">Freelance</div>
+              <div class="experience-role">UIUX Designer</div>
               <div class="experience-date">1/2024 - Present</div>
             </div>
 
@@ -645,8 +658,10 @@
             </div>
           </div>
 
-          <a href="#" target="_blank" class="experience-link">Resume</a>
-          <a href="https://www.linkedin.com/in/moira-huang" target="_blank" class="experience-link">More on Linkedin</a>
+          <div class="experience-links">
+            <a href="resume.png" target="_blank" class="experience-link">Resume</a>
+            <a href="https://www.linkedin.com/in/moira-huang" target="_blank" class="experience-link">More on Linkedin</a>
+          </div>
         </div>
 
         <!-- About block -->
@@ -664,6 +679,7 @@
               </a>
             </div>
           </div>
+          <img class="corner-art" src="../images/selected/4.png" alt="" aria-hidden="true">
         </div>
       </div>
 
@@ -806,6 +822,8 @@
       document.addEventListener('mouseleave',() => { cursor.style.opacity = '0'; cursor.classList.remove('click'); });
       document.addEventListener('mouseenter',() => { cursor.style.opacity = '1'; });
     })();
+
   </script>
+
 </body>
 </html>
