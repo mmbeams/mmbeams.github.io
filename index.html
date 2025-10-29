@@ -126,6 +126,12 @@
       list-style: none;
       padding: 0;
       margin: 0;
+      position: relative;
+    }
+
+    .hero-nav li{
+      position: relative;
+      padding-left: 0;
     }
 
     .hero-nav a{
@@ -135,15 +141,29 @@
       line-height: 20px;
       font-weight: 400;
       letter-spacing: .5px;
+      transition: opacity 0.3s ease;
     }
 
     .hero-nav a.active{
       font-weight: 600;
-      font-style: italic;
     }
 
     .hero-nav {
       margin-bottom: 0;
+    }
+
+    /* Nav indicator circle */
+    .nav-indicator{
+      position: absolute;
+      left: -30px;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      background: #000;
+      border-radius: 50%;
+      transform: translate(0, 2px);
+      transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+      pointer-events: none;
     }
 
     .hero-tagline {
@@ -175,7 +195,33 @@
 }
 
 /* column wrappers */
-.gallery-col{ display: flex; flex-direction: column; gap: 45px; }
+.gallery-col{
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+/* Animation for left column (appears first) */
+.gallery-col:nth-child(1){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.3s;
+}
+
+/* Animation for right column (appears second) */
+.gallery-col:nth-child(2){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.6s;
+}
+
+/* Keyframe animation */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* tiles */
 .gallery-item{
@@ -221,7 +267,7 @@
   opacity: 1;
 }
 
-/* Reunion: purple background on hover */
+/* Wavely: purple background on hover */
 .gallery-item.tall:hover a::before{
   background-color: #8900E1;
   opacity: 1;
@@ -413,13 +459,14 @@
     <div class="container">
       <div class="name">
         <span id="typed-name"></span>
-        <span class="typing-cursor"></span>
+        <!-- <span class="typing-cursor"></span> -->
       </div>
       <nav class="hero-nav" aria-label="Primary">
         <ul>
-          <li><a href="index.html" class="active">→ i design products :)</a></li>
-          <li><a href="archive/index.html">→ archive</a></li>
-          <li><a href="about/index.html">→ who am i?</a></li>
+          <div class="nav-indicator"></div>
+          <li><a href="index.html" class="active">i design products :)</a></li>
+          <li><a href="archive/index.html">archive</a></li>
+          <li><a href="about/index.html">who am i?</a></li>
         </ul>
       </nav>
       <div class="hero-tagline">
@@ -432,11 +479,32 @@
   <div class="container">
     <div class="gallery-grid">
 
-      <!-- LEFT COLUMN: two squares + contact block -->
+      <!-- LEFT COLUMN: Wavely (tall) + new grid -->
+      <div class="gallery-col">
+        <!-- Wavely (575 x 825 approx) -->
+        <div class="gallery-item tall">
+          <a href="wavely/index.html">
+            <img src="images/selected/3.png" alt="Wavely">
+          </a>
+          <div class="overlay-title">Wavely</div>
+          <div class="overlay-subtitle">App Design & Development</div>
+        </div>
+
+        <!-- News Z -->
+        <div class="gallery-item new-grid">
+          <a href="newz/index.html">
+            <img src="images/selected/newz.png" alt="NewZ">
+          </a>
+          <div class="overlay-title">newZ</div>
+          <div class="overlay-subtitle">Web3 App Design</div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: two squares + contact block -->
       <div class="gallery-col">
         <!-- Huawei (square) -->
         <div class="gallery-item square">
-          <a href="selected-huawei/index.html">
+          <a href="huawei/index.html">
             <img src="images/selected/1.png" alt="Huawei Connect">
           </a>
           <div class="overlay-subtitle">Website Design</div>
@@ -445,7 +513,7 @@
 
         <!-- LKK (square) -->
         <div class="gallery-item square">
-          <a href="selected-lkk/index.html">
+          <a href="lkk/index.html">
             <img src="images/selected/2.png" alt="Lee Kum Kee Design System">
           </a>
           <div class="overlay-title">Lee Kum Kee</div>
@@ -469,27 +537,6 @@
             </div>
           </div>
           <img class="corner-art" src="images/selected/4.png" alt="" aria-hidden="true">
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN: Reunion (tall) + new grid -->
-      <div class="gallery-col">
-        <!-- Reunion (575 x 825 approx) -->
-        <div class="gallery-item tall">
-          <a href="selected-reunion/index.html">
-            <img src="images/selected/3.png" alt="Reunion">
-          </a>
-          <div class="overlay-title">Reunion</div>
-          <div class="overlay-subtitle">App Design & Development</div>
-        </div>
-
-        <!-- News Z -->
-        <div class="gallery-item new-grid">
-          <a href="#">
-            <img src="images/selected/newsz.png" alt="NewZ">
-          </a>
-          <div class="overlay-title">newZ</div>
-          <div class="overlay-subtitle">Web3 App Design</div>
         </div>
       </div>
 
@@ -539,6 +586,61 @@
       typeChar();
     })();
 
+    // Nav indicator animation
+    (function navIndicator(){
+      const indicator = document.querySelector('.nav-indicator');
+      const navLinks = document.querySelectorAll('.hero-nav li');
+
+      if(!indicator || navLinks.length === 0) return;
+
+      function updateIndicator(animate = false){
+        const activeLink = document.querySelector('.hero-nav a.active');
+        if(activeLink && activeLink.parentElement){
+          const li = activeLink.parentElement;
+          const topOffset = li.offsetTop;
+          const linkHeight = activeLink.offsetHeight;
+          const circleOffset = (linkHeight / 2) - 8; // Center circle (8px is half of 16px)
+          const targetTop = topOffset + circleOffset;
+
+          if(animate){
+            // Get previous position from sessionStorage
+            const prevTop = sessionStorage.getItem('navIndicatorTop');
+            if(prevTop !== null){
+              // Start from previous position
+              indicator.style.transition = 'none';
+              indicator.style.top = prevTop + 'px';
+              // Force reflow
+              indicator.offsetHeight;
+              // Animate to new position
+              indicator.style.transition = 'all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
+            }
+          }
+
+          indicator.style.top = targetTop + 'px';
+          // Store current position
+          sessionStorage.setItem('navIndicatorTop', targetTop);
+        }
+      }
+
+      // Check if coming from another page
+      const fromNav = sessionStorage.getItem('navTransition');
+      if(fromNav === 'true'){
+        updateIndicator(true);
+        sessionStorage.removeItem('navTransition');
+      } else {
+        updateIndicator(false);
+      }
+
+      // Store transition flag on nav link clicks
+      document.querySelectorAll('.hero-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          sessionStorage.setItem('navTransition', 'true');
+        });
+      });
+
+      // Update on window resize
+      window.addEventListener('resize', () => updateIndicator(false));
+    })();
 
     // Custom cursor
     (function cursor(){
