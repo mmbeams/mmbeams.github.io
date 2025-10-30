@@ -176,10 +176,20 @@
       white-space: pre-line;
       margin-top: 0;
       min-height: 2.4em;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
     }
 
     .hero-tagline .typed-line {
       display: inline;
+    }
+
+    .hero-tagline-image {
+      width: 60px;
+      height: auto;
+      display: block;
+      margin-top: 0;
     }
 
     /* =========================
@@ -325,7 +335,7 @@
 }
 
 .gallery-item.contact-block:hover {
-  background: #E0E0E0;
+  background: #E8E7E4;
 }
 
 .contact-text-top {
@@ -484,11 +494,12 @@
           <div class="nav-indicator"></div>
           <li><a href="../index.html">i design products</a></li>
           <li><a href="index.html" class="active">archive :o</a></li>
-          <li><a href="../about/index.html">who am i?</a></li>
+          <li><a href="../about/index.html">about</a></li>
         </ul>
       </nav>
       <div class="hero-tagline">
-        ✨<br>interactive designer and artist
+        <img src="../images/flower1.png" alt="" class="hero-tagline-image">
+        <span>blending art, design, tech</span>
       </div>
     </div>
   </section>
@@ -549,7 +560,7 @@
             </a>
           </div>
         </div>
-        <img class="corner-art" src="../images/selected/4.png" alt="" aria-hidden="true">
+        <img class="corner-art" src="../images/selected/5.png" alt="" aria-hidden="true">
       </div>
 
     </div>
