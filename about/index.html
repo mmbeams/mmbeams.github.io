@@ -174,10 +174,20 @@
       white-space: pre-line;
       margin-top: 0;
       min-height: 2.4em;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
     }
 
     .hero-tagline .typed-line {
       display: inline;
+    }
+
+    .hero-tagline-image {
+      width: 60px;
+      height: auto;
+      display: block;
+      margin-top: 0;
     }
 
     /* =========================
@@ -437,7 +447,7 @@
 }
 
 .gallery-item.about-block:hover {
-  background: #E0E0E0;
+  background: #E5E1E6;
 }
 
 .about-text-top {
@@ -581,11 +591,12 @@
           <div class="nav-indicator"></div>
           <li><a href="../index.html">i design products</a></li>
           <li><a href="../archive/index.html">archive</a></li>
-          <li><a href="index.html" class="active">who am i? :I</a></li>
+          <li><a href="index.html" class="active">about :I</a></li>
         </ul>
       </nav>
       <div class="hero-tagline">
-        💐<br>work life explorer
+        <img src="../images/flower3.png" alt="" class="hero-tagline-image">
+        <span>making moments feel alive</span>
       </div>
     </div>
   </section>
@@ -679,7 +690,7 @@
               </a>
             </div>
           </div>
-          <img class="corner-art" src="../images/selected/4.png" alt="" aria-hidden="true">
+          <img class="corner-art" src="../images/selected/6.png" alt="" aria-hidden="true">
         </div>
       </div>
 
