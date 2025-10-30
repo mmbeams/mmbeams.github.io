@@ -543,6 +543,106 @@
 }
 
 /* =========================
+   MESSAGE SECTION
+========================= */
+.message-section {
+  padding: 0 45px;
+  margin-top: 45px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.message-section .container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.message-flower {
+  width: 60px;
+  height: auto;
+  transform-origin: center center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.message-flower:hover {
+  animation: rotateFlowerHover 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.message-box-container {
+  flex: 1;
+  background: var(--bg);
+  border: 0.8px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+}
+
+.message-input {
+  flex: 1;
+  padding: 16px 24px;
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--primary);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.message-input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.message-send-btn {
+  padding: 16px 24px;
+  font-size: 1.2rem;
+  font-weight: 200;
+  color: var(--primary);
+  background: var(--bg);
+  border: none;
+  border-left: 0.8px solid rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-send-btn:hover {
+  opacity: 0.7;
+  transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+  .message-section .container {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .message-flower {
+    width: 30px;
+  }
+
+  .message-box-container {
+    order: 10;
+    width: 100%;
+  }
+}
+
+/* =========================
    FOOTER
 ========================= */
 .footer {
@@ -738,6 +838,17 @@
 </section>
 
   <!-- =========================
+       MESSAGE SECTION
+  ========================== -->
+  <section class="message-section">
+    <div class="container">
+      <img src="../images/flower1.png" alt="" class="message-flower">
+      <img src="../images/flower2.png" alt="" class="message-flower">
+      <img src="../images/flower3.png" alt="" class="message-flower">
+    </div>
+  </section>
+
+  <!-- =========================
        FOOTER
   ========================== -->
   <footer class="footer">
@@ -871,6 +982,36 @@
       document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
       document.addEventListener('mouseleave',() => { cursor.style.opacity = '0'; cursor.classList.remove('click'); });
       document.addEventListener('mouseenter',() => { cursor.style.opacity = '1'; });
+    })();
+
+    // Message form submission
+    (function messageForm(){
+      const form = document.getElementById('messageForm');
+      const input = document.getElementById('messageInput');
+
+      if(!form || !input) return;
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const message = input.value.trim();
+
+        if(!message) {
+          alert('Please enter a message!');
+          return;
+        }
+
+        // Create mailto link
+        const subject = encodeURIComponent('Message from Portfolio Website');
+        const body = encodeURIComponent(message);
+        const mailtoLink = `mailto:moirahuang18@gmail.com?subject=${subject}&body=${body}`;
+
+        // Open default email client
+        window.location.href = mailtoLink;
+
+        // Clear the input
+        input.value = '';
+      });
     })();
 
   </script>
