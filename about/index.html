@@ -179,10 +179,16 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      position: relative;
     }
 
     .hero-tagline .typed-line {
       display: inline;
+    }
+
+    .hero-tagline span {
+      position: relative;
+      z-index: 1;
     }
 
     .hero-tagline-image {
@@ -190,6 +196,37 @@
       height: auto;
       display: block;
       margin-top: 0;
+      position: relative;
+      z-index: 10;
+      transform-origin: center center;
+      animation: rotateFlower 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      cursor: pointer;
+    }
+
+    .hero-tagline-image:hover {
+      animation: rotateFlowerHover 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes rotateFlower {
+      0% {
+        transform: rotate(-160deg);
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes rotateFlowerHover {
+      0% {
+        transform: rotate(-160deg);
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
     }
 
     /* =========================
