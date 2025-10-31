@@ -469,6 +469,27 @@
   .gallery-grid{ grid-template-columns: 1fr; }
   .gallery-item.tall{ height: 620px; }
   .gallery-item.triangle{ height: 240px; }
+
+  /* Make contact block text smaller on smaller screens */
+  .contact-text-top {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .contact-text-bottom {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .overlay-title {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .overlay-subtitle {
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 /* =========================
@@ -532,6 +553,13 @@
       .gallery-row.second-row {
         grid-template-columns: 1fr;
         gap: clamp(0.5rem, 1vw, 1rem);
+      }
+
+      /* Make hero text smaller on smaller screens */
+      .hero .name,
+      .hero-tagline,
+      .footer-signature {
+        font-size: clamp(1.2rem, 1.4rem + .4vw, 1.6rem);
       }
     }
     @media (max-width: 480px){
