@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OtherDay</title>
+  <link rel="icon" type="image/png" href="../../images/signature.png?v=1" />
+
+  <!-- Preload key images -->
+  <link rel="preload" href="cover_bg.png" as="image">
+  <link rel="preload" href="cover.png" as="image">
+
+  <style>
+
+    @font-face {
+      font-family: 'SpecialElite';
+      src: url('../../fonts/SpecialElite-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'ShadowsIntoLight';
+      src: url('../../fonts/ShadowsIntoLight-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root{
+      /* Fallback height before JS sets exact value */
+      --cover-height: 900px;
+      /* Aspect ratio used to reserve space for the cover image wrapper (adjust if needed) */
+      --cover-aspect-w: 16;
+      --cover-aspect-h: 9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { margin: 0; padding: 0; }
+    body{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #3D3B8D;
+      color: #FFFFFF;
+      line-height: 1.6;
+      font-weight: 200;
+      overflow-x: hidden;
+
+      position: relative;
+      display: flow-root;
+    }
+
+    /* Custom Cursor */
+    * {
+      cursor: none !important;
+    }
+
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background: #FFF;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease;
+      transform: translate(-50%, -50%);
+    }
+
+    .custom-cursor.hover,
+    .custom-cursor.click {
+      transform: translate(-50%, -50%) scale(2);
+    }
+
+    .click-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #FFF;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 1;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.2s ease;
+      z-index: 9998;
+    }
+
+    .click-dot.fade-out {
+      opacity: 0;
+    }
+
+    nav{
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 2rem 1rem;
+      background: transparent;
+      backdrop-filter: none;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      transition: all .3s ease;
+    }
+    .back-btn{
+      color: #FFF;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 200;
+      letter-spacing: .5px;
+      transition: all .3s ease;
+      display: flex; align-items: center;
+    }
+    .back-btn:hover{ opacity: .7; transform: translateX(-5px); }
+
+    body::before{
+      content:'';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: var(--cover-height);
+      background: url('cover_bg.png') top center / cover no-repeat;
+      z-index: -2;
+    }
+
+    .container{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem 4rem;
+    }
+
+    .white-content{
+      background: transparent;
+      padding-top: 4.5rem;
+    }
+
+    .work-hero{
+      margin-bottom: 0;
+      opacity: 0;
+      animation: fadeInUp 1s ease .5s forwards;
+      position: relative;
+      background: transparent;
+      padding-bottom: 4.5rem;
+    }
+
+    .work-image.large{
+      margin: 4rem 0 2rem 0;
+      border-radius: 0;
+      aspect-ratio: calc(var(--cover-aspect-w) / var(--cover-aspect-h));
+    }
+    .work-image{
+      border-radius: 12px;
+      overflow: hidden;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .work-image img{
+      width: 100%; height: auto; object-fit: contain;
+      display: block;
+    }
+
+    .hero-content{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 5rem;
+      align-items: start;
+    }
+    .hero-left{ display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .work-subtitle{
+      font-family: 'SF Pro', sans-serif;
+      font-size: .8rem; font-weight: 300; margin: 0; font-style: italic;
+      color: #FFF;
+    }
+    .hero-right{ display: flex; justify-content: flex-end; }
+    .work-title{
+      font-family: 'SF Pro', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400; margin: 0; line-height: 1.3; letter-spacing: -1px;
+      color: #FFF;
+    }
+    .work-meta{ display: flex; flex-direction: column; gap: 2rem; font-size: .8rem; opacity: .8; color: #FFF; }
+    .work-meta-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .work-meta-item{ display: flex; flex-direction: column; gap: .5rem; }
+    .work-meta-label{
+      font-weight: 200; opacity: .6; font-size: .7rem; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .work-meta-value{ font-weight: 300; font-size: .8rem; }
+
+    .section-divider{
+      width: 100%; height: 1px;
+      background: rgba(255,255,255,.1);
+      margin: 4.5rem 0;
+    }
+
+    .wip-notice{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #FFFFFF;
+      font-size: 0.8rem;
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 8rem;
+    }
+
+    .problem-title-section{
+      text-align: center;
+      margin-top: 24rem;
+      margin-bottom: 8rem;
+      max-width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .problem-title-section.closer-text{
+      margin-top: 16rem;
+      margin-bottom: 2rem;
+    }
+
+    .problem-title-section p{
+      margin: 0;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #FFFFFF;
+    }
+
+    .solution-section{ margin: 4rem 0; }
+
+    /* Hifi image section */
+    .hifi-image-section{
+      margin: 0 0 4rem 0;
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+    }
+
+    .hifi-image-section img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Full width image section */
+    .full-width-image{
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      margin-bottom: 0;
+    }
+
+    .full-width-image img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .full-width-image.spacing-top{
+      margin-top: 8rem;
+    }
+
+    /* Click Me Text */
+    .click-me-text{
+      text-align: center;
+      margin-top: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .click-me-text p{
+      margin: 0;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 200;
+      color: #FFFFFF;
+      opacity: 1;
+    }
+
+    /* Figma Embed - Centered, Larger */
+    .figma-embed{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0 2rem;
+    }
+
+    .figma-embed iframe{
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+
+    /* Figma Link Button */
+    .figma-link-container{
+      text-align: center;
+      margin-top: 16rem;
+      margin-bottom: 4rem;
+    }
+
+    .figma-link-button{
+      display: inline-block;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #FFFFFF;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border: 2px solid #FFFFFF;
+      border-radius: 40px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .figma-link-button:hover{
+      background-color: #FFFFFF;
+      color: #3D3B8D;
+    }
+
+    .project-nav{
+      padding: 4rem 0 2rem;
+      margin-top: 6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .project-nav a{
+      color: #FFFFFF;
+      text-decoration: none;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      padding: 1rem 0;
+    }
+    .project-nav a:hover{
+      opacity: 0.7;
+    }
+    .project-nav .prev::before{
+      content: '← ';
+    }
+    .project-nav .next::after{
+      content: ' →';
+    }
+
+    .contact-block {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0;
+      padding-top: 4rem;
+      background: transparent;
+      transition: background-color 0.5s ease;
+      position: relative;
+      margin-top: 4rem;
+      min-height: 330px;
+    }
+
+    .contact-block > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-block .corner-art {
+      position: absolute;
+      right: -60px;
+      bottom: -60px;
+      width: 280px;
+      height: auto;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .contact-text-top {
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #FFFFFF;
+    }
+
+    .contact-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-text-bottom {
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 400;
+      color: #FFFFFF;
+      letter-spacing: 0.5px;
+    }
+
+    .contact-icons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .contact-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-icons a:hover {
+      opacity: 0.7;
+    }
+
+    .contact-icons img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: #3D3B8D; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 1px; }
+
+    @keyframes fadeInUp{
+      from{ opacity: 0; transform: translateY(40px); }
+      to{ opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px){
+      nav{ padding: 1.5rem 1rem; }
+      .container{ padding: 6rem 1rem 2rem; }
+      .hero-content{ grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+      .hero-right{ justify-content: flex-start; }
+      .work-meta-row{ grid-template-columns: 1fr; gap: 1.5rem; }
+      .project-nav{ flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="custom-cursor"></div>
+
+  <nav>
+    <a href="../archive/index.html" class="back-btn">←</a>
+  </nav>
+
+  <div class="container">
+    <div class="work-hero">
+      <div class="work-image large">
+        <img src="cover.png" alt="OtherDay App Design">
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-left">
+          <h1 class="work-title">OtherDay</h1>
+          <p class="work-subtitle">A soul swapping experience where you spend another day living the other’s day.</p>
+        </div>
+        <div class="hero-right">
+          <div class="work-meta">
+            <div class="work-meta-row">
+              <div class="work-meta-item">
+                <div class="work-meta-label">Type</div>
+                <div class="work-meta-value">App Design</div>
+              </div>
+              <div class="work-meta-item">
+                <div class="work-meta-label">Role</div>
+                <div class="work-meta-value">UIUX Designer</div>
+              </div>
+            </div>
+            <div class="work-meta-row">
+              <div class="work-meta-item">
+                <div class="work-meta-label">Timeline</div>
+                <div class="work-meta-value">Figma Design-a-thon 2025</div>
+              </div>
+              <div class="work-meta-item">
+                <div class="work-meta-label">Team</div>
+                <div class="work-meta-value">Moira Huang, Eva He, Christina Wu, Gaby Chen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="white-content">
+      <!-- Hifi Image -->
+      <div class="hifi-image-section">
+        <img src="hifi.png" alt="High Fidelity Design">
+      </div>
+
+      <div class="problem-title-section">
+        <p>For those searching beyond their own lives, it's hard to truly see through others' eyes. Each day feels familiar, yet the questions — what if, what else — linger.</p>
+      </div>
+
+      <!-- Full width images -->
+      <div class="full-width-image">
+        <img src="problem1.png" alt="Problem">
+      </div>
+
+      <div class="problem-title-section">
+        <p>What if you had the power to live someone else's life for a single day,<br>just to feel what it's like?</p>
+      </div>
+
+      <div class="full-width-image spacing-top">
+        <img src="userflow1.png" alt="User Flow">
+      </div>
+
+      <div class="full-width-image spacing-top">
+        <img src="wireframe1.png" alt="Wireframe">
+      </div>
+
+      <div class="full-width-image spacing-top">
+        <img src="solution1.png" alt="Solution 1">
+      </div>
+
+      <div class="full-width-image">
+        <img src="solution2.png" alt="Solution 2">
+      </div>
+
+      <div class="full-width-image">
+        <img src="solution3.png" alt="Solution 3">
+      </div>
+
+      <!-- Click Me Text -->
+      <div class="click-me-text">
+        <p>Click me</p>
+      </div>
+
+      <!-- Figma Prototype -->
+      <div class="figma-embed">
+        <iframe src="https://embed.figma.com/proto/bOJbZmNvsEM0CMbPj0FNXj/Cmd-G?page-id=2%3A3&node-id=214-8345&p=f&viewport=15%2C251%2C0.16&scaling=scale-down&content-scaling=fixed&starting-point-node-id=214%3A8345&show-proto-sidebar=0&hide-ui=1&embed-host=share" allowfullscreen></iframe>
+      </div>
+
+      <!-- Figma Link Button -->
+      <div class="figma-link-container">
+        <a href="https://www.figma.com/proto/bOJbZmNvsEM0CMbPj0FNXj/Cmd-G?page-id=2%3A3&node-id=214-8345&p=f&viewport=15%2C251%2C0.16&scaling=scale-down&content-scaling=fixed&starting-point-node-id=214%3A8345&show-proto-sidebar=1" class="figma-link-button" target="_blank">View full prototype in Figma</a>
+      </div>
+
+      <!-- Thank You Image -->
+      <div class="full-width-image">
+        <img src="thankyou.png" alt="Thank You">
+      </div>
+
+      <div class="project-nav">
+        <a href="../googleIO/index.html" class="prev">Google I/O Connect</a>
+        <a href="../imaLogo/index.html" class="next">IMA Logo</a>
+      </div>
+
+      <div class="contact-block">
+        <div class="contact-text-top">
+          Designed in New York City<br>& Shanghai with love :)
+        </div>
+        <div class="contact-bottom">
+          <div class="contact-text-bottom">Keep in touch</div>
+          <div class="contact-icons">
+            <a href="https://www.linkedin.com/in/moira-huang" target="_blank">
+              <img src="../../images/linkedin.png" alt="LinkedIn">
+            </a>
+            <a href="mailto:moirahuang18@gmail.com">
+              <img src="../../images/gmail.png" alt="Email">
+            </a>
+          </div>
+        </div>
+        <img class="corner-art" src="../../images/selected/4.png" alt="" aria-hidden="true">
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-left">
+          <div class="footer-left-text">Designed in New York with Love :)</div>
+          <div class="footer-contact-text">Happy to connect via <a href="https://www.linkedin.com/in/moira-huang" target="_blank">LinkedIn</a> & <a href="mailto:moirahuang18@gmail.com">Email</a></div>
+        </div>
+      </div>
+      <img src="../images/flower2.png" alt="" class="footer-flower">
+      <div class="footer-bottom">
+        <span class="footer-signature">mo.</span>
+        <span class="footer-text">@2025</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    let lastScrollY = window.scrollY;
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > lastScrollY && y > 100) nav.style.transform = 'translateY(-100%)';
+      else nav.style.transform = 'translateY(0)';
+      lastScrollY = y;
+    });
+
+    (function cursor(){
+      const cursor = document.querySelector('.custom-cursor');
+      if(!cursor) return;
+
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+
+      const interactive = document.querySelectorAll('a, button, [role="button"]');
+      interactive.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      const makeDot = (x, y) => {
+        const dot = document.createElement('div');
+        dot.className = 'click-dot';
+        dot.style.left = x + 'px';
+        dot.style.top  = y + 'px';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.classList.add('fade-out'), 1000);
+        setTimeout(() => dot.remove(), 4000);
+      }
+
+      document.addEventListener('mousedown', e => {
+        cursor.classList.add('click');
+        makeDot(e.pageX, e.pageY);
+      });
+      document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
+      document.addEventListener('mouseleave',() => {
+        cursor.style.opacity = '0';
+        cursor.classList.remove('click');
+      });
+      document.addEventListener('mouseenter',() => {
+        cursor.style.opacity = '1';
+      });
+    })();
+
+    function setCoverHeight(){
+      const divider = document.querySelector('.section-divider');
+      if (!divider) return;
+      const y = divider.getBoundingClientRect().top + window.scrollY;
+      document.documentElement.style.setProperty('--cover-height', y + 'px');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setCoverHeight();
+      requestAnimationFrame(setCoverHeight);
+    });
+
+    window.addEventListener('resize', setCoverHeight);
+  </script>
+</body>
+</html>

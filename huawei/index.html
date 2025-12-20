@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huawei Connect Website Redesign</title>
+  <link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" href="../images/signature.png" sizes="16x16">
+<link rel="icon" type="image/png" href="../images/signature.png" sizes="32x32">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+
+        @font-face {
+            font-family: 'SpecialElite';
+            src: url('../fonts/SpecialElite-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'ShadowsIntoLight';
+            src: url('../fonts/ShadowsIntoLight-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #FFFFFF;
+            color: #000000;
+            line-height: 1.6;
+            font-weight: 200;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Custom Cursor */
+        * {
+            cursor: none !important;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-cursor.hover,
+        .custom-cursor.click {
+            transform: translate(-50%, -50%) scale(2);
+        }
+
+        .click-dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #000;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.2s ease;
+            z-index: 9998;
+        }
+
+        .click-dot.fade-out {
+            opacity: 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 2rem 1rem;
+            background: transparent;
+            backdrop-filter: none;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn {
+            color: #000000;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 200;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn:hover {
+            opacity: 0.7;
+            transform: translateX(-5px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 4rem;
+        }
+
+        .work-hero {
+            margin-bottom: 7rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            min-height: 100vh;
+            background: url('bg.png') top center / cover no-repeat;
+            z-index: -2;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 5rem;
+            align-items: start;
+        }
+
+        .hero-left {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .hero-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .work-title {
+            font-family: 'SF Pro', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            margin: 0;
+            line-height: 1.3;
+            letter-spacing: -1px;
+        }
+
+        .work-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .work-meta-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .work-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .work-meta-label {
+            font-weight: 200;
+            opacity: 0.6;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .work-meta-value {
+            font-weight: 300;
+            font-size: 0.8rem;
+        }
+
+        /* Content Sections */
+        .work-section {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .work-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .work-section h2 {
+            font-family: 'ShadowsIntoLight', 'SF Pro', sans-serif;
+            font-size: 2rem;
+            font-weight: normal;
+            margin-bottom: 2rem;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+
+        .work-section p {
+            font-size: 14px;
+            line-height: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+
+        .work-section ul {
+            list-style: none;
+            margin-left: 0;
+            max-width: 800px;
+        }
+
+        .work-section li {
+            font-size: 14px;
+            line-height: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .work-section li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #000000;
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+
+        /* Image Containers */
+        .work-image {
+            margin: 4rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .work-image img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .image-placeholder {
+            color: #000000;
+            font-size: 0.8rem;
+            font-weight: 200;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .image-caption {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            text-align: center;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* Grid Images */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .image-grid .work-image {
+            margin: 0;
+            aspect-ratio: 4/3;
+        }
+
+        /* Navigation between projects */
+        .project-nav {
+            padding: 4rem 0 2rem;
+            margin-top: 6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-nav a {
+            color: #000000;
+            text-decoration: none;
+            font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 18px;
+            line-height: 22px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .project-nav a:hover {
+            opacity: 0.7;
+        }
+
+        .project-nav .prev::before {
+            content: '← ';
+        }
+
+        .project-nav .next::after {
+            content: ' →';
+        }
+
+        /* Contact Block */
+        .contact-block {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0;
+            padding-top: 4rem;
+            background: transparent;
+            transition: background-color 0.5s ease;
+            position: relative;
+            margin-top: 4rem;
+            min-height: 330px;
+        }
+
+        .contact-block > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-block .corner-art {
+            position: absolute;
+            right: -60px;
+            bottom: -60px;
+            width: 280px;
+            height: auto;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .contact-block:hover {
+            background: transparent;
+        }
+
+        .contact-text-top {
+            font-size: 30px;
+            line-height: 36px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .contact-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .contact-text-bottom {
+            font-size: 18px;
+            line-height: 22px;
+            font-weight: 400;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .contact-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-icons a:hover {
+            opacity: 0.7;
+        }
+
+        .contact-icons img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 1rem;
+            }
+
+            .container {
+                padding: 6rem 1rem 2rem;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-top: 2rem;
+            }
+
+            .hero-right {
+                justify-content: flex-start;
+            }
+
+            .work-meta-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .project-nav {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-analysis {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .problem-image {
+                order: 1;
+                padding-top: 0;
+            }
+
+            .problem-image .work-image {
+                width: 250px;
+            }
+
+            .problem-left {
+                order: 2;
+            }
+
+            .problem-right {
+                order: 3;
+            }
+
+            .problem-point {
+                max-width: 100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Problem Analysis Section */
+        .problem-analysis {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .problem-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .problem-image {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .problem-image .work-image {
+            margin: 0;
+            border-radius: 8px;
+            max-width: 100%;
+            width: 900px;
+        }
+
+        .problem-right {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        /* Make main images larger */
+        .work-image.large {
+            margin: 4rem 0 2rem 0;
+            border-radius: 0;
+        }
+
+        .work-image.large img {
+            width: 100%;
+            max-width: none;
+        }
+
+        .problem-point {
+            background: #EEEEEE;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            width: 50%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .problem-left .problem-point:nth-child(1) {
+            margin-left: 40%;
+            z-index: 2;
+        }
+
+        .problem-left .problem-point:nth-child(2) {
+            margin-left: 60%;
+            margin-top: -30px;
+            z-index: 1;
+        }
+
+        .problem-right .problem-point:nth-child(1) {
+            margin-left: 30%;
+            z-index: 2;
+        }
+
+        .problem-right .problem-point:nth-child(2) {
+            margin-left: 0;
+            margin-top: -25px;
+            z-index: 3;
+        }
+
+        .problem-right .problem-point:nth-child(3) {
+            margin-left: 15%;
+            margin-top: -35px;
+            z-index: 1;
+        }
+
+        .problem-point::before {
+            display: none;
+        }
+
+        .problem-point p {
+            margin: 0;
+            font-family: 'SF Pro', sans-serif;
+            font-size: 14px;
+            line-height: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            color: #000000;
+            text-align: center;
+        }
+
+        /* Problem 2 Section */
+        /* Problem Title Section */
+        .problem-title-section{
+            text-align: center;
+            margin-top: 8rem;
+            margin-bottom: 8rem;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .problem-title-section p{
+            margin: 0;
+            font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 30px;
+            line-height: 36px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        /* Figma Link Button */
+        .figma-link-container{
+            text-align: center;
+            margin-top: 16rem;
+            margin-bottom: 20rem;
+        }
+
+        .figma-link-button{
+            display: inline-block;
+            font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 30px;
+            line-height: 36px;
+            font-weight: 400;
+            color: #000000;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border: 2px solid #000000;
+            border-radius: 40px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .figma-link-button:hover{
+            background-color: #000000;
+            color: #FFFFFF;
+        }
+
+        .problem2-section {
+            margin: 4rem 0;
+        }
+
+        .problem2-text {
+            margin-top: 8rem;
+            margin-bottom: 2rem;
+        }
+
+        .problem2-text p {
+            font-size: 14px;
+            line-height: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            margin: 0;
+            max-width: 400px;
+        }
+
+        .problem2-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .problem2-image .work-image {
+            margin: 0;
+            border-radius: 8px;
+            max-width: 100%;
+            width: 800px;
+        }
+
+        /* Mobile responsive for problem2 section */
+        @media (max-width: 768px) {
+            .problem2-image .work-image {
+                width: 90%;
+            }
+        }
+
+        /* Interactive Circle Trends */
+        .trends-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4rem auto;
+        }
+
+        #bubbleChart {
+            width: 900px;
+            height: 700px;
+        }
+
+        #bubbleChart text {
+            font-size: 12px;
+            fill: #444;
+            text-anchor: middle;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        #bubbleChart .center-text {
+            font-size: 14px;
+            fill: #555;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .click-instruction {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        /* Mobile responsive for trends */
+        @media (max-width: 768px) {
+            #bubbleChart {
+                width: 100%;
+                max-width: 600px;
+                height: 500px;
+            }
+            #bubbleChart text {
+                font-size: 10px;
+            }
+        }
+
+        /* Solution Section */
+        .solution-section {
+            margin: 6rem 0 4rem 0;
+        }
+
+        .solution-item-centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .solution-image-large {
+            width: 90%;
+            max-width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .solution-image-large img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .solution-item-centered h3 {
+            font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 18px;
+            line-height: 22px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: #000000;
+            text-align: center;
+        }
+
+        /* Mobile responsive for solution section */
+        @media (max-width: 768px) {
+            .solution-row {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                align-items: start;
+            }
+
+            .solution-content {
+                padding-left: 0;
+                order: 1;
+            }
+
+            .solution-main-image {
+                order: 2;
+            }
+        }
+
+        /* Motion GIFs Grid */
+        .motion-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(4, 1fr);
+            gap: 0;
+            margin: 6rem 0;
+            position: relative;
+        }
+
+        .motion-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            align-items: end;
+            padding: 2.5rem 0;
+            position: relative;
+        }
+
+        /* .motion-row::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        } */
+
+        .motion-row:nth-child(even) .motion-gif {
+            order: 2;
+        }
+
+        .motion-row:nth-child(even) .motion-text {
+            order: 1;
+        }
+
+        .motion-gif {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .motion-gif img {
+            width: 100%;
+            height: auto;
+            border-radius: 0px;
+        }
+
+        .motion-row:nth-child(1) .motion-gif,
+        .motion-row:nth-child(3) .motion-gif {
+            justify-content: flex-start;
+            padding-left: 1rem;
+        }
+
+        .motion-row:nth-child(2) .motion-gif,
+        .motion-row:nth-child(4) .motion-gif {
+            justify-content: flex-end;
+            padding-right: 1rem;
+        }
+
+        .motion-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 0 3rem;
+        }
+
+        .motion-row:nth-child(even) .motion-text {
+            text-align: right;
+        }
+
+        .motion-text h3 {
+            font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 18px;
+            line-height: 22px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin: 0;
+            color: #000000;
+        }
+
+        .motion-text p {
+            font-size: 14px;
+            line-height: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            color: #000000;
+            margin: 0;
+        }
+
+        /* Element Rows */
+        .element-rows {
+            margin: 4rem auto;
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 8rem;
+        }
+
+        .element-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .element-row img {
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Row 1: 1 image takes full width */
+        .element-row.row-1 img {
+            width: 100%;
+        }
+
+        /* Row 2 & 3: 2 images each, equal width */
+        .element-row.row-2 img,
+        .element-row.row-3 img {
+            width: calc(50% - 1rem);
+        }
+
+        /* Row 4: 1 image takes full width */
+        .element-row.row-4 img {
+            width: 100%;
+        }
+
+        /* Mobile responsive for motion grid */
+        @media (max-width: 768px) {
+            .motion-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1.5rem 0;
+                text-align: center;
+            }
+
+            .motion-row::after {
+                display: none;
+            }
+
+            .motion-row:nth-child(even) .motion-gif {
+                order: 1;
+            }
+
+            .motion-row:nth-child(even) .motion-text {
+                order: 2;
+                text-align: center;
+            }
+
+            .motion-text {
+                padding: 0 1rem;
+            }
+
+            .motion-gif img {
+                max-width: 300px;
+            }
+        }
+
+        /* Figma Embed */
+        .figma-embed {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4rem 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .figma-embed iframe {
+            width: 100%;
+            max-width: 100%;
+            border: none;
+        }
+
+        /* Mobile responsive for Figma embed */
+        @media (max-width: 768px) {
+            .figma-embed iframe {
+                width: 100%;
+                height: 300px;
+                max-width: 100%;
+            }
+        }
+
+        /* Section Dividers */
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.1);
+            margin: 4.5rem 0;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #EEEEEE;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            padding: 45px 0px 30px 0px;
+            position: relative;
+            margin-top: 96px;
+        }
+
+        .footer .container{
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 70px;
+            position: relative;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-left-text {
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 500;
+            letter-spacing: .5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-contact-text {
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 200;
+            letter-spacing: .5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-contact-text a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: underline;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-contact-text a:hover {
+            opacity: 0.7;
+        }
+
+        .footer-flower {
+            position: absolute;
+            top: 46%;
+            transform: translateY(-50%);
+            right: 70px;
+            width: 160px;
+            height: auto;
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+            padding-left: 0;
+            padding-bottom: 20px;
+        }
+
+        .footer-signature {
+            font-family: 'EduAUVICWANTDots', cursive;
+            color: #FFFFFF;
+            font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+        }
+
+        .footer-text {
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 200;
+            letter-spacing: .5px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .custom-cursor.footer-cursor{
+            background: #FFF;
+        }
+
+        .custom-cursor.footer-cursor.hover,
+        .custom-cursor.footer-cursor.click{
+            background: #FFF;
+        }
+
+        .click-dot.footer-dot{
+            background:#FFF;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="../index.html" class="back-btn">←</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="work-hero">
+            <div class="work-image large">
+                <img src="1.png" alt="Huawei Connect Website Redesign">
+            </div>
+            <div class="hero-content">
+                <div class="hero-left">
+                    <h1 class="work-title">Huawei Connect Website Redesign</h1>
+                </div>
+                <div class="hero-right">
+                    <div class="work-meta">
+                        <div class="work-meta-row">
+                            <div class="work-meta-item">
+                                <div class="work-meta-label">Type</div>
+                                <div class="work-meta-value">UI/UX Design<br>Website Design</div>
+                            </div>
+                            <div class="work-meta-item">
+                                <div class="work-meta-label">Role</div>
+                                <div class="work-meta-value">UIUX Designer</div>
+                            </div>
+                        </div>
+                        <div class="work-meta-row">
+                            <div class="work-meta-item">
+                                <div class="work-meta-label">Timeline</div>
+                                <div class="work-meta-value">06/2024 - 08/2024</div>
+                            </div>
+                            <div class="work-meta-item">
+                                <div class="work-meta-label">Team</div>
+                                <div class="work-meta-value">Kit Meng, Moira Huang</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="section-divider"></div>
+
+        <!-- Problem Section -->
+        <div class="problem-title-section" style="margin-top: 12rem; margin-bottom: 12rem;">
+            <p>Huawei Connect is a premier event showcasing AI-driven innovation,<br>where thought leaders and innovators converge.<br>The existing site felt outdated, and not user friendly.</p>
+        </div>
+
+        <!-- Problem Analysis Section -->
+        <div class="problem-analysis">
+            <div class="problem-image">
+                <div class="work-image">
+                    <img src="problem.png" alt="Problem analysis of the original website">
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem 2 Section -->
+        <div class="problem-title-section" style="margin-top: 18rem; margin-bottom: 10rem;">
+            <p>How to improve overall user experience?</p>
+        </div>
+        <div class="trends-container">
+            <svg id="bubbleChart"></svg>
+        </div>
+
+        <!-- Divider -->
+        <div class="section-divider"></div>
+
+        <!-- Solution Section -->
+        <div class="solution-section">
+            <div class="solution-item-centered">
+                <div class="solution-image-large">
+                    <img src="solution1.png" alt="Main solution design">
+                </div>
+                <h3>Bento UI</h3>
+            </div>
+
+            <div class="solution-item-centered">
+                <div class="solution-image-large">
+                    <img src="solution2.png" alt="Solution detail 1">
+                </div>
+                <h3>Dot Interaction</h3>
+            </div>
+
+            <div class="solution-item-centered">
+                <div class="solution-image-large">
+                    <img src="solution3.png" alt="Solution detail 2">
+                </div>
+                <h3>Tech Fonts</h3>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="section-divider"></div>
+
+        <!-- Motion GIFs Grid -->
+        <div class="motion-grid">
+            <div class="motion-row">
+                <div class="motion-gif">
+                    <img src="motion1.gif" alt="Multi-layered KV graphic">
+                </div>
+                <div class="motion-text">
+                    <h3>Multi-layered KV graphic</h3>
+                    <p>KV layers shift subtly with mouse direction for parallax depth.</p>
+                </div>
+            </div>
+
+            <div class="motion-row">
+                <div class="motion-gif">
+                    <img src="motion2.gif" alt="Dot transition">
+                </div>
+                <div class="motion-text">
+                    <h3>Dot transition</h3>
+                    <p>Dots animate out and in during auto-scroll transitions.</p>
+                </div>
+            </div>
+
+            <div class="motion-row">
+                <div class="motion-gif">
+                    <img src="motion3.gif" alt="Gradient title fade-in">
+                </div>
+                <div class="motion-text">
+                    <h3>Gradient title fade-in</h3>
+                    <p>Titles fade in over Huawei gradient text backgrounds.</p>
+                </div>
+            </div>
+
+            <div class="motion-row">
+                <div class="motion-gif">
+                    <img src="motion4.gif" alt="Horizontal scroll text">
+                </div>
+                <div class="motion-text">
+                    <h3>Horizontal scroll text</h3>
+                    <p>Vertical page scroll drives horizontal text movement.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Element Images -->
+        <div class="element-rows">
+            <!-- Row 1: element1 -->
+            <div class="element-row row-1">
+                <img src="element1.png" alt="Element 1">
+            </div>
+
+            <!-- Row 2: element2 and element3 -->
+            <div class="element-row row-2">
+                <img src="element2.png" alt="Element 2">
+                <img src="element3.png" alt="Element 3">
+            </div>
+
+            <!-- Row 3: element4 and element5 -->
+            <div class="element-row row-3">
+                <img src="element4.png" alt="Element 4">
+                <img src="element5.png" alt="Element 5">
+            </div>
+
+            <!-- Row 4: element6 -->
+            <div class="element-row row-4">
+                <img src="element6.png" alt="Element 6">
+            </div>
+        </div>
+
+        <!-- Figma Prototype -->
+        <div id="result">
+        <div class="figma-embed">
+            <iframe id="figmaEmbed" style="border: none;" width="1200" height="700" src="https://embed.figma.com/proto/TGlcj7Xn6afpWUxm4QWMWv/Huawei-Connect-Web-Pitch?page-id=1%3A3368&node-id=1-7028&p=f&viewport=435%2C421%2C0.04&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1%3A3369&show-proto-sidebar=0&hide-ui=1&embed-host=share" allowfullscreen loading="eager"></iframe>
+        </div>
+        </div>
+
+        <!-- Figma Link Button -->
+        <div class="figma-link-container">
+            <a href="https://www.figma.com/proto/TGlcj7Xn6afpWUxm4QWMWv/Huawei-Connect-Web-Pitch?page-id=1%3A3368&node-id=1-5023&p=f&viewport=374%2C421%2C0.04&t=4B4eqO9RvvDczs6j-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=1%3A3369&show-proto-sidebar=1" class="figma-link-button" target="_blank">View full prototype in Figma</a>
+        </div>
+
+        <!-- Project Navigation -->
+        <div class="project-nav">
+            <a href="../wavely/index.html" class="prev">Wavely</a>
+            <a href="../lkk/index.html" class="next">Oovo</a>
+        </div>
+    </div>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-left">
+          <div class="footer-left-text">Designed in New York with Love :)</div>
+          <div class="footer-contact-text">Happy to connect via <a href="https://www.linkedin.com/in/moira-huang" target="_blank">LinkedIn</a> & <a href="mailto:moirahuang18@gmail.com">Email</a></div>
+        </div>
+      </div>
+      <img src="../images/flower2.png" alt="" class="footer-flower">
+      <div class="footer-bottom">
+        <span class="footer-signature">mo.</span>
+        <span class="footer-text">@2025</span>
+      </div>
+    </div>
+  </footer>
+
+
+    <script>
+        // Smooth scroll animation on scroll
+        const sections = document.querySelectorAll('.work-section');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Back button functionality
+        function goBack() {
+            // In a real scenario, this would navigate back to the main portfolio
+            alert('Navigate back to main portfolio page');
+            // window.history.back() or window.location.href = 'index.html';
+        }
+
+        // Hide/show navigation on scroll
+        let lastScrollY = window.scrollY;
+        const nav = document.querySelector('nav');
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                nav.style.transform = 'translateY(-100%)';
+            } else {
+                nav.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+
+        // Interactive Circle Trends with D3.js
+        const data = [
+            { name: "ARTIFICIAL\nINTELLIGENCE", r: 120 },
+            { name: "GRADIENTS", r: 110 },
+            { name: "3D\nEXPERIENCES", r: 90 },
+            { name: "DYNAMIC\nSCROLLING", r: 100 },
+            { name: "MICRO-\nINTERACTIONS", r: 80 },
+            { name: "UX\nWRITING", r: 50 },
+            { name: "BENTO UI", r: 45 },
+            { name: "PARALLAX", r: 50 },
+            { name: "NEUMORPHISM", r: 50 },
+            { name: "CHAT\nBOTS", r: 45 }
+        ];
+
+        const colors = ['#7FC3FF', '#FFBEA7', '#F1DCEE', '#82A7FF', '#86EDA5', '#C82C3E'];
+
+        const width = 900, height = 700;
+        const svg = d3.select("#bubbleChart")
+            .attr("width", width)
+            .attr("height", height);
+
+        const nodes = svg.selectAll("g")
+            .data(data)
+            .enter()
+            .append("g")
+            .attr("transform", `translate(${width/2},${height/2})`);
+
+        const circles = nodes.append("circle")
+            .attr("r", d => d.r)
+            .attr("fill", "white")
+            .attr("stroke", "#000")
+            .attr("stroke-width", "1")
+            .attr("cursor", "pointer")
+            .style("transition", "fill 0.15s ease")
+            .on("mouseenter", function(event, d) {
+                const index = data.indexOf(d);
+                d3.select(this)
+                    .transition()
+                    .duration(100)
+                    .attr("fill", colors[index % colors.length]);
+            })
+            .on("mouseleave", function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(100)
+                    .attr("fill", "white");
+            });
+
+        nodes.append("text")
+            .each(function(d) {
+                const lines = d.name.split("\n");
+                const textElement = d3.select(this);
+                lines.forEach((line, i) => {
+                    textElement.append("tspan")
+                        .attr("x", 0)
+                        .attr("dy", i === 0 ? "-0.4em" : "1.2em")
+                        .text(line);
+                });
+            })
+            .style("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("font-weight", "300")
+            .style("fill", "#000");
+
+        svg.append("text")
+            .attr("class", "center-text")
+            .attr("x", width / 2)
+            .attr("y", height / 2)
+            .text("TRENDS");
+
+        // Force simulation to prevent overlap
+        const simulation = d3.forceSimulation(data)
+            .force("charge", d3.forceManyBody().strength(2))
+            .force("center", d3.forceCenter(width / 2, height / 2 - 30).strength(0.1))
+            .force("collision", d3.forceCollide().radius(d => d.r + 1))
+            .on("tick", ticked);
+
+        function ticked() {
+            nodes.attr("transform", d => `translate(${d.x},${d.y})`);
+        }
+
+        // Custom cursor
+        (function cursor(){
+            const cursor = document.querySelector('.custom-cursor');
+            if(!cursor) return;
+
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top  = e.clientY + 'px';
+            });
+
+            const interactive = document.querySelectorAll('a, button, [role="button"]');
+            interactive.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            const footer = document.querySelector('.footer');
+            let isInFooter = false;
+            if(footer) {
+                footer.addEventListener('mouseenter', () => {
+                    cursor.classList.add('footer-cursor');
+                    isInFooter = true;
+                });
+                footer.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('footer-cursor');
+                    isInFooter = false;
+                });
+            }
+
+            const makeDot = (x, y) => {
+                const dot = document.createElement('div');
+                dot.className = 'click-dot';
+                if(isInFooter) {
+                    dot.classList.add('footer-dot');
+                }
+                dot.style.left = x + 'px';
+                dot.style.top  = y + 'px';
+                document.body.appendChild(dot);
+                setTimeout(() => dot.classList.add('fade-out'), 1000);
+                setTimeout(() => dot.remove(), 4000);
+            }
+
+            document.addEventListener('mousedown', e => {
+                cursor.classList.add('click');
+                makeDot(e.pageX, e.pageY);
+            });
+            document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
+            document.addEventListener('mouseleave',() => {
+                cursor.style.opacity = '0';
+                cursor.classList.remove('click');
+            });
+            document.addEventListener('mouseenter',() => {
+                cursor.style.opacity = '1';
+            });
+        })();
+
+        // Figma prototype auto-reload on scroll
+        document.addEventListener("DOMContentLoaded", function () {
+            const resultSection = document.querySelector("#result");
+            const figmaFrame = document.querySelector("#figmaEmbed");
+            const originalSrc = figmaFrame.src;
+            let hasReloaded = false;
+
+            const figmaObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !hasReloaded) {
+                        // Restart the prototype by reloading iframe
+                        figmaFrame.src = "";
+                        figmaFrame.src = originalSrc;
+                        hasReloaded = true;
+                    } else if (!entry.isIntersecting) {
+                        // allow reload again if user scrolls away
+                        hasReloaded = false;
+                    }
+                });
+            }, { threshold: 0.4 }); // triggers when 40% visible
+
+            figmaObserver.observe(resultSection);
+        });
+    </script>
+</body>
+</html>

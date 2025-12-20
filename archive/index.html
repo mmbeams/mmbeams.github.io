@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en" class="cursor-default">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>archive . moira huang</title>
+  <link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" href="../images/signature.png" sizes="16x16">
+<link rel="icon" type="image/png" href="../images/signature.png" sizes="32x32">
+  <style>
+    /* =========================================================
+       Fonts
+    ========================================================= */
+    @font-face {
+      font-family: 'ShadowsIntoLight';
+      src: url('../fonts/ShadowsIntoLight-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'EduQLDHand';
+      src: url('../fonts/EduQLDHand-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Cedarville Cursive';
+      src: url('../fonts/CedarvilleCursive-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'EduQLDBeginner';
+      src: url('../fonts/EduQLDBeginner-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'EduAUVICWANTDots';
+      src: url('../fonts/EduAUVICWANTDots-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* =========================================================
+       Reset + Root
+    ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --primary: #2a2a2a;
+      --accent: #ffa200;
+      --bg: #FFFFFF;
+      --paper-dot: rgba(0,0,0,0.03);
+      --hover: 0.7;
+      --speed: .3s;
+
+      /* Layout rhythm */
+      --page-x: clamp(1rem, 5vw, 6rem);   /* page side padding */
+      --container: 1200px;                /* shared max width */
+      --radius: 20px;
+
+    }
+
+    html { scroll-behavior: auto; }
+    body{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--primary);
+      background: var(--bg);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Subtle paper texture */
+    body::before{
+      content:'';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, var(--paper-dot) 1px, transparent 0);
+      background-size: 20px 20px;
+      pointer-events: none; z-index: -1; opacity: .4;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{ width: 2px; }
+    ::-webkit-scrollbar-thumb{ background: rgba(42,42,42,.3); border-radius: 1px; }
+    ::-webkit-scrollbar-track{ background: rgba(255,255,255,.1); }
+
+    /* =========================================================
+       Custom Cursor (kept from your version)
+    ========================================================= */
+    *{ cursor: none !important; }
+    .custom-cursor{
+      position: fixed; top:0; left:0; width:8px; height:8px;
+      background:#000; border-radius:50%;
+      pointer-events:none; z-index:9999;
+      transition: transform .1s ease;
+      transform: translate(-50%, -50%);
+    }
+    .custom-cursor.hover, .custom-cursor.click{ transform: translate(-50%, -50%) scale(2); }
+    .click-dot{
+      position:absolute; width:16px; height:16px; background:#000; border-radius:50%;
+      pointer-events:none; opacity:1; transform:translate(-50%,-50%); transition:opacity .2s ease; z-index:9998;
+    }
+    .click-dot.fade-out{ opacity:0; }
+
+    /* =========================================================
+       Shared container
+    ========================================================= */
+    .container{
+      width: min(100% - 2*var(--page-x), var(--container));
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+    .hero{
+      padding: 60px 45px 45px 45px;
+    }
+
+    .hero .container{
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero .name{
+      font-family: 'EduAUVICWANTDots', cursive;
+      color: #000000;
+      font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* .typing-cursor{
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #000;
+      border-radius: 50%;
+      margin-left: 8px;
+      vertical-align: baseline;
+      animation: blink 1.2s steps(1) infinite;
+    }
+
+    @keyframes blink{
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    } */
+
+    .hero-nav ul{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      position: relative;
+    }
+
+    .hero-nav li{
+      position: relative;
+      padding-left: 0;
+    }
+
+    .hero-nav a{
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 18px;
+      line-height: 20px;
+      font-weight: 400;
+      letter-spacing: .5px;
+      transition: opacity 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .hero-nav a.active{
+      font-weight: 500;
+      opacity: 1;
+    }
+
+    .hero-nav {
+      margin-bottom: 0;
+    }
+
+    /* Nav indicator circle */
+    .nav-indicator{
+      position: absolute;
+      left: -30px;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      background: #000;
+      border-radius: 50%;
+      transform: translate(0, 2px);
+      transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .hero-tagline {
+      font-family: 'EduAUVICWANTDots', cursive;
+      color: #000000;
+      font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+      text-align: right;
+      white-space: pre-line;
+      margin-top: 0;
+      min-height: 2.4em;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      position: relative;
+    }
+
+    .hero-tagline .typed-line {
+      display: inline;
+    }
+
+    .hero-tagline span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-tagline-image {
+      width: 80px;
+      height: auto;
+      display: block;
+      margin-top: 0;
+      position: relative;
+      z-index: 10;
+      transform-origin: center center;
+      animation: rotateFlower 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      cursor: pointer;
+    }
+
+    .hero-tagline-image:hover {
+      animation: rotateFlowerHover 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes rotateFlower {
+      0% {
+        transform: rotate(-160deg);
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes rotateFlowerHover {
+      0% {
+        transform: rotate(-160deg);
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    /* =========================
+   IMAGE GALLERY (2 columns, 45px gutters & edges)
+========================= */
+.gallery-section{
+  padding: 0 45px;                /* 45px to page edges */
+}
+.gallery-section .container{
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2x2 grid for squares */
+  gap: 45px;                       /* 45px between all tiles */
+}
+
+/* full width bottom row */
+.gallery-bottom{
+  grid-column: 1 / -1; /* span full width */
+}
+
+/* tiles */
+.gallery-item{
+  border-radius: 40px;
+  overflow: hidden;
+  background: var(--bg);
+  border: 0.8px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.05);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  transition: transform .3s ease, background-color .4s ease;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+/* Animation for grid items - staggered appearance */
+.gallery-item:nth-child(1){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.gallery-item:nth-child(2){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.45s;
+}
+
+.gallery-item:nth-child(3){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.6s;
+}
+
+.gallery-item:nth-child(4){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.75s;
+}
+
+.gallery-item:nth-child(5){
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.9s;
+}
+
+/* Keyframe animation */
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* sizes requested */
+.gallery-item.square{ height: 630px; }   /* square grids - fixed height */
+.gallery-item.half-height{ height: 330px; } /* full width bottom grid */
+
+/* center images, keep original proportions */
+.gallery-item a{ display:block; width:100%; height:100%; display:flex; align-items:center; justify-content:center; position:relative; }
+.gallery-item img{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; position:relative; z-index:2; }
+
+/* background image/color for grids */
+.gallery-item a::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index:1;
+}
+
+/* Google I/O Connect: show google_bg.png on hover */
+.gallery-item.square:nth-child(1):hover a::before{
+  background-image: url('google_bg.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+}
+
+/* OtherDay: show #3D3B8D on hover */
+.gallery-item.square:nth-child(2):hover a::before{
+  background-color: #3D3B8D;
+  opacity: 1;
+}
+
+/* IMA Logo: orange background on hover */
+.gallery-item.square:nth-child(3):hover a::before{
+  background-color: #FFB800;
+  opacity: 1;
+}
+
+/* letters i couldn't say: dark background on hover */
+.gallery-item.square:nth-child(4):hover a::before{
+  background-color: #181815;
+  opacity: 1;
+}
+
+/* contact block styling */
+/* let us absolutely position inside the card */
+.gallery-item.contact-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 45px;
+  background: var(--bg);
+  transition: background-color 0.5s ease;
+  position: relative;
+}
+
+/* keep existing text/icons above the decorative image */
+.gallery-item.contact-block > *{ position: relative; z-index: 1; }
+
+/* the new bottom-right image */
+.gallery-item.contact-block .corner-art{
+  position: absolute;
+  right: -60px;         /* tweak if you want tighter to the edge */
+  bottom: -60px;
+  width: 280px;         /* adjust size as you like */
+  height: auto;
+  z-index: 0;           /* below text/icons, above card background */
+  pointer-events: none; /* don't block clicks on the icons */
+}
+
+.gallery-item.contact-block:hover {
+  background: #E8E7E4;
+}
+
+.contact-text-top {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 400;
+  color: var(--primary);
+}
+
+.contact-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.contact-text-bottom {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--primary);
+  letter-spacing: .5px;
+}
+
+.contact-icons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.contact-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.contact-icons a:hover {
+  opacity: 0.7;
+}
+
+.contact-icons img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* overlay labels (kept from your version) */
+.gallery-item .overlay-title{
+  position:absolute; bottom:calc(45px + 24px); left:45px; z-index:10; pointer-events:none;
+  font-family:'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 400; color: var(--primary);
+}
+.gallery-item .overlay-subtitle{
+  position:absolute; bottom:45px; left:45px; z-index:10; pointer-events:none;
+  font-family:'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400; color: var(--primary); letter-spacing:.5px;
+}
+
+/* responsive: stack on small screens */
+@media (max-width: 768px){
+  .gallery-grid{ grid-template-columns: 1fr; }
+  .gallery-item.tall{ height: 620px; }
+  .gallery-item.triangle{ height: 240px; }
+
+  /* Make contact block text smaller on smaller screens */
+  .contact-text-top {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .contact-text-bottom {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .overlay-title {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .overlay-subtitle {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  padding: 96px 45px 45px 45px;
+}
+
+.footer .container{
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-content {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.footer-signature {
+  font-family: 'EduAUVICWANTDots', cursive;
+  color: #000000;
+  font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+}
+
+.footer-text {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.3);
+  letter-spacing: .5px;
+}
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+    @media (max-width: 1024px){
+      .signature{ inline-size: 56px; }
+    }
+    @media (max-width: 768px){
+      .hero-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .hero-bento{
+        grid-template-areas:
+          "signature nav"
+          "content   content"
+          "social    social";
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        gap: 1.25rem 1rem;
+      }
+      .hero-nav ul{ flex-direction: row; gap: 1rem; justify-content:flex-end; }
+      .social{ justify-content:center; }
+
+      /* Gallery responsive */
+      .gallery-row.second-row {
+        grid-template-columns: 1fr;
+        gap: clamp(0.5rem, 1vw, 1rem);
+      }
+
+      /* Make hero text smaller on smaller screens */
+      .hero .name,
+      .hero-tagline,
+      .footer-signature {
+        font-size: clamp(1.2rem, 1.4rem + .4vw, 1.6rem);
+      }
+    }
+    @media (max-width: 480px){
+      .signature{ inline-size: 44px; }
+
+      /* Gallery mobile - all images stack vertically */
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom Cursor -->
+  <div class="custom-cursor"></div>
+
+  <!-- =========================
+       HERO
+  ========================== -->
+  <section class="hero">
+    <div class="container">
+      <div class="name">
+        <span id="typed-name"></span>
+        <span class="typing-cursor"></span>
+      </div>
+      <nav class="hero-nav" aria-label="Primary">
+        <ul>
+          <div class="nav-indicator"></div>
+          <li><a href="../index.html">product | uiux design</a></li>
+          <li><a href="index.html" class="active">other works :O</a></li>
+          <li><a href="../about/index.html">about</a></li>
+        </ul>
+      </nav>
+      <div class="hero-tagline">
+        <img src="../images/flower1.png" alt="" class="hero-tagline-image">
+        <span>blending art design tech</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" id="works">
+  <div class="container">
+    <div class="gallery-grid">
+
+      <!-- Square 1 -->
+      <div class="gallery-item square">
+        <a href="../googleIO/index.html">
+          <img src="google.png" alt="Google I/O Connect">
+        </a>
+        <div class="overlay-title">Google I/O Connect</div>
+        <div class="overlay-subtitle">Graphic Design</div>
+      </div>
+
+      <!-- Square 2 -->
+      <div class="gallery-item square">
+        <a href="../otherDay/index.html">
+          <img src="otherDay.png" alt="OtherDay">
+        </a>
+        <div class="overlay-title">OtherDay</div>
+        <div class="overlay-subtitle">App Design . Figma Design-a-thon</div>
+      </div>
+
+      <!-- Square 3 (switched with Square 4) -->
+      <div class="gallery-item square">
+        <a href="../imaLogo/index.html">
+          <img src="imalogo.png" alt="IMA Logo">
+        </a>
+        <div class="overlay-title">IMA Logo</div>
+        <div class="overlay-subtitle">Motion Design</div>
+      </div>
+
+      <!-- Square 4 (switched with Square 3) -->
+      <div class="gallery-item square">
+        <a href="../letters/index.html">
+          <img src="letters.png" alt="letters i couldn't say">
+        </a>
+        <div class="overlay-title">letters i couldn't say</div>
+        <div class="overlay-subtitle">Creative Coding</div>
+      </div>
+
+      <!-- Bottom block (full width, half height) -->
+      <div class="gallery-item half-height gallery-bottom contact-block">
+        <div class="contact-text-top">
+          Designed in New York City<br>& Shanghai with love :)
+        </div>
+        <div class="contact-bottom">
+          <div class="contact-text-bottom">Keep in touch</div>
+          <div class="contact-icons">
+            <a href="https://www.linkedin.com/in/moira-huang" target="_blank">
+              <img src="../images/linkedin.png" alt="LinkedIn">
+            </a>
+            <a href="mailto:moirahuang18@gmail.com">
+              <img src="../images/gmail.png" alt="Email">
+            </a>
+          </div>
+        </div>
+        <img class="corner-art" src="../images/selected/5.png" alt="" aria-hidden="true">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-signature">mo.</span>
+        <span class="footer-text">@2025</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================
+       JS – nav active state + cursor
+  ========================== -->
+  <script>
+    // Scroll to top on load/restore
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const toTop = () => setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), 0);
+    window.addEventListener('load', toTop);
+    window.addEventListener('pageshow', e => { if (e.persisted) toTop(); });
+
+    // Typing animation for name
+    (function typeNameOnce(){
+      const nameEl = document.getElementById('typed-name');
+      if(!nameEl) return;
+
+      const nameText = 'moira huang';
+      let i = 0;
+      const typeDelay = 100;
+
+      const typeChar = () => {
+        if (i < nameText.length) {
+          nameEl.textContent += nameText[i];
+          i++;
+          setTimeout(typeChar, typeDelay);
+        }
+      };
+
+      typeChar();
+    })();
+
+
+    // Nav indicator animation
+    (function navIndicator(){
+      const indicator = document.querySelector('.nav-indicator');
+      const navLinks = document.querySelectorAll('.hero-nav li');
+
+      if(!indicator || navLinks.length === 0) return;
+
+      function updateIndicator(animate = false){
+        const activeLink = document.querySelector('.hero-nav a.active');
+        if(activeLink && activeLink.parentElement){
+          const li = activeLink.parentElement;
+          const topOffset = li.offsetTop;
+          const linkHeight = activeLink.offsetHeight;
+          const circleOffset = (linkHeight / 2) - 8; // Center circle (8px is half of 16px)
+          const targetTop = topOffset + circleOffset;
+
+          if(animate){
+            // Get previous position from sessionStorage
+            const prevTop = sessionStorage.getItem('navIndicatorTop');
+            if(prevTop !== null){
+              // Start from previous position
+              indicator.style.transition = 'none';
+              indicator.style.top = prevTop + 'px';
+              // Force reflow
+              indicator.offsetHeight;
+              // Animate to new position
+              indicator.style.transition = 'all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
+            }
+          }
+
+          indicator.style.top = targetTop + 'px';
+          // Store current position
+          sessionStorage.setItem('navIndicatorTop', targetTop);
+        }
+      }
+
+      // Check if coming from another page
+      const fromNav = sessionStorage.getItem('navTransition');
+      if(fromNav === 'true'){
+        updateIndicator(true);
+        sessionStorage.removeItem('navTransition');
+      } else {
+        updateIndicator(false);
+      }
+
+      // Store transition flag on nav link clicks
+      document.querySelectorAll('.hero-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          sessionStorage.setItem('navTransition', 'true');
+        });
+      });
+
+      // Update on window resize
+      window.addEventListener('resize', () => updateIndicator(false));
+    })();
+
+    // Custom cursor
+    (function cursor(){
+      const cursor = document.querySelector('.custom-cursor');
+      if(!cursor) return;
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+
+      const interactive = document.querySelectorAll('a, button, [role="button"]');
+      interactive.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      const makeDot = (x,y) => {
+        const dot = document.createElement('div');
+        dot.className = 'click-dot';
+        dot.style.left = x + 'px';
+        dot.style.top  = y + 'px';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.classList.add('fade-out'), 1000);
+        setTimeout(() => dot.remove(), 4000);
+      }
+      document.addEventListener('mousedown', e => { cursor.classList.add('click'); makeDot(e.pageX, e.pageY); });
+      document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
+      document.addEventListener('mouseleave',() => { cursor.style.opacity = '0'; cursor.classList.remove('click'); });
+      document.addEventListener('mouseenter',() => { cursor.style.opacity = '1'; });
+    })();
+  </script>
+</body>
+</html>

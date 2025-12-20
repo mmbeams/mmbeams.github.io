@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wavely</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" href="../images/signature.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../images/signature.png" sizes="32x32">
+
+  <!-- Preload key images -->
+  <link rel="preload" href="cover_bg.png" as="image">
+  <link rel="preload" href="cover.png" as="image">
+
+  <style>
+    @font-face {
+      font-family: 'SpecialElite';
+      src: url('../fonts/SpecialElite-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'ShadowsIntoLight';
+      src: url('../fonts/ShadowsIntoLight-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'EduAUVICWANTDots';
+      src: url('../fonts/EduAUVICWANTDots-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('../fonts/sf-pro-display/SFPRODISPLAYREGULAR.OTF') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    :root{
+      --cover-height: 900px;
+      --cover-aspect-w: 16;
+      --cover-aspect-h: 9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { margin: 0; padding: 0; }
+
+    body{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #F6F6F6;
+      color: #000000;
+      line-height: 1.6;
+      font-weight: 200;
+      overflow-x: hidden;
+      position: relative;
+      display: flow-root;
+      font-size: 15px;
+    }
+
+    /* Custom Cursor */
+    * {
+      cursor: none !important;
+    }
+
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background: #000;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease;
+      transform: translate(-50%, -50%);
+    }
+
+    .custom-cursor.hover,
+    .custom-cursor.click {
+      transform: translate(-50%, -50%) scale(2);
+    }
+
+    .click-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #000;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 1;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.2s ease;
+      z-index: 9998;
+    }
+
+    .click-dot.fade-out {
+      opacity: 0;
+    }
+
+    /* Top back icon bar */
+    nav{
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 2rem 1rem;
+      background: transparent;
+      backdrop-filter: none;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      transition: all .3s ease;
+    }
+    .back-btn{
+      color: #000;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 200;
+      letter-spacing: .5px;
+      transition: all .3s ease;
+      display: flex; align-items: center;
+    }
+    .back-btn:hover{ opacity: .7; transform: translateX(-5px); }
+
+    /* Hero background */
+    body::before{
+      content:'';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: var(--cover-height);
+      background: url('cover_bg.png') top center / cover no-repeat;
+      z-index: -2;
+    }
+
+    /* Layout containers (wider) */
+    .container{
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 3rem 5rem;
+    }
+
+    .white-content{
+      background: transparent;
+      padding-top: 4.5rem;
+    }
+
+    .work-hero{
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease .5s forwards;
+      position: relative;
+      background: transparent;
+      padding-bottom: 4.5rem;
+    }
+
+    .work-image.large{
+      margin: 4rem 0 2rem;
+      margin-right: calc(-50vw + 50%);
+      border-radius: 0;
+      aspect-ratio: calc(var(--cover-aspect-w) / var(--cover-aspect-h));
+      display: flex;
+      justify-content: flex-end;
+      width: 100vw;
+      position: relative;
+      left: 0;
+    }
+    .work-image{
+      border-radius: 12px;
+      overflow: hidden;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .work-image img{
+      width: 100%; height: auto; object-fit: contain;
+      display: block;
+    }
+
+    /* Hero grid */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 3.25rem;
+      align-items: flex-start;
+      margin-top: 3rem;
+    }
+
+    .hero-left{ display: flex; flex-direction: column; gap: 1rem; }
+    .hero-right{ display: flex; justify-content: flex-start; }
+
+    .work-title{
+      font-family: 'SF Pro', sans-serif;
+      font-size: clamp(2.4rem, 4vw, 3.1rem);
+      font-weight: 400;
+      margin: 0;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+    }
+
+    .work-subtitle{
+      font-family: 'SF Pro', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      font-weight: 300;
+      opacity: 0.85;
+      max-width: 340px;
+    }
+
+    .hero-intro{
+      font-size: 0.92rem;
+      line-height: 1.9;
+      font-weight: 400;
+      max-width: 380px;
+    }
+
+    .work-meta{ display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem; }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem 2.25rem;
+      font-size: 0.85rem;
+    }
+
+    .meta-grid span {
+      display: block;
+      opacity: 0.5;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.12em;
+    }
+
+    .section-divider{
+      width: 100%; height: 1px;
+      background: rgba(0,0,0,.06);
+      margin: 5rem 0 4.5rem;
+    }
+
+    /* Generic section block (wider) */
+    .work-section{
+      max-width: 1400px;
+      margin: 0 auto 5rem;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all .8s ease;
+    }
+    .work-section.visible{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .work-section img {
+      border-radius: 8px;
+    }
+
+    /* Section label + big headline (eatcue-style) */
+    .section-header{
+      margin-bottom: 2.5rem;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .section-label{
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 0.45rem;
+    }
+
+    .section-headline{
+      font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+      font-size: 22px !important;
+      line-height: 1.4 !important;
+      font-weight: 400 !important;
+    }
+
+    .section-headline span{
+      font-weight: 400;
+    }
+
+    .work-section h2{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+      font-size: 1.05rem !important;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      text-align: left !important;
+      opacity: 0.75;
+    }
+
+    .work-section h3{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+      font-size: 1.02rem !important;
+      font-weight: 500;
+      margin: 2.3rem 0 0.75rem;
+      text-transform: none;
+      letter-spacing: 0.01em;
+      text-align: left !important;
+    }
+
+    .work-section h4{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+      font-size: 0.94rem !important;
+      font-weight: 500 !important;
+      margin-top: 1.6rem !important;
+      margin-bottom: 0.35rem !important;
+    }
+
+    .work-section p,
+    .work-section ul,
+    .work-section ol,
+    .work-section blockquote{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+      font-size: 0.88rem !important;
+      line-height: 1.9 !important;
+      font-weight: 300 !important;
+      letter-spacing: 0.01em !important;
+      color: #111 !important;
+    }
+
+    .work-section p{
+      margin-bottom: 1.1rem !important;
+    }
+
+    .work-section ul,
+    .work-section ol{
+      padding-left: 1.25rem !important;
+      margin-bottom: 1.4rem !important;
+    }
+
+    .work-section blockquote{
+      border-left: 2px solid #000;
+      padding-left: 1rem !important;
+      margin: 1.5rem 0 !important;
+      font-style: italic;
+    }
+
+    .section-lead{
+      font-size: 1rem !important;
+      line-height: 1.7 !important;
+      font-weight: 400 !important;
+      max-width: 600px;
+      margin: 1.5rem 0 0;
+      text-align: left !important;
+    }
+
+    /* Split layout (text + image) */
+    .split-layout{
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 4rem;
+      align-items: center;
+    }
+    .split-layout--reverse{
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    }
+    .split-copy{
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .split-visual{
+      display: flex;
+      justify-content: flex-start;
+    }
+    .split-visual img{
+      max-width: 280px;
+      width: 100%;
+      opacity: 0.25;
+      background: #f5f5f5;
+      padding: 1.75rem;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    .center-text {
+      text-align: left;
+      margin-top: 3rem;
+    }
+
+    .center-text p {
+      max-width: 560px;
+    }
+
+    .goals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.75rem;
+      margin: 2.5rem 0 0;
+      text-align: left;
+    }
+
+    .goals-grid div {
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .goals-grid strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.88rem;
+    }
+
+    /* Concept layout: label small, description big, image right */
+    .concept-layout{
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 4rem;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .concept-copy{
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .concept-visual{
+      display: flex;
+      justify-content: flex-end;
+      margin-right: calc(-50vw + 50%);
+      position: relative;
+    }
+
+    .concept-visual img{
+      width: 100%;
+      max-width: 800px;
+      opacity: 1;
+      background: transparent;
+      padding: 0;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    .concept-smallline{
+      font-size: 0.8rem !important;
+      opacity: 0.78;
+    }
+
+    /* Feature rows: text + image */
+    .feature-row{
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 4rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+
+    .feature-copy{
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .feature-copy h4{
+      margin-top: 0 !important;
+      margin-bottom: 0.15rem !important;
+      font-size: 0.95rem !important;
+      font-weight: 500 !important;
+    }
+
+    .feature-visual{
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .feature-visual img{
+      max-width: 360px;
+      width: 100%;
+      opacity: 1;
+      background: transparent;
+      padding: 0;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
+    /* Steps (today's networking) */
+    .steps{
+      margin-top: 2rem;
+    }
+
+    .step{
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+      column-gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-number{
+      font-size: 0.8rem;
+      font-weight: 500;
+      opacity: 0.5;
+      margin-top: 0.2rem;
+    }
+
+    .step-title{
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+
+    .step p{
+      margin-bottom: 0.25rem !important;
+    }
+
+    /* Stats section */
+    .stat-grid{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.5rem;
+      margin: 2.75rem 0 1.25rem;
+    }
+
+    .stat-card{
+      background: #f7f7f7;
+      border-radius: 12px;
+      padding: 2rem 1.75rem 2.1rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .stat-card-number{
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-card-label{
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      opacity: 0.7;
+    }
+
+    .stat-card-body{
+      font-size: 0.8rem;
+      opacity: 0.9;
+      line-height: 1.7;
+    }
+
+    .insight-block{
+      margin-top: 2.5rem;
+    }
+
+    .insight-block blockquote{
+      max-width: 680px;
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    /* Chat-bubble style quotes */
+    .quote-stream{
+      margin-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .quote-bubble{
+      position: relative;
+      background: #f3f3f3;
+      border-radius: 18px;
+      padding: 1.4rem 1.6rem;
+      max-width: 560px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.04);
+      font-size: 0.88rem !important;
+    }
+
+    .quote-bubble p{
+      margin: 0 !important;
+      line-height: 1.7 !important;
+    }
+
+    .quote-bubble .quote-index{
+      display: block;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      margin-bottom: 0.4rem;
+    }
+
+    .quote-bubble.left{
+      margin-right: auto;
+    }
+
+    .quote-bubble.right{
+      margin-left: auto;
+    }
+
+    .quote-bubble.left::after,
+    .quote-bubble.right::after{
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      width: 18px;
+      height: 18px;
+      background: #f3f3f3;
+      border-radius: 4px;
+      transform: rotate(45deg);
+    }
+
+    .quote-bubble.left::after{
+      left: 24px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.04);
+    }
+
+    .quote-bubble.right::after{
+      right: 24px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.04);
+    }
+
+    /* Persona cards */
+    .persona-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .persona-card{
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: #fafafa;
+      padding: 1.75rem 1.75rem 1.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      height: 100%;
+    }
+
+    .persona-card h4{
+      margin-top: 0 !important;
+      margin-bottom: 0.15rem !important;
+    }
+
+    .persona-role{
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.7;
+    }
+
+    .persona-quote{
+      font-style: italic;
+      font-size: 0.84rem;
+      line-height: 1.7;
+    }
+
+    /* Student Explorer with image row */
+    .persona-card--with-image{
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .persona-avatar{
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #e2e2e2;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .persona-body{
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .learn-list li + li{
+      margin-top: 0.75rem;
+    }
+
+    /* Iteration bento layout */
+    .iteration-block{
+      margin-top: 3rem;
+      padding: 1.75rem 1.75rem 2rem;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: #fbfbfb;
+    }
+
+    .iteration-header{
+      margin-bottom: 1.5rem;
+    }
+
+    .iteration-tagline{
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .iteration-grid{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.75rem;
+    }
+
+    .iteration-card{
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 1.3rem 1.4rem 1.4rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+    }
+
+    .iteration-label{
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.6;
+      margin-bottom: 0.25rem;
+    }
+
+    .iteration-card h4{
+      margin-top: 0.1rem !important;
+      margin-bottom: 0.25rem !important;
+    }
+
+    .iteration-card ul{
+      margin-top: 0.4rem !important;
+      margin-bottom: 0 !important;
+    }
+
+    .iteration-foot{
+      margin-top: 1.4rem;
+    }
+
+    .iteration-foot-title{
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Figma, project nav, contact */
+    .click-me-text{
+      text-align: center;
+      margin-top: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .click-me-text p{
+      margin: 0;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 200;
+      color: #000000;
+      opacity: 1;
+    }
+
+    .figma-embed{
+      display: flex; justify-content: center; align-items: center;
+      margin: 0; padding: 0 2rem;
+    }
+    .figma-embed iframe{
+      width: 100%;
+      height: 800px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .figma-link-container{
+      text-align: center;
+      margin-top: 12rem;
+      margin-bottom: 4rem;
+    }
+
+    .figma-link-button{
+      display: inline-block;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #000000;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border: 2px solid #000000;
+      border-radius: 40px;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .figma-link-button:hover{
+      background-color: #AE39F2;
+      color: #FFFFFF;
+      border-color: #AE39F2;
+    }
+
+    .project-nav{
+      padding: 4rem 0 2rem;
+      margin-top: 6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .project-nav:has(.next:only-child){
+      justify-content: flex-end;
+    }
+    .project-nav a{
+      color: #000000;
+      text-decoration: none;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      padding: 1rem 0;
+    }
+    .project-nav a:hover{ opacity: 0.7; }
+    .project-nav .prev::before{ content: '← '; }
+    .project-nav .next::after{ content: ' →'; }
+
+    .contact-block {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0;
+      padding-top: 4rem;
+      background: transparent;
+      transition: background-color 0.5s ease;
+      position: relative;
+      margin-top: 4rem;
+      min-height: 330px;
+    }
+
+    .contact-block > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-block .corner-art {
+      position: absolute;
+      right: -60px;
+      bottom: -60px;
+      width: 280px;
+      height: auto;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .contact-text-top {
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #000000;
+    }
+
+    .contact-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-text-bottom {
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 400;
+      color: #000000;
+      letter-spacing: 0.5px;
+    }
+
+    .contact-icons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .contact-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-icons a:hover {
+      opacity: 0.7;
+    }
+
+    .contact-icons img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    /* Section Navigation */
+    .section-nav {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 999;
+    }
+
+    .section-nav-progress {
+      position: relative;
+      width: 56px;
+      height: 56px;
+    }
+
+    .section-nav-progress svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .section-nav-progress circle {
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .progress-bg {
+      stroke: rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      stroke: #000;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+
+    .section-nav-toggle {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      border: none;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none !important;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .section-nav-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    .section-nav-menu {
+      position: absolute;
+      bottom: 60px;
+      right: 0;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 0.5rem 0;
+      min-width: 180px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .section-nav-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .section-nav-menu a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: #000;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+      cursor: none !important;
+    }
+
+    .section-nav-menu a:hover {
+      background-color: #f5f5f5;
+    }
+
+    .section-nav-menu a.active {
+      font-weight: 500;
+      background-color: #f0f0f0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: #FFF; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.3); border-radius: 1px; }
+
+    /* Footer */
+    .footer {
+      background: #000000;
+      padding: 45px 0px 30px 0px;
+      position: relative;
+      margin-top: 96px;
+    }
+
+    .footer .container{
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 70px;
+      position: relative;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-left-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-contact-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-contact-text a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: underline;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-contact-text a:hover {
+      opacity: 0.7;
+    }
+
+    .footer-flower {
+      position: absolute;
+      top: 46%;
+      transform: translateY(-50%);
+      right: 70px;
+      width: 160px;
+      height: auto;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      position: relative;
+      z-index: 2;
+      padding-left: 0;
+      padding-bottom: 20px;
+    }
+
+    .footer-signature {
+      font-family: 'EduAUVICWANTDots', cursive;
+      color: #FFFFFF;
+      font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+    }
+
+    .footer-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .custom-cursor.footer-cursor{
+      background: #FFF;
+    }
+
+    .custom-cursor.footer-cursor.hover,
+    .custom-cursor.footer-cursor.click{
+      background: #FFF;
+    }
+
+    .click-dot.footer-dot{
+      background:#FFF;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp{
+      from{ opacity: 0; transform: translateY(40px); }
+      to{ opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        margin-top: 2.5rem;
+      }
+      .hero-right{
+        max-width: 420px;
+      }
+      .split-layout,
+      .split-layout--reverse,
+      .concept-layout,
+      .feature-row,
+      .iteration-grid{
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .split-visual,
+      .concept-visual,
+      .feature-visual{
+        justify-content: flex-start;
+      }
+      .goals-grid{
+        grid-template-columns: 1fr;
+      }
+      .stat-grid{
+        grid-template-columns: 1fr;
+      }
+      .work-section{
+        max-width: 100%;
+      }
+      .quote-bubble{
+        max-width: 100%;
+      }
+      .persona-card--with-image{
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 768px){
+      nav{ padding: 1.5rem 1rem; }
+      .container{ padding: 5.5rem 1.5rem 3rem; }
+      .project-nav{
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      .work-image.large{
+        margin: 4rem -1.5rem 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom Cursor -->
+  <div class="custom-cursor"></div>
+
+  <!-- Section Navigation -->
+  <div class="section-nav">
+    <div class="section-nav-progress">
+      <svg>
+        <circle class="progress-bg" cx="28" cy="28" r="26"></circle>
+        <circle class="progress-bar" cx="28" cy="28" r="26" id="progressCircle"></circle>
+      </svg>
+      <button class="section-nav-toggle" id="sectionNavToggle">1</button>
+    </div>
+    <div class="section-nav-menu" id="sectionNavMenu">
+      <a href="#intro1" data-section="intro">1. Intro</a>
+      <a href="#section-solution" data-section="solution">2. Solution</a>
+      <a href="#research1" data-section="research">3. Research</a>
+      <a href="#design1" data-section="v1">4. Design Process V1</a>
+      <a href="#v2testing" data-section="v2">5. Design Process V2</a>
+      <a href="#final1" data-section="final">6. Final Design</a>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="../index.html" class="back-btn">←</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Hero Section -->
+    <div class="work-hero">
+      <div class="work-image large">
+        <img src="cover.png" alt="Wavely Cover">
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-left">
+          <h1 class="work-title">Wavely —<br>Designing a smarter coffee chat network</h1>
+          <p class="work-subtitle">From cold DMs to weekly ripple conversations.</p>
+
+          <div class="work-meta">
+            <div class="meta-grid">
+              <div>
+                <span>Type</span>
+                App Design
+              </div>
+              <div>
+                <span>Role</span>
+                Research, Design, Test
+              </div>
+              <div>
+                <span>Timeline</span>
+                08/2025 – Present
+              </div>
+              <div>
+                <span>Location</span>
+                New York, NY
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <div class="white-content">
+      <!-- Intro + Challenge + context -->
+      <div class="work-section" id="section-intro">
+        <h3 style="margin-bottom: 2rem; text-align: center !important; max-width: 100%; margin-left: auto; margin-right: auto; display: block;">Networking started to feel pretty pointless</h3>
+
+        <img src="intro1.png" alt="Introduction" style="width: 40%; max-width: 200px; margin: 0 auto 3rem; display: block;" id="intro1">
+
+        <p style="font-size: 1.1rem; line-height: 1.8; text-align: center; max-width: 700px; margin-left: auto; margin-right: auto; margin-bottom: 4rem;">
+          In my last years of school, I knew I was "supposed" to network. But every LinkedIn message felt cold and pointless. I opened LinkedIn, tried to reach out, and froze—who do I message, what do I say, and why would they reply? After a few unanswered DMs and hearing the same frustration from students, new grads, and busy professionals, I started Wavely as a way to redesign that experience.
+        </p>
+
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Intro2 Image - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <img src="intro2.png" alt="Question" style="width: 100%; display: block;">
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="work-section">
+
+        <div class="section-header" style="margin-top: 0;">
+          <div class="section-label">?</div>
+          <p class="section-headline" style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important;">
+            How can I improve online networking?
+          </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <h3 style="text-align: center !important; display: block; margin-left: auto; margin-right: auto;">Design goals</h3>
+        </div>
+
+        <div class="goals-grid" style="text-align: center;">
+          <div>
+            <strong style="font-family: 'SF Pro Display', sans-serif; font-size: 22px; font-weight: 400;">High-intent conversations</strong><br>
+            <span style="font-size: 14px;">Make each coffee chat clearly scoped<br>and mutually valuable instead of vague.</span>
+          </div>
+          <div>
+            <strong style="font-family: 'SF Pro Display', sans-serif; font-size: 22px; font-weight: 400;">Low-commitment</strong><br>
+            <span style="font-size: 14px;">Fit realistically into busy schedules<br>and fluctuating social energy.</span>
+          </div>
+          <div>
+            <strong style="font-family: 'SF Pro Display', sans-serif; font-size: 22px; font-weight: 400;">Ripple-driven</strong><br>
+            <span style="font-size: 14px;">Let one good chat naturally<br>trigger the next helpful connection.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Concept at a glance -->
+      <div class="work-section" id="section-solution">
+        <div class="concept-layout">
+          <div class="concept-copy">
+            <div class="section-label">The Solution</div>
+            <p class="section-headline" style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important;">
+              Wavely is a <span>weekly coffee chat network</span> that cuts out cold DMs and endless feeds,
+              matching you with <span>one helpful person at a time</span> and letting each good chat lead to the next.
+            </p>
+          </div>
+          <div class="concept-visual">
+            <img src="overview.png" alt="Wavely overview flow">
+          </div>
+        </div>
+
+        <!-- Feature rows -->
+        <div style="max-width: 1000px; margin: 3rem auto 0;">
+          <div class="feature-row">
+          <div class="feature-copy">
+            <h4>Weekly Waves</h4>
+            <p>Opt in only when you have time, get one thoughtful match, and show what you're looking for and can offer, so each chat feels like a fair exchange, not a favor.</p>
+          </div>
+          <div class="feature-visual">
+            <img src="weekly.gif" alt="Weekly Waves feature">
+          </div>
+        </div>
+
+        <div class="feature-row" style="margin-top: 1.5rem; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);">
+          <div class="feature-visual" style="order: 1; justify-content: flex-start;">
+            <img src="intro.gif" alt="Ask and Give feature">
+          </div>
+          <div class="feature-copy" style="order: 2; text-align: left;">
+            <h4>Warm Starts</h4>
+            <p>Before each chat, Wavely gives you a quick "why you two" summary of what brought you together, so you can open with something real instead of a cold DM.</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="feature-copy">
+            <h4>Refer &amp; Ripples</h4>
+            <p>After a good chat, you can introduce them to someone else. Over time, those warm intros turn into a web of helpful people, not just a longer contact list.</p>
+          </div>
+          <div class="feature-visual">
+            <img src="refer.gif" alt="Refer and Ripple feature">
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Research Images - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;" id="section-research">
+        <!-- Research Image 0 -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="research0.png" alt="Research overview" style="width: 100%; display: block;">
+        </div>
+
+        <!-- Research Image 1 -->
+        <div style="width: 100%; background-color: #181816;">
+          <img src="research1.png" alt="Research findings part 1" style="width: 100%; display: block;" id="research1">
+        </div>
+
+        <!-- Research Image 2 -->
+        <div style="width: 100%; background-color: #181816;">
+          <img src="research2.png" alt="Research findings part 2" style="width: 100%; display: block;">
+        </div>
+
+        <!-- Research Image 3 -->
+        <div style="width: 100%; background-color: #181816;">
+          <img src="research3.png" alt="Research findings part 3" style="width: 100%; display: block;">
+        </div>
+
+        <!-- Design Image 1 -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="design1.png" alt="Design process" style="width: 100%; display: block;" id="design1">
+        </div>
+      </div>
+
+      <!-- V1 Video Section -->
+      <div id="section-v1"></div>
+      <div class="work-section">
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 1200px; margin: 0 auto;">
+          <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 2rem 0;">Search → Filter → DM.</p>
+          <video autoplay loop muted playsinline style="width: 100%; max-width: 400px; border-radius: 12px;">
+            <source src="v1.mov" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+
+      <!-- V1 Testing Images - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <!-- research0.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="research0.png" alt="Research overview" style="width: 100%; display: block;">
+        </div>
+
+        <!-- v1testing.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="v1testing.png" alt="V1 Testing part 1" style="width: 100%; display: block;">
+        </div>
+
+        <!-- v1testing2.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="v1testing2.png" alt="V1 Testing part 2" style="width: 100%; display: block;">
+        </div>
+
+        <!-- research3.png -->
+        <div style="width: 100%; background-color: #181816;">
+          <img src="research3.png" alt="Research findings part 3" style="width: 100%; display: block;">
+        </div>
+
+        <!-- iteration1.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="iteration1.png" alt="Iteration 1" style="width: 100%; display: block;">
+        </div>
+
+        <!-- trans1.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="trans1.png" alt="Transition 1" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- interact.gif Section -->
+      <div style="background-color: #000000; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 4rem 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
+          <div style="justify-content: flex-start;">
+            <img src="interact.gif" alt="Interact profile animation" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          </div>
+          <div>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #FFFFFF;">before</p>
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #FFFFFF; margin: 0 0 1.5rem 0;">Search + Interact with profile</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #FFFFFF;">6 out of 8 users said that seeing only one interest on a profile still didn't tell them how to start a conversation. They felt they had "something in common" in theory, but were stuck on what to say first.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- trans2.png - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="trans2.png" alt="Transition 2" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- askgive.gif Section -->
+      <div class="work-section">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
+          <div style="justify-content: flex-start;">
+            <img src="askgive.gif" alt="Ask and Give feature" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          </div>
+          <div>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">after</p>
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Ask + Give</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">So I reframed the profile as an Ask + Give card, clearly showing what each person wants and what they can offer.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- intro.gif Section -->
+      <div class="work-section">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
+          <div style="justify-content: flex-start;">
+            <img src="intro.gif" alt="Warm Intro feature" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          </div>
+          <div>
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Warm Intro</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">Show 1–2 shared topics and how the person can help you as suggested openers, so it's easier to start a high-intent, mutually valuable conversation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Iteration2 and Trans1 Images - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <!-- iteration2.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="iteration2.png" alt="Iteration 2" style="width: 100%; display: block;">
+        </div>
+
+        <!-- trans1.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="trans1.png" alt="Transition 1" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- chats.gif Section -->
+      <div style="background-color: #000000; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 4rem 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
+          <div>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #FFFFFF;">before</p>
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #FFFFFF; margin: 0 0 1.5rem 0;">Endless Pending Chats</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #FFFFFF;">7 out of 8 users felt overwhelmed by a long list of pending chats and reported that once they had multiple pending conversations, they were unlikely to start any of them.</p>
+          </div>
+          <div style="justify-content: flex-end;">
+            <img src="chats.gif" alt="Endless pending chats" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- trans2.png - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="trans2.png" alt="Transition 2" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- weekly.gif Section -->
+      <div class="work-section">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
+          <div>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">after</p>
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Weekly Waves</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">Small, time-boxed batches of matches, so networking feels low-commitment, predictable, and easier to fit into their week.</p>
+          </div>
+          <div style="justify-content: flex-end;">
+            <img src="weekly.gif" alt="Weekly Waves feature" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Iteration3 and Trans1 Images - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <!-- iteration3.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="iteration3.png" alt="Iteration 3" style="width: 100%; display: block;">
+        </div>
+
+        <!-- trans1.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="trans1.png" alt="Transition 1" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- connection.png Section -->
+      <div style="background-color: #000000; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 4rem 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
+          <div style="justify-content: flex-start;">
+            <img src="connection.png" alt="Big shallow network" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          </div>
+          <div>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #FFFFFF;">before</p>
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #FFFFFF; margin: 0 0 1.5rem 0;">End up with a big, shallow network</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #FFFFFF;">4 of 8 users still described their networking in V1 as a "big but shallow." Conversations rarely led to the next helpful person.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- trans2.png - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="trans2.png" alt="Transition 2" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- refer.gif Section -->
+      <div class="work-section">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
+          <div style="justify-content: flex-start;">
+            <img src="refer.gif" alt="Refer and Ripple Network" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          </div>
+          <div>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">after</p>
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Refer & Ripple Network</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">After a good conversation, users can refer one more relevant person, and the system uses these referrals to suggest the next match.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- V2 Testing and Iteration Images - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+        <!-- research0.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="research0.png" alt="Research overview" style="width: 100%; display: block;">
+        </div>
+
+        <!-- v2testing.png -->
+        <div style="width: 100%; background-color: #F6F6F6;" id="section-v2">
+          <img src="v2testing.png" alt="V2 Testing" style="width: 100%; display: block;" id="v2testing">
+        </div>
+
+        <!-- research3.png -->
+        <div style="width: 100%; background-color: #181816;">
+          <img src="research3.png" alt="Research findings part 3" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- v2iteration1.png and v2iteration2.png - Side by Side -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; background-color: #F6F6F6; padding: 4rem 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">Problem</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Low motivation for giver/helper to reply</p>
+            <img src="v2iteration1.png" alt="V2 Iteration 1" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
+            <div style="max-width: 350px;">
+              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Optional Message & "Buy them a coffee"</p>
+              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">Askers can add a short message and send a coffee token, giving givers a clear reason and a small reward for helping.</p>
+            </div>
+          </div>
+          <div style="background-color: rgba(0,0,0,0.1); width: 1px;"></div>
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">Problem</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Avoid zombie users during matching</p>
+            <img src="v2iteration2.png" alt="V2 Iteration 2" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
+            <div style="max-width: 350px;">
+              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Expiring Matches</p>
+              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">If someone doesn't reply within 12 hours, the match expires and their weekly chance reduces.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider" style="margin: 2.5rem 0 2rem;"></div>
+
+      <!-- v2iteration3.png, v2iteration4.mov, v2iteration5.png - Three Columns -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; background-color: #F6F6F6; padding: 4rem 0;">
+        <div style="display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr; gap: 0; max-width: 1400px; margin: 0 auto; padding: 0 3rem;">
+          <!-- Column 1: v2iteration3.png -->
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Avoid ghosting / unrepling during chat</p>
+            <img src="v2iteration3.png" alt="V2 Iteration 3" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
+            <div style="max-width: 350px;">
+              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">10 mins chat</p>
+              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">encourage giver to help the person who receive a coffee will gain a coffee, and they can give coffee to someone else</p>
+            </div>
+          </div>
+
+          <div style="background-color: rgba(0,0,0,0.1); width: 1px;"></div>
+
+          <!-- Column 2: v2iteration4.mov -->
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Improve UI Playfulness</p>
+            <div style="width: 100%; max-width: 300px; height: 300px; overflow: hidden; border-radius: 12px; margin-bottom: 2rem;">
+              <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; object-position: center 47%; display: block;">
+                <source src="v2iteration4.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div style="max-width: 350px;">
+              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Swipe to join the wave</p>
+              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">Users swipe to join each weekly wave, making the flow feel more like a fun, lightweight game.</p>
+            </div>
+          </div>
+
+          <div style="background-color: rgba(0,0,0,0.1); width: 1px;"></div>
+
+          <!-- Column 3: v2iteration5.png -->
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Simplify UX flow through UI</p>
+            <img src="v2iteration5.png" alt="V2 Iteration 5" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
+            <div style="max-width: 350px;">
+              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Flip button</p>
+              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">Flip card using flip button, reduce an unnecessary step to start chat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final Images - Full Width -->
+      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;" id="section-final">
+        <!-- final1.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="final1.png" alt="Final 1" style="width: 100%; display: block;" id="final1">
+        </div>
+
+        <!-- final2.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="final2.png" alt="Final 2" style="width: 100%; display: block;">
+        </div>
+
+        <!-- final3.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="final3.png" alt="Final 3" style="width: 100%; display: block;">
+        </div>
+
+        <!-- final4.png -->
+        <div style="width: 100%; background-color: #F6F6F6;">
+          <img src="final4.png" alt="Final 4" style="width: 100%; display: block;">
+        </div>
+      </div>
+
+      <!-- Project Navigation -->
+      <div class="project-nav">
+        <a href="../huawei/index.html" class="next">Huawei Connect</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-left">
+          <div class="footer-left-text">Designed in New York with Love :)</div>
+          <div class="footer-contact-text">Happy to connect via <a href="https://www.linkedin.com/in/moira-huang" target="_blank">LinkedIn</a> & <a href="mailto:moirahuang18@gmail.com">Email</a></div>
+        </div>
+      </div>
+      <img src="../images/flower2.png" alt="" class="footer-flower">
+      <div class="footer-bottom">
+        <span class="footer-signature">mo.</span>
+        <span class="footer-text">@2025</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    // Reveal sections on scroll
+    const sections = document.querySelectorAll('.work-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    sections.forEach(s => observer.observe(s));
+
+    // Hide/show top nav on scroll
+    let lastScrollY = window.scrollY;
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > lastScrollY && y > 100) nav.style.transform = 'translateY(-100%)';
+      else nav.style.transform = 'translateY(0)';
+      lastScrollY = y;
+    });
+
+    // Custom cursor
+    (function cursor(){
+      const cursor = document.querySelector('.custom-cursor');
+      if(!cursor) return;
+
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+
+      const interactive = document.querySelectorAll('a, button, [role="button"]');
+      interactive.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      const footer = document.querySelector('.footer');
+      let isInFooter = false;
+      if(footer) {
+        footer.addEventListener('mouseenter', () => {
+          cursor.classList.add('footer-cursor');
+          isInFooter = true;
+        });
+        footer.addEventListener('mouseleave', () => {
+          cursor.classList.remove('footer-cursor');
+          isInFooter = false;
+        });
+      }
+
+      const makeDot = (x, y) => {
+        const dot = document.createElement('div');
+        dot.className = 'click-dot';
+        if(isInFooter) {
+          dot.classList.add('footer-dot');
+        }
+        dot.style.left = x + 'px';
+        dot.style.top  = y + 'px';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.classList.add('fade-out'), 1000);
+        setTimeout(() => dot.remove(), 4000);
+      }
+
+      document.addEventListener('mousedown', e => {
+        cursor.classList.add('click');
+        makeDot(e.pageX, e.pageY);
+      });
+      document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
+      document.addEventListener('mouseleave',() => {
+        cursor.style.opacity = '0';
+        cursor.classList.remove('click');
+      });
+      document.addEventListener('mouseenter',() => {
+        cursor.style.opacity = '1';
+      });
+    })();
+
+    // Set cover height for hero background
+    function setCoverHeight(){
+      const divider = document.querySelector('.section-divider');
+      if (!divider) return;
+      const y = divider.getBoundingClientRect().top + window.scrollY;
+      document.documentElement.style.setProperty('--cover-height', y + 'px');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setCoverHeight();
+      requestAnimationFrame(setCoverHeight);
+    });
+
+    window.addEventListener('resize', setCoverHeight);
+
+    // Section Navigation
+    (function sectionNav(){
+      const toggle = document.getElementById('sectionNavToggle');
+      const menu = document.getElementById('sectionNavMenu');
+      const menuLinks = menu.querySelectorAll('a');
+      const progressCircle = document.getElementById('progressCircle');
+
+      const sections = {
+        'intro': { el: document.getElementById('section-intro'), number: '1' },
+        'solution': { el: document.getElementById('section-solution'), number: '2' },
+        'research': { el: document.getElementById('section-research'), number: '3' },
+        'v1': { el: document.getElementById('section-v1'), number: '4' },
+        'v2': { el: document.getElementById('section-v2'), number: '5' },
+        'final': { el: document.getElementById('section-final'), number: '6' }
+      };
+
+      // Setup progress circle
+      const radius = 26;
+      const circumference = 2 * Math.PI * radius;
+      progressCircle.style.strokeDasharray = circumference;
+      progressCircle.style.strokeDashoffset = circumference;
+
+      // Toggle menu
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('active');
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+          menu.classList.remove('active');
+        }
+      });
+
+      // Handle menu item clicks
+      menuLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href').substring(1);
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            menu.classList.remove('active');
+          }
+        });
+      });
+
+      // Update progress and active section on scroll
+      function updateProgress() {
+        // Calculate scroll progress
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = scrollTop / docHeight;
+        const offset = circumference - (scrollPercent * circumference);
+        progressCircle.style.strokeDashoffset = offset;
+
+        // Update active section
+        const scrollPos = window.scrollY + window.innerHeight / 2;
+        let currentSection = 'intro';
+        let minDistance = Infinity;
+
+        Object.entries(sections).forEach(([key, { el }]) => {
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const elementTop = rect.top + window.scrollY;
+            const distance = Math.abs(elementTop - scrollPos);
+
+            // Find the section closest to the middle of the viewport
+            if (distance < minDistance && rect.top < window.innerHeight * 0.6) {
+              minDistance = distance;
+              currentSection = key;
+            }
+          }
+        });
+
+        // Update toggle number
+        toggle.textContent = sections[currentSection].number;
+
+        // Update active menu item
+        menuLinks.forEach(link => {
+          const section = link.getAttribute('data-section');
+          if (section === currentSection) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+
+      window.addEventListener('scroll', updateProgress);
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>

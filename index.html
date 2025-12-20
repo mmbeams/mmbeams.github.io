@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en" class="cursor-default">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>moira huang</title>
+  <link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" href="images/signature.png" sizes="16x16">
+<link rel="icon" type="image/png" href="images/signature.png" sizes="32x32">
+  <style>
+    /* =========================================================
+       Fonts
+    ========================================================= */
+    @font-face {
+      font-family: 'ShadowsIntoLight';
+      src: url('fonts/ShadowsIntoLight-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Caveat';
+      src: url('fonts/Caveat-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'EduAUVICWANTDots';
+      src: url('fonts/EduAUVICWANTDots-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* =========================================================
+       Reset + Root
+    ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --primary: #2a2a2a;
+      --accent: #ffa200;
+      --bg: #FFFFFF;
+      --paper-dot: rgba(0,0,0,0.03);
+      --hover: 0.7;
+      --speed: .3s;
+
+      /* Layout rhythm */
+      --page-x: clamp(1rem, 5vw, 6rem);   /* page side padding */
+      --container: 1200px;                /* shared max width */
+      --radius: 20px;
+
+    }
+
+    html { scroll-behavior: auto; }
+    body{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--primary);
+      background: var(--bg);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Subtle paper texture */
+    body::before{
+      content:'';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, var(--paper-dot) 1px, transparent 0);
+      background-size: 20px 20px;
+      pointer-events: none; z-index: -1; opacity: .4;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{ width: 2px; }
+    ::-webkit-scrollbar-thumb{ background: rgba(42,42,42,.3); border-radius: 1px; }
+    ::-webkit-scrollbar-track{ background: rgba(255,255,255,.1); }
+
+    /* =========================================================
+       Custom Cursor (kept from your version)
+    ========================================================= */
+    *{ cursor: none !important; }
+    .custom-cursor{
+      position: fixed; top:0; left:0; width:8px; height:8px;
+      background:#000; border-radius:50%;
+      pointer-events:none; z-index:9999;
+      transition: transform .1s ease, background .3s ease, border-color .3s ease;
+      transform: translate(-50%, -50%);
+    }
+    .custom-cursor.hover, .custom-cursor.click{
+      transform: translate(-50%, -50%) scale(3.5);
+      background: transparent;
+      border: .1px solid #000;
+    }
+    .custom-cursor.gallery-hover{
+      transform: translate(-50%, -50%) scale(3.5);
+      background: transparent;
+      border: .1px solid #000;
+    }
+    .custom-cursor.footer-cursor{
+      background: #FFF;
+    }
+    .custom-cursor.footer-cursor.hover,
+    .custom-cursor.footer-cursor.click{
+      background: transparent;
+      border-color: #FFF;
+    }
+    .click-dot{
+      position:absolute; width:16px; height:16px; background:#000; border-radius:50%;
+      pointer-events:none; opacity:1; transform:translate(-50%,-50%); transition:opacity .2s ease, background .2s ease; z-index:9998;
+    }
+    .click-dot.fade-out{ opacity:0; }
+    .click-dot.footer-dot{ background:#FFF; }
+
+    /* =========================================================
+       Shared container
+    ========================================================= */
+    .container{
+      width: min(100% - 2*var(--page-x), var(--container));
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+    .hero{
+      padding: 30px 0px 45px 0px;
+      position: relative;
+    }
+
+    .hero::after{
+      content: '';
+      position: absolute;
+      top: 65px;
+      left: 0;
+      right: 0;
+      height: 0.5px;
+      background: rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.8s ease 1.5s forwards;
+      opacity: 0;
+    }
+
+    .hero .container{
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 70px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-header{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 60px;
+      padding-bottom: 15px;
+      animation: slideDownFadeIn 0.8s ease 1.5s forwards;
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    @keyframes slideDownFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero .name{
+      display: block;
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+    }
+
+    .hero .name img{
+      height: 20px;
+      width: auto;
+      display: block;
+    }
+
+    .hero-nav{
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .hero-nav ul{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .hero-nav li{
+      position: relative;
+    }
+
+    .hero-nav a{
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      transition: opacity 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .hero-nav a.active{
+      font-weight: 200;
+      opacity: 1;
+    }
+
+    .hero-email{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #000000;
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .hero-email:hover{
+      opacity: 0.6;
+    }
+
+    /* Nav indicator circle - hidden now */
+    .nav-indicator{
+      display: none;
+    }
+
+    .hero-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 30px 0 60px 0;
+    }
+
+    .hero-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .hero-tagline-image {
+      width: 80px;
+      height: auto;
+      display: block;
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+      transform-origin: center center;
+      animation: rotateFlower 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      cursor: pointer;
+    }
+
+    .hero-tagline-image:hover {
+      animation: rotateFlowerHover 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes rotateFlower {
+      0% {
+        transform: rotate(-160deg);
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes rotateFlowerHover {
+      0% {
+        transform: rotate(-160deg);
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .hero-tagline {
+      font-family: 'EduAUVICWANTDots', cursive;
+      color: #000000;
+      font-size: clamp(0.9rem, 1.0rem + .2vw, 1.2rem);
+      text-align: center;
+      animation: fadeIn 1s ease 0.5s forwards;
+      opacity: 0;
+    }
+
+    .hero-subtext {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      text-align: left;
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .8px;
+      color: var(--primary);
+      animation: fadeIn 1s ease 1.5s forwards;
+      opacity: 0;
+    }
+
+    .hero-subtext div {
+      opacity: 0.6;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* =========================
+   IMAGE GALLERY (Column-based layout with alternating aspect ratios)
+========================= */
+.gallery-section{
+  padding: 0;
+}
+.gallery-section .container{
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 70px;
+}
+
+.gallery-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 10px; /* horizontal gap between columns */
+  row-gap: 120px; /* vertical gap between rows */
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gallery item wrapper - includes image and text below */
+.gallery-item-wrapper{
+  display: grid;
+  grid-template-rows: auto auto;
+  row-gap: 15px;
+  opacity: 0;
+  transform: translateY(60px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.gallery-item-wrapper:nth-child(3n+1){
+  animation-delay: 0.3s;
+}
+
+.gallery-item-wrapper:nth-child(3n+2){
+  animation-delay: 0.4s;
+}
+
+.gallery-item-wrapper:nth-child(3n+3){
+  animation-delay: 0.5s;
+}
+
+/* All items are square */
+.gallery-item-wrapper .gallery-item{
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+
+/* Gallery item (image container) */
+.gallery-item{
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform .3s ease, background-color .4s ease;
+}
+
+/* center images, keep original proportions */
+.gallery-item a{
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.gallery-item img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* background image/color for items */
+.gallery-item a::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  transition: background-color 0.5s ease, opacity 0.5s ease;
+  z-index: 1;
+}
+
+/* Wavely: light brown background always, darker on hover */
+.gallery-item-wrapper.wavely .gallery-item a::before{
+  background-color: #B8AD8F;
+  opacity: 1;
+}
+.gallery-item-wrapper.wavely .gallery-item:hover a::before{
+  background-color: #665B3A;
+  opacity: 1;
+}
+
+/* Oovo: light orange background always, darker on hover */
+.gallery-item-wrapper.oovo .gallery-item a::before{
+  background-color: #FFD4A3;
+  opacity: 1;
+}
+.gallery-item-wrapper.oovo .gallery-item:hover a::before{
+  background-color: #FF9318;
+  opacity: 1;
+}
+
+/* Google I/O Connect: light background, no hover */
+.gallery-item-wrapper.google .gallery-item a::before{
+  background-color: #EEEEED;
+  opacity: 1;
+}
+
+/* letters i couldn't say: light grey background, darker on hover */
+.gallery-item-wrapper.letters .gallery-item a::before{
+  background-color: #6B6B68;
+  opacity: 1;
+}
+.gallery-item-wrapper.letters .gallery-item:hover a::before{
+  background-color: #181815;
+  opacity: 1;
+}
+
+/* Huawei: gray background, no hover */
+.gallery-item-wrapper.huawei .gallery-item a::before{
+  background-color: #878787;
+  opacity: 1;
+}
+
+/* Make Huawei GIFs full width without distortion */
+.gallery-item-wrapper.huawei .gallery-item img{
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Huawei first image: align to top, flush to edges */
+.gallery-item-wrapper.huawei:nth-child(4) .gallery-item{
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.gallery-item-wrapper.huawei:nth-child(4) .gallery-item a{
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* Huawei third image: align to bottom, flush to edges */
+.gallery-item-wrapper.huawei:nth-child(6) .gallery-item{
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.gallery-item-wrapper.huawei:nth-child(6) .gallery-item a{
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+/* News Z: light grey background always, darker on hover */
+.gallery-item-wrapper.newsz .gallery-item a::before{
+  background-color: #A8AAA5;
+  opacity: 1;
+}
+.gallery-item-wrapper.newsz .gallery-item:hover a::before{
+  background-color: #5C5E57;
+  opacity: 1;
+}
+
+/* IMA Logo: light orange background, darker on hover */
+.gallery-item-wrapper.ima .gallery-item a::before{
+  background-color: #FFE5A3;
+  opacity: 1;
+}
+.gallery-item-wrapper.ima .gallery-item:hover a::before{
+  background-color: #FFB800;
+  opacity: 1;
+}
+
+/* OtherDay: light purple background, darker on hover */
+.gallery-item-wrapper.otherday .gallery-item a::before{
+  background-color: #8E8CB5;
+  opacity: 1;
+}
+.gallery-item-wrapper.otherday .gallery-item:hover a::before{
+  background-color: #3D3B8D;
+  opacity: 1;
+}
+/* OtherDay: keep image at full opacity */
+.gallery-item-wrapper.otherday .gallery-item img{
+  opacity: 1 !important;
+}
+
+/* Text below images */
+.gallery-item-text{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gallery-item-title{
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: .5px;
+  color: var(--primary);
+  opacity: 1;
+}
+
+.gallery-item-title:empty{
+  display: none;
+}
+
+.gallery-item-subtitle{
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 200;
+  letter-spacing: .5px;
+  color: var(--primary);
+  opacity: 0.6;
+}
+
+.gallery-item-title:empty + .gallery-item-subtitle{
+  margin-top: -4px;
+}
+
+/* Show/hide elements based on screen size */
+.mobile-only{
+  display: none;
+}
+
+.desktop-only{
+  display: block;
+}
+
+/* responsive: stack on small screens */
+@media (max-width: 768px){
+  .gallery-grid{
+    grid-template-columns: 1fr; /* single column on mobile */
+    gap: 45px;
+  }
+
+  /* Keep same text size on smaller screens */
+  .gallery-item-title {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .gallery-item-subtitle {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* Show mobile content, hide desktop content */
+  .mobile-only{
+    display: block;
+  }
+
+  .desktop-only{
+    display: none;
+  }
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  background: #000000;
+  padding: 45px 0px 30px 0px;
+  position: relative;
+  margin-top: 96px;
+}
+
+.footer .container{
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 70px;
+  position: relative;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-left-text {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: .5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-contact-text {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 200;
+  letter-spacing: .5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-contact-text a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: underline;
+  transition: opacity 0.3s ease;
+}
+
+.footer-contact-text a:hover {
+  opacity: 0.7;
+}
+
+.footer-flower {
+  position: absolute;
+  top: 46%;
+  transform: translateY(-50%);
+  right: 70px;
+  width: 160px;
+  height: auto;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+  padding-left: 0;
+  padding-bottom: 20px;
+}
+
+.footer-signature {
+  font-family: 'EduAUVICWANTDots', cursive;
+  color: #FFFFFF;
+  font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+}
+
+.footer-text {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 200;
+  letter-spacing: .5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+    @media (max-width: 1024px){
+      .signature{ inline-size: 56px; }
+    }
+    @media (max-width: 768px){
+      .hero-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .hero-bento{
+        grid-template-areas:
+          "signature nav"
+          "content   content"
+          "social    social";
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        gap: 1.25rem 1rem;
+      }
+      .hero-nav ul{ flex-direction: row; gap: 1rem; justify-content:flex-end; }
+      .social{ justify-content:center; }
+
+      /* Gallery responsive */
+      .gallery-row.second-row {
+        grid-template-columns: 1fr;
+        gap: clamp(0.5rem, 1vw, 1rem);
+      }
+
+      /* Make hero text smaller on smaller screens */
+      .hero .name,
+      .hero-tagline,
+      .footer-signature {
+        font-size: clamp(1.2rem, 1.4rem + .4vw, 1.6rem);
+      }
+    }
+    @media (max-width: 480px){
+      .signature{ inline-size: 44px; }
+
+      /* Gallery mobile - all images stack vertically */
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom Cursor -->
+  <div class="custom-cursor"></div>
+
+  <!-- =========================
+       HERO
+  ========================== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-header">
+        <div class="name">moira huang</div>
+        <nav class="hero-nav" aria-label="Primary">
+          <ul>
+            <div class="nav-indicator"></div>
+            <li><a href="index.html" class="active">work</a></li>
+            <li><a href="about/index.html">about</a></li>
+          </ul>
+        </nav>
+        <a href="https://www.linkedin.com/in/moira-huang" target="_blank" class="hero-email">linkedin</a>
+      </div>
+      <div class="hero-center">
+        <img src="images/flower2.png" alt="" class="hero-tagline-image">
+        <div class="hero-text-wrapper">
+          <div class="hero-tagline">i design and code minimal, human products
+          <br>that shape emotion and unseen experiences.
+          <br>recently graduated from nyu.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" id="works">
+  <div class="container">
+    <div class="gallery-grid">
+
+      <!-- Wavely - Row 1 -->
+      <div class="gallery-item-wrapper wavely">
+        <div class="gallery-item">
+          <a href="wavely/index.html">
+            <img src="images/wavely2.gif" alt="Wavely 2">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title desktop-only">Wavely</div>
+          <div class="gallery-item-subtitle desktop-only">Case Study</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper wavely">
+        <div class="gallery-item">
+          <a href="wavely/index.html">
+            <img src="images/wavely1.gif" alt="Wavely 1">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle desktop-only">I designed a coffee chat platform that encourages real conversations and turns one chat into a trusted network. I built an MVP and tested it with 50+ users across multiple iterations.</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper wavely">
+        <div class="gallery-item">
+          <a href="wavely/index.html">
+            <img src="images/wavely3.gif" alt="Wavely 3">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title mobile-only">Wavely</div>
+          <div class="gallery-item-subtitle mobile-only">I designed a coffee chat platform that encourages real conversations and turns one chat into a trusted network. I built an MVP and tested it with 50+ users across multiple iterations.</div>
+        </div>
+      </div>
+
+      <!-- Huawei - Row 2 -->
+      <div class="gallery-item-wrapper huawei">
+        <div class="gallery-item">
+          <a href="huawei/index.html">
+            <img src="images/huawei1.gif" alt="Huawei Connect">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title desktop-only">Huawei Connect</div>
+          <div class="gallery-item-subtitle desktop-only">Website Design</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper huawei">
+        <div class="gallery-item">
+          <a href="huawei/index.html">
+            <img src="images/selected/1.png" alt="Huawei Connect">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle desktop-only">Our team redesigned the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper huawei">
+        <div class="gallery-item">
+          <a href="huawei/index.html">
+            <img src="images/huawei3.gif" alt="Huawei Connect">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title mobile-only">Huawei Connect</div>
+          <div class="gallery-item-subtitle mobile-only">Our team redesigned the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+        </div>
+      </div>
+
+      <!-- Google I/O Connect - Row 3 -->
+      <div class="gallery-item-wrapper google">
+        <div class="gallery-item">
+          <a href="googleIO/index.html">
+            <img src="images/google1.png" alt="Google I/O Connect">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title desktop-only">Google I/O Connect</div>
+          <div class="gallery-item-subtitle desktop-only">Brand Identity, Graphic Design</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper google">
+        <div class="gallery-item">
+          <a href="googleIO/index.html">
+            <img src="images/google2.png" alt="Google I/O Connect">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle desktop-only">We partnered with Google I/O Connect to deliver a developer-focused event featuring Google Gemini.</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper google">
+        <div class="gallery-item">
+          <a href="googleIO/index.html">
+            <img src="images/google3.png" alt="Google I/O Connect">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title mobile-only">Google I/O Connect</div>
+          <div class="gallery-item-subtitle mobile-only">We partnered with Google I/O Connect to deliver a developer-focused event featuring Google Gemini.</div>
+        </div>
+      </div>
+
+      <!-- News Z - Row 4 -->
+      <div class="gallery-item-wrapper newsz">
+        <div class="gallery-item">
+          <a href="newz/index.html">
+            <img src="images/newz1.png" alt="NewZ">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title">newZ</div>
+          <div class="gallery-item-subtitle">Web3 App Design</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper newsz">
+        <div class="gallery-item">
+          <a href="newz/index.html">
+            <img src="images/newz2.png" alt="NewZ">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper newsz">
+        <div class="gallery-item">
+          <a href="newz/index.html">
+            <img src="images/newz3.png" alt="NewZ">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <!-- Oovo - Row 5 -->
+      <div class="gallery-item-wrapper oovo">
+        <div class="gallery-item">
+          <a href="oovo/index.html">
+            <img src="images/oovo1.png" alt="Oovo">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title">Oovo</div>
+          <div class="gallery-item-subtitle">App Design, Case Study (NYU Designathon 1st Prize)</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper oovo">
+        <div class="gallery-item">
+          <a href="oovo/index.html">
+            <img src="images/oovo2.png" alt="Oovo">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper oovo">
+        <div class="gallery-item">
+          <a href="oovo/index.html">
+            <img src="images/oovo3.png" alt="Oovo">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <!-- OtherDay - Row 6
+      <div class="gallery-item-wrapper otherday">
+        <div class="gallery-item">
+          <a href="otherDay/index.html">
+            <img src="archive/otherDay.png" alt="OtherDay">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title">OtherDay</div>
+          <div class="gallery-item-subtitle">App Design . Figma Design-a-thon</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper otherday">
+        <div class="gallery-item">
+          <a href="otherDay/index.html">
+            <img src="archive/otherDay.png" alt="OtherDay">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper otherday">
+        <div class="gallery-item">
+          <a href="otherDay/index.html">
+            <img src="archive/otherDay.png" alt="OtherDay">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div> -->
+
+      <!-- IMA Logo - Row 7 -->
+      <div class="gallery-item-wrapper ima">
+        <div class="gallery-item">
+          <a href="imaLogo/index.html">
+            <img src="images/ima1.png" alt="IMA Logo">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title">IMA Logo</div>
+          <div class="gallery-item-subtitle">Motion Design</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper ima">
+        <div class="gallery-item">
+          <a href="imaLogo/index.html">
+            <img src="images/ima2.png" alt="IMA Logo">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper ima">
+        <div class="gallery-item">
+          <a href="imaLogo/index.html">
+            <img src="images/ima3.png" alt="IMA Logo">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <!-- letters i couldn't say - Row 8 -->
+      <div class="gallery-item-wrapper letters">
+        <div class="gallery-item">
+          <a href="letters/index.html">
+            <img src="images/letters2.jpeg" alt="letters i couldn't say">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title">letters i couldn't say</div>
+          <div class="gallery-item-subtitle">Creative Coding</div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper letters">
+        <div class="gallery-item">
+          <a href="letters/index.html">
+            <img src="images/letters1.jpeg" alt="letters i couldn't say">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+      <div class="gallery-item-wrapper letters">
+        <div class="gallery-item">
+          <a href="letters/index.html">
+            <img src="images/letters3.jpeg" alt="letters i couldn't say">
+          </a>
+        </div>
+        <div class="gallery-item-text">
+          <div class="gallery-item-title"></div>
+          <div class="gallery-item-subtitle"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-left">
+          <div class="footer-left-text">Designed in New York with Love :)</div>
+          <div class="footer-contact-text">Happy to connect via <a href="https://www.linkedin.com/in/moira-huang" target="_blank">LinkedIn</a> & <a href="mailto:moirahuang18@gmail.com">Email</a></div>
+        </div>
+      </div>
+      <img src="images/flower2.png" alt="" class="footer-flower">
+      <div class="footer-bottom">
+        <span class="footer-signature">mo.</span>
+        <span class="footer-text">@2025</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================
+       JS – nav active state + cursor
+  ========================== -->
+  <script>
+    // Scroll to top on load/restore
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const toTop = () => setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), 0);
+    window.addEventListener('load', toTop);
+    window.addEventListener('pageshow', e => { if (e.persisted) toTop(); });
+
+    // Nav indicator animation
+    (function navIndicator(){
+      const indicator = document.querySelector('.nav-indicator');
+      const navLinks = document.querySelectorAll('.hero-nav li');
+
+      if(!indicator || navLinks.length === 0) return;
+
+      function updateIndicator(animate = false){
+        const activeLink = document.querySelector('.hero-nav a.active');
+        if(activeLink && activeLink.parentElement){
+          const li = activeLink.parentElement;
+          const topOffset = li.offsetTop;
+          const linkHeight = activeLink.offsetHeight;
+          const circleOffset = (linkHeight / 2) - 8; // Center circle (8px is half of 16px)
+          const targetTop = topOffset + circleOffset;
+
+          if(animate){
+            // Get previous position from sessionStorage
+            const prevTop = sessionStorage.getItem('navIndicatorTop');
+            if(prevTop !== null){
+              // Start from previous position
+              indicator.style.transition = 'none';
+              indicator.style.top = prevTop + 'px';
+              // Force reflow
+              indicator.offsetHeight;
+              // Animate to new position
+              indicator.style.transition = 'all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
+            }
+          }
+
+          indicator.style.top = targetTop + 'px';
+          // Store current position
+          sessionStorage.setItem('navIndicatorTop', targetTop);
+        }
+      }
+
+      // Check if coming from another page
+      const fromNav = sessionStorage.getItem('navTransition');
+      if(fromNav === 'true'){
+        updateIndicator(true);
+        sessionStorage.removeItem('navTransition');
+      } else {
+        updateIndicator(false);
+      }
+
+      // Store transition flag on nav link clicks
+      document.querySelectorAll('.hero-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          sessionStorage.setItem('navTransition', 'true');
+        });
+      });
+
+      // Update on window resize
+      window.addEventListener('resize', () => updateIndicator(false));
+    })();
+
+    // Custom cursor
+    (function cursor(){
+      const cursor = document.querySelector('.custom-cursor');
+      if(!cursor) return;
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+
+      const interactive = document.querySelectorAll('a, button, [role="button"]');
+      interactive.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      const galleryItems = document.querySelectorAll('.gallery-item-wrapper');
+      galleryItems.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('gallery-hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('gallery-hover'));
+      });
+
+      const footer = document.querySelector('.footer');
+      let isInFooter = false;
+      if(footer) {
+        footer.addEventListener('mouseenter', () => {
+          cursor.classList.add('footer-cursor');
+          isInFooter = true;
+        });
+        footer.addEventListener('mouseleave', () => {
+          cursor.classList.remove('footer-cursor');
+          isInFooter = false;
+        });
+      }
+
+      const makeDot = (x,y) => {
+        const dot = document.createElement('div');
+        dot.className = 'click-dot';
+        if(isInFooter) {
+          dot.classList.add('footer-dot');
+        }
+        dot.style.left = x + 'px';
+        dot.style.top  = y + 'px';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.classList.add('fade-out'), 1000);
+        setTimeout(() => dot.remove(), 4000);
+      }
+      document.addEventListener('mousedown', e => { cursor.classList.add('click'); makeDot(e.pageX, e.pageY); });
+      document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
+      document.addEventListener('mouseleave',() => { cursor.style.opacity = '0'; cursor.classList.remove('click'); });
+      document.addEventListener('mouseenter',() => { cursor.style.opacity = '1'; });
+    })();
+  </script>
+</body>
+</html>
