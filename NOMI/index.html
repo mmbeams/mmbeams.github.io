@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nomi</title>
+  <link rel="icon" type="image/png" href="../images/signature.png?v=1" />
+
+  <style>
+
+    @font-face {
+      font-family: 'SpecialElite';
+      src: url('../fonts/SpecialElite-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'ShadowsIntoLight';
+      src: url('../fonts/ShadowsIntoLight-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'EduAUVICWANTDots';
+      src: url('../fonts/EduAUVICWANTDots-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root{
+      --cover-height: 900px;
+      --cover-aspect-w: 16;
+      --cover-aspect-h: 9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { margin: 0; padding: 0; }
+    body{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #000000;
+      color: #FFFFFF;
+      line-height: 1.6;
+      font-weight: 200;
+      overflow-x: hidden;
+
+      position: relative;
+      display: flow-root;
+    }
+
+    /* Custom Cursor */
+    * {
+      cursor: none !important;
+    }
+
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background: #FFF;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease;
+      transform: translate(-50%, -50%);
+    }
+
+    .custom-cursor.hover,
+    .custom-cursor.click {
+      transform: translate(-50%, -50%) scale(2);
+    }
+
+    .click-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #FFF;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 1;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.2s ease;
+      z-index: 9998;
+    }
+
+    .click-dot.fade-out {
+      opacity: 0;
+    }
+
+    /* Top back icon bar */
+    nav{
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 2rem 1rem;
+      background: transparent;
+      backdrop-filter: none;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      transition: all .3s ease;
+    }
+    .back-btn{
+      color: #000;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 200;
+      letter-spacing: .5px;
+      transition: all .3s ease;
+      display: flex; align-items: center;
+    }
+    .back-btn:hover{ opacity: .7; transform: translateX(-5px); }
+
+    /* Full-page background */
+    body::before{
+      content:'';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: var(--cover-height);
+      background: #8E8CB5;
+      z-index: -2;
+    }
+
+    /* Layout containers */
+    .container{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem 4rem;
+    }
+
+    .white-content{
+      background: transparent;
+      padding-top: 4.5rem;
+    }
+
+    .work-hero{
+      margin-bottom: 0;
+      opacity: 0;
+      animation: fadeInUp 1s ease .5s forwards;
+      position: relative;
+      background: transparent;
+      padding-bottom: 4.5rem;
+    }
+
+    .work-image.large{
+      margin: 4rem 0 2rem 0;
+      border-radius: 0;
+      aspect-ratio: calc(var(--cover-aspect-w) / var(--cover-aspect-h));
+    }
+    .work-image{
+      border-radius: 12px;
+      overflow: hidden;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .work-image img{
+      width: 100%; height: auto; object-fit: contain;
+      display: block;
+    }
+
+    .hero-content{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 5rem;
+      align-items: start;
+    }
+    .hero-left{ display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .work-subtitle{
+      font-family: 'SF Pro', sans-serif;
+      font-size: .8rem; font-weight: 300; margin: 0; font-style: italic;
+      color: #000;
+    }
+    .hero-right{ display: flex; justify-content: flex-end; }
+    .work-title{
+      font-family: 'SF Pro', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400; margin: 0; line-height: 1.3; letter-spacing: -1px;
+      color: #000;
+    }
+    .work-meta{ display: flex; flex-direction: column; gap: 2rem; font-size: .8rem; opacity: .8; color: #000; }
+    .work-meta-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .work-meta-item{ display: flex; flex-direction: column; gap: .5rem; }
+    .work-meta-label{
+      font-weight: 200; opacity: .6; font-size: .7rem; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .work-meta-value{ font-weight: 300; font-size: .8rem; }
+
+    .work-section{
+      margin-bottom: 5rem;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all .8s ease;
+    }
+    .work-section.visible{ opacity: 1; transform: translateY(0); }
+
+    .work-section h2{
+      font-family: 'ShadowsIntoLight','SF Pro',sans-serif;
+      font-size: 2rem; font-weight: normal; margin-bottom: 2rem; color: #FFF; letter-spacing: .5px;
+    }
+    .work-section p{
+      font-size: 14px; line-height: 18px; font-weight: 300; letter-spacing: 0.5px; margin-bottom: 2rem; max-width: 400px;
+    }
+
+    .section-divider{
+      width: 100%; height: 1px;
+      background: rgba(255,255,255,.1);
+      margin: 4.5rem 0;
+    }
+
+    /* Work in Progress */
+    .wip-notice{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #FFFFFF;
+      font-size: 0.8rem;
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 8rem;
+    }
+
+    /* Problem Title Section */
+    .problem-title-section{
+      text-align: center;
+      margin-top: 24rem;
+      margin-bottom: 14rem;
+    }
+
+    .problem-title-section.closer-text{
+      margin-top: 16rem;
+      margin-bottom: 2rem;
+    }
+
+    .problem-title-section p{
+      margin: 0;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #FFFFFF;
+    }
+
+    /* Project Navigation */
+    .project-nav{
+      padding: 4rem 0 2rem;
+      margin-top: 6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .project-nav a{
+      color: #FFFFFF;
+      text-decoration: none;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      padding: 1rem 0;
+    }
+    .project-nav a:hover{
+      opacity: 0.7;
+    }
+    .project-nav .prev::before{
+      content: '← ';
+    }
+    .project-nav .next::after{
+      content: ' →';
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.3); border-radius: 1px; }
+
+    /* Animations */
+    @keyframes fadeInUp{
+      from{ opacity: 0; transform: translateY(40px); }
+      to{ opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px){
+      nav{ padding: 1.5rem 1rem; }
+      .container{ padding: 6rem 1rem 2rem; }
+      .hero-content{ grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+      .hero-right{ justify-content: flex-start; }
+      .work-meta-row{ grid-template-columns: 1fr; gap: 1.5rem; }
+      .project-nav{ flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    /* Footer */
+    .footer {
+      background: #000000;
+      padding: 45px 0px 30px 0px;
+      position: relative;
+      margin-top: 96px;
+    }
+
+    .footer .container{
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 70px;
+      position: relative;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-left-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-contact-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-contact-text a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: underline;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-contact-text a:hover {
+      opacity: 0.7;
+    }
+
+    .footer-flower {
+      position: absolute;
+      top: 46%;
+      transform: translateY(-50%);
+      right: 70px;
+      width: 160px;
+      height: auto;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      position: relative;
+      z-index: 2;
+      padding-left: 0;
+      padding-bottom: 20px;
+    }
+
+    .footer-signature {
+      font-family: 'EduAUVICWANTDots', cursive;
+      color: #FFFFFF;
+      font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+    }
+
+    .footer-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .custom-cursor.footer-cursor{
+      background: #FFF;
+    }
+
+    .custom-cursor.footer-cursor.hover,
+    .custom-cursor.footer-cursor.click{
+      background: #FFF;
+    }
+
+    .click-dot.footer-dot{
+      background:#FFF;
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom Cursor -->
+  <div class="custom-cursor"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="../index.html" class="back-btn">←</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Hero Section -->
+    <div class="work-hero">
+      <div class="work-image large">
+        <!-- Add cover image here when available -->
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-left">
+          <h1 class="work-title">Nomi</h1>
+          <p class="work-subtitle">A Chrome extension for ADHD to capture tiny thoughts from any page, lets AI organize them, and turns them into actionable calendar events.</p>
+        </div>
+        <div class="hero-right">
+          <div class="work-meta">
+            <div class="work-meta-row">
+              <div class="work-meta-item">
+                <div class="work-meta-label">Type</div>
+                <div class="work-meta-value">AI Product Design</div>
+              </div>
+              <div class="work-meta-item">
+                <div class="work-meta-label">Role</div>
+                <div class="work-meta-value">Product Designer</div>
+              </div>
+            </div>
+            <div class="work-meta-row">
+              <div class="work-meta-item">
+                <div class="work-meta-label">Timeline</div>
+                <div class="work-meta-value">2025</div>
+              </div>
+              <div class="work-meta-item">
+                <div class="work-meta-label">Team</div>
+                <div class="work-meta-value">Moira Huang</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <div class="white-content">
+      <!-- More to come section -->
+      <div class="problem-title-section closer-text">
+        <p>More to come...</p>
+      </div>
+
+      <!-- Work in Progress Notice -->
+      <div class="wip-notice">
+        Project details coming soon
+      </div>
+
+      <!-- Project Navigation -->
+      <div class="project-nav">
+        <a href="../oovo/index.html" class="prev">Oovo</a>
+        <a href="../imaLogo/index.html" class="next">IMA Logo</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-left">
+          <div class="footer-left-text">Designed in New York with Love :)</div>
+          <div class="footer-contact-text">Happy to connect via <a href="https://www.linkedin.com/in/moira-huang" target="_blank">LinkedIn</a> & <a href="mailto:moirahuang18@gmail.com">Email</a></div>
+        </div>
+      </div>
+      <img src="../images/flower2.png" alt="" class="footer-flower">
+      <div class="footer-bottom">
+        <span class="footer-signature">mo.</span>
+        <span class="footer-text">@2025</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    // Reveal sections on scroll
+    const sections = document.querySelectorAll('.work-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    sections.forEach(s => observer.observe(s));
+
+    // Hide/show top nav on scroll
+    let lastScrollY = window.scrollY;
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > lastScrollY && y > 100) nav.style.transform = 'translateY(-100%)';
+      else nav.style.transform = 'translateY(0)';
+      lastScrollY = y;
+    });
+
+    // Custom cursor
+    (function cursor(){
+      const cursor = document.querySelector('.custom-cursor');
+      if(!cursor) return;
+
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+
+      const interactive = document.querySelectorAll('a, button, [role="button"]');
+      interactive.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      const makeDot = (x, y) => {
+        const dot = document.createElement('div');
+        dot.className = 'click-dot';
+        dot.style.left = x + 'px';
+        dot.style.top  = y + 'px';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.classList.add('fade-out'), 1000);
+        setTimeout(() => dot.remove(), 4000);
+      }
+
+      document.addEventListener('mousedown', e => {
+        cursor.classList.add('click');
+        makeDot(e.pageX, e.pageY);
+      });
+      document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
+      document.addEventListener('mouseleave',() => {
+        cursor.style.opacity = '0';
+        cursor.classList.remove('click');
+      });
+      document.addEventListener('mouseenter',() => {
+        cursor.style.opacity = '1';
+      });
+    })();
+
+    // Set cover height
+    function setCoverHeight(){
+      const divider = document.querySelector('.section-divider');
+      if (!divider) return;
+      const y = divider.getBoundingClientRect().top + window.scrollY;
+      document.documentElement.style.setProperty('--cover-height', y + 'px');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setCoverHeight();
+      requestAnimationFrame(setCoverHeight);
+    });
+
+    window.addEventListener('resize', setCoverHeight);
+  </script>
+</body>
+</html>
