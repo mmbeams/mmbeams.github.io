@@ -81,15 +81,16 @@
       position: fixed; top:0; left:0; width:8px; height:8px;
       background:#000; border-radius:50%;
       pointer-events:none; z-index:9999;
-      transition: transform .1s ease;
+      transition: transform .1s ease, background .3s ease, border-color .3s ease;
       transform: translate(-50%, -50%);
     }
     .custom-cursor.hover, .custom-cursor.click{
-      transform: translate(-50%, -50%) scale(2);
+      transform: translate(-50%, -50%) scale(3.5);
+      background: transparent;
+      border: .1px solid #000;
     }
     .custom-cursor.footer-cursor{
-      background: transparent;
-      border: 2px solid #FFF;
+      background: #FFF;
     }
     .custom-cursor.footer-cursor.hover,
     .custom-cursor.footer-cursor.click{
@@ -519,8 +520,47 @@
 
 /* responsive: stack on small screens */
 @media (max-width: 768px){
+  /* Increase content width on mobile */
+  .hero .container,
+  .about-section .container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  /* Make nav text smaller, moira huang same size as nav */
+  .hero .name {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .hero-nav a {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .hero-email {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* Match hero text size */
+  .hero-tagline {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* Reduce gap between nav and content */
+  .hero-header {
+    margin-bottom: 40px;
+  }
+
+  .hero-center {
+    padding: 20px 0 40px 0;
+  }
+
   .photo-row {
     flex-direction: column;
+    margin-bottom: 40px;
   }
 
   .photo-container {
@@ -530,8 +570,8 @@
   .info-grid {
     grid-template-columns: 1fr;
     gap: 30px;
+    margin-bottom: 40px;
   }
-
 
   .flower-row {
     gap: 10px;
@@ -539,6 +579,21 @@
 
   .flower-item img {
     width: 60px;
+  }
+
+  /* Keep text sizes consistent on mobile */
+  .about-description,
+  .info-title,
+  .info-item,
+  .company-name,
+  .role-date {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* Reduce footer margin on mobile */
+  .footer {
+    margin-top: 60px;
   }
 }
 
@@ -609,6 +664,20 @@
   opacity: 0.5;
   pointer-events: none;
   z-index: 1;
+  transform-origin: center center;
+}
+
+.footer-flower.scrolling {
+  animation: spinFlower 1s linear infinite;
+}
+
+@keyframes spinFlower {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
 }
 
 .footer-bottom {
@@ -660,8 +729,8 @@
       <div class="hero-center">
         <img src="../images/flower1.png" alt="" class="hero-tagline-image">
         <div class="hero-text-wrapper">
-          <div class="hero-tagline"> as a product designer and vibe coder,<br>i believe design can change things.<br>
-we don’t need more things, just better ones.</div>
+          <div class="hero-tagline"> As a product designer and vibe coder,<br>
+i ship fast, iterate often, and love working<br>with teams to build better things.</div>
         </div>
       </div>
     </div>
@@ -688,8 +757,8 @@ we don’t need more things, just better ones.</div>
             <div class="info-title">Education</div>
             <div class="info-list">
               <div class="info-item">New York University</div>
-              <div class="info-item">BFA, Interactive Media Arts</div>
-              <div class="info-item">Minor in Web Programming and Development</div>
+              <div class="info-item">BFA, Interactive Media Arts (STEM)</div>
+              <div class="info-item">Minor in Web Programming and Applications</div><br>
               <div class="info-item">Class of 2026</div>
             </div>
           </div>
@@ -699,11 +768,11 @@ we don’t need more things, just better ones.</div>
             <div class="info-title">Skills</div>
             <div class="info-list">
               <div class="info-item">UIUX Design</div>
+              <div class="info-item">Rapit Prototyping</div>
+              <div class="info-item">Usability + A/B Testing</div>
               <div class="info-item">Front-end Development</div>
+              <div class="info-item">Vibe Coding</div>
               <div class="info-item">Motion Design</div>
-              <div class="info-item">Design System</div>
-              <div class="info-item">Prototyping</div>
-              <div class="info-item">Human-AI Interaction</div>
             </div>
           </div>
 
@@ -712,16 +781,16 @@ we don’t need more things, just better ones.</div>
             <div class="info-title">Experience</div>
             <div class="info-list">
               <div class="experience-item">
-                <div class="company-name">Publicis Groupe - UIUX Creative Intern</div>
+                <div class="company-name">UIUX Creative Intern - Publicis Groupe</div>
               </div>
               <div class="experience-item">
-                <div class="company-name">iQIYI - Design Assistant</div>
+                <div class="company-name">Design Assistant - iQIYI</div>
               </div>
               <div class="experience-item">
                 <div class="company-name">Freelance UIUX Designer</div>
               </div>
               <div class="experience-item">
-                <div class="company-name">XIVO Design - Product Design Intern</div>
+                <div class="company-name">Product Design Intern - XIVO Design</div>
               </div>
               <div class="experience-item">
               </div>
@@ -854,6 +923,27 @@ i’m a bento ui lover, pixel perfect designer,<br>photographer, bedroom DJ, and
       document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
       document.addEventListener('mouseleave',() => { cursor.style.opacity = '0'; cursor.classList.remove('click'); });
       document.addEventListener('mouseenter',() => { cursor.style.opacity = '1'; });
+    })();
+
+    // Flower rotation on scroll
+    (function flowerRotation(){
+      const flower = document.querySelector('.footer-flower');
+      if(!flower) return;
+
+      let scrollTimeout;
+
+      window.addEventListener('scroll', () => {
+        // Add spinning class when scrolling
+        flower.classList.add('scrolling');
+
+        // Clear previous timeout
+        clearTimeout(scrollTimeout);
+
+        // Remove spinning class after scrolling stops
+        scrollTimeout = setTimeout(() => {
+          flower.classList.remove('scrolling');
+        }, 150);
+      }, { passive: true });
     })();
 
   </script>

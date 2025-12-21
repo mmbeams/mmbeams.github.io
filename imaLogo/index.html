@@ -26,6 +26,13 @@
       font-style: normal;
     }
 
+    @font-face {
+      font-family: 'EduAUVICWANTDots';
+      src: url('../../fonts/EduAUVICWANTDots-VariableFont_wght.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     :root{
       /* Fallback height before JS sets exact value */
       --cover-height: 900px;
@@ -408,13 +415,106 @@
       .work-meta-row{ grid-template-columns: 1fr; gap: 1.5rem; }
       .project-nav{ flex-direction: column; gap: 1rem; text-align: center; }
     }
+
+    /* =========================
+       FOOTER
+    ========================= */
+    .footer {
+      background: #000000;
+      padding: 45px 0px 30px 0px;
+      position: relative;
+      margin-top: 96px;
+    }
+
+    .footer .container{
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 70px;
+      position: relative;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .footer-left-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-contact-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-contact-text a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: underline;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-contact-text a:hover {
+      opacity: 0.7;
+    }
+
+    .footer-flower {
+      position: absolute;
+      top: 46%;
+      transform: translateY(-50%);
+      right: 70px;
+      width: 160px;
+      height: auto;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      position: relative;
+      z-index: 2;
+      padding-left: 0;
+      padding-bottom: 20px;
+    }
+
+    .footer-signature {
+      font-family: 'EduAUVICWANTDots', cursive;
+      color: #FFFFFF;
+      font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
+    }
+
+    .footer-text {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 200;
+      letter-spacing: .5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
   </style>
 </head>
 <body>
   <div class="custom-cursor"></div>
 
   <nav>
-    <a href="../archive/index.html" class="back-btn">←</a>
+    <a href="../../index.html" class="back-btn">←</a>
   </nav>
 
   <div class="container">
@@ -517,26 +617,8 @@
         <a href="../letters/index.html" class="next">letters i couldn't say</a>
       </div>
 
-      <div class="contact-block">
-        <div class="contact-text-top">
-          Designed in New York City<br>& Shanghai with love :)
-        </div>
-        <div class="contact-bottom">
-          <div class="contact-text-bottom">Keep in touch</div>
-          <div class="contact-icons">
-            <a href="https://www.linkedin.com/in/moira-huang" target="_blank">
-              <img src="../../images/linkedin.png" alt="LinkedIn">
-            </a>
-            <a href="mailto:moirahuang18@gmail.com">
-              <img src="../../images/gmail.png" alt="Email">
-            </a>
-          </div>
-        </div>
-        <img class="corner-art" src="../../images/selected/4.png" alt="" aria-hidden="true">
-      </div>
     </div>
   </div>
-
 
   <!-- =========================
        FOOTER
@@ -549,7 +631,7 @@
           <div class="footer-contact-text">Happy to connect via <a href="https://www.linkedin.com/in/moira-huang" target="_blank">LinkedIn</a> & <a href="mailto:moirahuang18@gmail.com">Email</a></div>
         </div>
       </div>
-      <img src="../images/flower2.png" alt="" class="footer-flower">
+      <img src="../../images/flower2.png" alt="" class="footer-flower">
       <div class="footer-bottom">
         <span class="footer-signature">mo.</span>
         <span class="footer-text">@2025</span>

@@ -95,6 +95,14 @@
       background: transparent;
       border: .1px solid #000;
     }
+    .custom-cursor.gallery-hover::after{
+      content: '→';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 4px;
+    }
     .custom-cursor.footer-cursor{
       background: #FFF;
     }
@@ -385,7 +393,13 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: transform .3s ease, background-color .4s ease;
+  transition: transform .3s ease, opacity 0.4s ease, background-color .4s ease;
+  opacity: 1;
+}
+
+/* Reduce opacity of all other items when any item is hovered */
+.gallery-grid:has(.gallery-item:hover) .gallery-item:not(:hover){
+  opacity: 0.4;
 }
 
 /* center images, keep original proportions */
@@ -426,6 +440,25 @@
 .gallery-item-wrapper.wavely .gallery-item:hover a::before{
   background-color: #665B3A;
   opacity: 1;
+}
+
+/* Wavely3: smaller, centered with dark background */
+.gallery-item-wrapper.wavely-small .gallery-item a::before{
+  background-color: #665B3A;
+  opacity: 1;
+}
+.gallery-item-wrapper.wavely-small .gallery-item img{
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+/* Wavely1: freeze gif, play on hover */
+.gallery-item-wrapper.wavely-freeze .gallery-item img{
+  content: url('images/wavely1-static.png');
+}
+.gallery-item-wrapper.wavely-freeze .gallery-item:hover img{
+  content: url('images/wavely1.gif');
 }
 
 /* Oovo: light orange background always, darker on hover */
@@ -531,6 +564,14 @@
   gap: 4px;
 }
 
+.gallery-item-text a{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  color: inherit;
+}
+
 .gallery-item-title{
   font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
@@ -570,9 +611,58 @@
 
 /* responsive: stack on small screens */
 @media (max-width: 768px){
+  /* Increase content width on mobile */
+  .hero .container,
+  .gallery-section .container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  /* Make nav text smaller, moira huang same size as nav */
+  .hero .name {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .hero-nav a {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .hero-email {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* Match hero text size */
+  .hero-tagline {
+    font-size: 16px !important;
+    line-height: 20px !important;
+  }
+
+  .hero-subtext {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .hero-subtext div {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* Reduce gap between nav and content */
+  .hero-header {
+    margin-bottom: 40px;
+  }
+
+  .hero-center {
+    padding: 20px 0 40px 0;
+  }
+
+  /* Increase gap between projects on mobile */
   .gallery-grid{
     grid-template-columns: 1fr; /* single column on mobile */
-    gap: 45px;
+    gap: 60px;
   }
 
   /* Keep same text size on smaller screens */
@@ -586,6 +676,11 @@
     line-height: 20px;
   }
 
+  /* Smaller gap between image and description */
+  .gallery-item-wrapper {
+    row-gap: 4px;
+  }
+
   /* Show mobile content, hide desktop content */
   .mobile-only{
     display: block;
@@ -593,6 +688,11 @@
 
   .desktop-only{
     display: none;
+  }
+
+  /* Reduce footer margin on mobile */
+  .footer {
+    margin-top: 60px;
   }
 }
 
@@ -663,6 +763,20 @@
   opacity: 0.5;
   pointer-events: none;
   z-index: 1;
+  transform-origin: center center;
+}
+
+.footer-flower.scrolling {
+  animation: spinFlower 1s linear infinite;
+}
+
+@keyframes spinFlower {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
 }
 
 .footer-bottom {
@@ -689,48 +803,6 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-    /* =========================================================
-       RESPONSIVE
-    ========================================================= */
-    @media (max-width: 1024px){
-      .signature{ inline-size: 56px; }
-    }
-    @media (max-width: 768px){
-      .hero-container {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .hero-bento{
-        grid-template-areas:
-          "signature nav"
-          "content   content"
-          "social    social";
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr auto;
-        gap: 1.25rem 1rem;
-      }
-      .hero-nav ul{ flex-direction: row; gap: 1rem; justify-content:flex-end; }
-      .social{ justify-content:center; }
-
-      /* Gallery responsive */
-      .gallery-row.second-row {
-        grid-template-columns: 1fr;
-        gap: clamp(0.5rem, 1vw, 1rem);
-      }
-
-      /* Make hero text smaller on smaller screens */
-      .hero .name,
-      .hero-tagline,
-      .footer-signature {
-        font-size: clamp(1.2rem, 1.4rem + .4vw, 1.6rem);
-      }
-    }
-    @media (max-width: 480px){
-      .signature{ inline-size: 44px; }
-
-      /* Gallery mobile - all images stack vertically */
-    }
   </style>
 </head>
 <body>
@@ -776,32 +848,38 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title desktop-only">Wavely</div>
-          <div class="gallery-item-subtitle desktop-only">Case Study</div>
+          <a href="wavely/index.html">
+            <div class="gallery-item-title desktop-only">Wavely</div>
+            <div class="gallery-item-subtitle desktop-only">Case Study</div>
+          </a>
         </div>
       </div>
 
-      <div class="gallery-item-wrapper wavely">
+      <div class="gallery-item-wrapper wavely wavely-freeze">
         <div class="gallery-item">
           <a href="wavely/index.html">
             <img src="images/wavely1.gif" alt="Wavely 1">
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle desktop-only">I designed a coffee chat platform that encourages real conversations and turns one chat into a trusted network. I built an MVP and tested it with 50+ users across multiple iterations.</div>
+          <a href="wavely/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle desktop-only">An AI-matching coffee chat platform encourages real light conversations and turns one chat into a trusted network. Tested with 50+ users across 3 iterations.</div>
+          </a>
         </div>
       </div>
 
-      <div class="gallery-item-wrapper wavely">
+      <div class="gallery-item-wrapper wavely wavely-small">
         <div class="gallery-item">
           <a href="wavely/index.html">
             <img src="images/wavely3.gif" alt="Wavely 3">
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title mobile-only">Wavely</div>
-          <div class="gallery-item-subtitle mobile-only">I designed a coffee chat platform that encourages real conversations and turns one chat into a trusted network. I built an MVP and tested it with 50+ users across multiple iterations.</div>
+          <a href="wavely/index.html">
+            <div class="gallery-item-title mobile-only">Wavely</div>
+            <div class="gallery-item-subtitle mobile-only">I designed a coffee chat platform that encourages real conversations and turns one chat into a trusted network. I built an MVP and tested it with 50+ users across multiple iterations.</div>
+          </a>
         </div>
       </div>
 
@@ -813,8 +891,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title desktop-only">Huawei Connect</div>
-          <div class="gallery-item-subtitle desktop-only">Website Design</div>
+          <a href="huawei/index.html">
+            <div class="gallery-item-title desktop-only">Huawei Connect</div>
+            <div class="gallery-item-subtitle desktop-only">Website Design</div>
+          </a>
         </div>
       </div>
 
@@ -825,8 +905,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle desktop-only">Our team redesigned the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+          <a href="huawei/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle desktop-only">Our team redesigned the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+          </a>
         </div>
       </div>
 
@@ -837,8 +919,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title mobile-only">Huawei Connect</div>
-          <div class="gallery-item-subtitle mobile-only">Our team redesigned the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+          <a href="huawei/index.html">
+            <div class="gallery-item-title mobile-only">Huawei Connect</div>
+            <div class="gallery-item-subtitle mobile-only">Our team redesigned the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+          </a>
         </div>
       </div>
 
@@ -850,8 +934,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title desktop-only">Google I/O Connect</div>
-          <div class="gallery-item-subtitle desktop-only">Brand Identity, Graphic Design</div>
+          <a href="googleIO/index.html">
+            <div class="gallery-item-title desktop-only">Google I/O Connect</div>
+            <div class="gallery-item-subtitle desktop-only">Brand Identity, Graphic Design</div>
+          </a>
         </div>
       </div>
 
@@ -862,8 +948,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle desktop-only">We partnered with Google I/O Connect to deliver a developer-focused event featuring Google Gemini.</div>
+          <a href="googleIO/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle desktop-only">We partnered with Google I/O Connect to deliver a developer-focused event featuring Google Gemini.</div>
+          </a>
         </div>
       </div>
 
@@ -874,8 +962,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title mobile-only">Google I/O Connect</div>
-          <div class="gallery-item-subtitle mobile-only">We partnered with Google I/O Connect to deliver a developer-focused event featuring Google Gemini.</div>
+          <a href="googleIO/index.html">
+            <div class="gallery-item-title mobile-only">Google I/O Connect</div>
+            <div class="gallery-item-subtitle mobile-only">We partnered with Google I/O Connect to deliver a developer-focused event featuring Google Gemini.</div>
+          </a>
         </div>
       </div>
 
@@ -887,8 +977,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title">newZ</div>
-          <div class="gallery-item-subtitle">Web3 App Design</div>
+          <a href="newz/index.html">
+            <div class="gallery-item-title">newZ</div>
+            <div class="gallery-item-subtitle">Web3 App Design</div>
+          </a>
         </div>
       </div>
 
@@ -899,8 +991,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="newz/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -911,8 +1005,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="newz/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -924,8 +1020,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title">Oovo</div>
-          <div class="gallery-item-subtitle">App Design, Case Study (NYU Designathon 1st Prize)</div>
+          <a href="oovo/index.html">
+            <div class="gallery-item-title">Oovo</div>
+            <div class="gallery-item-subtitle">App Design, Case Study (NYU Designathon 1st Prize)</div>
+          </a>
         </div>
       </div>
 
@@ -936,8 +1034,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="oovo/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -948,8 +1048,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="oovo/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -998,8 +1100,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title">IMA Logo</div>
-          <div class="gallery-item-subtitle">Motion Design</div>
+          <a href="imaLogo/index.html">
+            <div class="gallery-item-title">IMA Logo</div>
+            <div class="gallery-item-subtitle">Motion Design</div>
+          </a>
         </div>
       </div>
 
@@ -1010,8 +1114,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="imaLogo/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -1022,8 +1128,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="imaLogo/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -1035,8 +1143,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title">letters i couldn't say</div>
-          <div class="gallery-item-subtitle">Creative Coding</div>
+          <a href="letters/index.html">
+            <div class="gallery-item-title">letters i couldn't say</div>
+            <div class="gallery-item-subtitle">Creative Coding</div>
+          </a>
         </div>
       </div>
 
@@ -1047,8 +1157,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="letters/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -1059,8 +1171,10 @@
           </a>
         </div>
         <div class="gallery-item-text">
-          <div class="gallery-item-title"></div>
-          <div class="gallery-item-subtitle"></div>
+          <a href="letters/index.html">
+            <div class="gallery-item-title"></div>
+            <div class="gallery-item-subtitle"></div>
+          </a>
         </div>
       </div>
 
@@ -1168,10 +1282,15 @@
         el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
       });
 
-      const galleryItems = document.querySelectorAll('.gallery-item-wrapper');
+      const galleryItems = document.querySelectorAll('.gallery-item');
       galleryItems.forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('gallery-hover'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('gallery-hover'));
+        el.addEventListener('mouseenter', () => {
+          cursor.classList.remove('hover');
+          cursor.classList.add('gallery-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.classList.remove('gallery-hover');
+        });
       });
 
       const footer = document.querySelector('.footer');
@@ -1203,6 +1322,27 @@
       document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
       document.addEventListener('mouseleave',() => { cursor.style.opacity = '0'; cursor.classList.remove('click'); });
       document.addEventListener('mouseenter',() => { cursor.style.opacity = '1'; });
+    })();
+
+    // Flower rotation on scroll
+    (function flowerRotation(){
+      const flower = document.querySelector('.footer-flower');
+      if(!flower) return;
+
+      let scrollTimeout;
+
+      window.addEventListener('scroll', () => {
+        // Add spinning class when scrolling
+        flower.classList.add('scrolling');
+
+        // Clear previous timeout
+        clearTimeout(scrollTimeout);
+
+        // Remove spinning class after scrolling stops
+        scrollTimeout = setTimeout(() => {
+          flower.classList.remove('scrolling');
+        }, 150);
+      }, { passive: true });
     })();
   </script>
 </body>
