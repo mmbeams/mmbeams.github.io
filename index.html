@@ -27,15 +27,8 @@
 
     @font-face {
       font-family: 'EduAUVICWANTDots';
-      src: url('fonts/EduAUVICWANTDots-VariableFont_wght.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    @font-face {
-      font-family: 'EduAUVICWANTDots';
       src: url('fonts/EduAUVICWANTDots-Medium.ttf') format('truetype');
-      font-weight: 500;
+      font-weight: normal;
       font-style: normal;
     }
 
@@ -618,6 +611,31 @@
   margin-top: -4px;
 }
 
+.gallery-item-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.gallery-item-tags + .gallery-item-tags{
+  margin-top: 4px;
+}
+
+.gallery-item-tag{
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 300;
+  letter-spacing: .3px;
+  color: var(--primary);
+  background-color: rgba(42, 42, 42, 0.08);
+  padding: 4px 10px;
+  border-radius: 12px;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
 /* Show/hide elements based on screen size */
 .mobile-only{
   display: none;
@@ -867,7 +885,13 @@
         <div class="gallery-item-text">
           <a href="wavely/index.html">
             <div class="gallery-item-title desktop-only">Wavely</div>
-            <div class="gallery-item-subtitle desktop-only">AI Product Design, Case Study</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">AI Product Design</span>
+              <span class="gallery-item-tag">Case Study</span>
+            </div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">NYU Startup Accelerator Program</span>
+            </div>
           </a>
         </div>
       </div>
@@ -881,7 +905,8 @@
         <div class="gallery-item-text">
           <a href="wavely/index.html">
             <div class="gallery-item-title"></div>
-            <div class="gallery-item-subtitle desktop-only">An AI-matching coffee chat platform encourages real light conversations and turns one chat into a trusted network. Tested with 50+ users across 3 iterations.</div>
+            <div class="gallery-item-subtitle desktop-only">Designed an AI-matching coffee chat platform to catalyze meaningful conversations. Built and tested product design-led MVPs with 50+ users, iterating through three product versions based on user feedback and usage patterns. Awarded as part of the NYU Startup Accelerator (2025).
+</div>
           </a>
         </div>
       </div>
@@ -896,6 +921,13 @@
           <a href="wavely/index.html">
             <div class="gallery-item-title mobile-only">Wavely</div>
             <div class="gallery-item-subtitle mobile-only">An AI-matching coffee chat platform encourages real light conversations and turns one chat into a trusted network. Tested with 50+ users across 3 version iterations.</div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">AI Product Design</span>
+              <span class="gallery-item-tag">Case Study</span>
+            </div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">NYU Startup Accelerator Program</span>
+            </div>
           </a>
         </div>
       </div>
@@ -910,7 +942,10 @@
         <div class="gallery-item-text">
           <a href="huawei/index.html">
             <div class="gallery-item-title desktop-only">Huawei Connect</div>
-            <div class="gallery-item-subtitle desktop-only">Website Design</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">Website Design</span>
+              <span class="gallery-item-tag">Go to Market</span>
+            </div>
           </a>
         </div>
       </div>
@@ -924,7 +959,8 @@
         <div class="gallery-item-text">
           <a href="huawei/index.html">
             <div class="gallery-item-title"></div>
-            <div class="gallery-item-subtitle desktop-only">Designed and pitched the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+            <div class="gallery-item-subtitle desktop-only">Launched a streamlined UX-focused marketing experience to socialize marketing assets for a Huawei technical conference. Improved ~20% information retrieval efficiency and increased website viewer engagement by ~40% based on post-launch analytics.
+</div>
           </a>
         </div>
       </div>
@@ -939,6 +975,10 @@
           <a href="huawei/index.html">
             <div class="gallery-item-title mobile-only">Huawei Connect</div>
             <div class="gallery-item-subtitle mobile-only">Our team redesigned the Huawei Connect event website to make it more user-friendly and reflect a modern, technology-driven style.</div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">Website Design</span>
+              <span class="gallery-item-tag">Go to Market</span>
+            </div>
           </a>
         </div>
       </div>
@@ -953,7 +993,9 @@
         <div class="gallery-item-text">
           <a href="googleIO/index.html">
             <div class="gallery-item-title desktop-only">Google I/O Connect</div>
-            <div class="gallery-item-subtitle desktop-only">Brand Identity</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">Brand Identity</span>
+            </div>
           </a>
         </div>
       </div>
@@ -967,7 +1009,8 @@
         <div class="gallery-item-text">
           <a href="googleIO/index.html">
             <div class="gallery-item-title"></div>
-            <div class="gallery-item-subtitle desktop-only">Collaborated with Google I/O Connect to deliver a developer-focused event featuring Google Gemini.</div>
+            <div class="gallery-item-subtitle desktop-only">Designed an interactive user experience for the “Google I/O Connect” conference to showcase Gemini AI image generation capabilities; created engaging in-person experiences for technical participants through comprehensive user research; iterated on interaction flows, visuals, and motion design; achieved ~200% YoY growth in WeChat official account views and increased YoY event participation by ~150%.
+</div>
           </a>
         </div>
       </div>
@@ -996,7 +1039,9 @@
         <div class="gallery-item-text">
           <a href="newz/index.html">
             <div class="gallery-item-title desktop-only">newZ</div>
-            <div class="gallery-item-subtitle desktop-only">Web3 App Design</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">Web3 App Design</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1025,6 +1070,9 @@
           <a href="newz/index.html">
             <div class="gallery-item-title mobile-only">newZ</div>
             <div class="gallery-item-subtitle mobile-only">A real-time stock sentiment tracker.</div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">Web3 App Design</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1039,7 +1087,13 @@
         <div class="gallery-item-text">
           <a href="oovo/index.html">
             <div class="gallery-item-title desktop-only">Oovo</div>
-            <div class="gallery-item-subtitle desktop-only">AI Product Design, Case Study<br>NYU Designathon First Prize</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">AI Product Design</span>
+              <span class="gallery-item-tag">Case Study</span>
+            </div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">Manus AI Designathon</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1053,7 +1107,7 @@
         <div class="gallery-item-text">
           <a href="oovo/index.html">
             <div class="gallery-item-title"></div>
-            <div class="gallery-item-subtitle desktop-only">An AI Sustainability Companion app dedicated to promoting green commuting.</div>
+            <div class="gallery-item-subtitle desktop-only">Led a team of three to design an AI companion app to help users commute eco-friendly; won first place.</div>
           </a>
         </div>
       </div>
@@ -1067,7 +1121,14 @@
         <div class="gallery-item-text">
           <a href="oovo/index.html">
             <div class="gallery-item-title mobile-only">Oovo</div>
-            <div class="gallery-item-subtitle mobile-only">An AI Sustainability Companion app dedicated to promoting green commuting. Won first prize at NYU Designathon.</div>
+            <div class="gallery-item-subtitle mobile-only">An AI Sustainability Companion app dedicated to promoting green commuting.</div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">AI Product Design</span>
+              <span class="gallery-item-tag">Case Study</span>
+            </div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">NYU Designathon First Prize</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1119,7 +1180,9 @@
         <div class="gallery-item-text">
           <a href="nomi/index.html">
             <div class="gallery-item-title desktop-only">Nomi</div>
-            <div class="gallery-item-subtitle desktop-only">AI Product Design</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">AI Product Design</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1133,7 +1196,7 @@
         <div class="gallery-item-text">
           <a href="nomi/index.html">
             <div class="gallery-item-title"></div>
-            <div class="gallery-item-subtitle desktop-only">A Chrome extension for ADHD to capture tiny thoughts from any page, lets AI organize them, and turns them into actionable calendar events.</div>
+            <div class="gallery-item-subtitle desktop-only">Led a team of three to design and launch an AI note-taking Chrome extension in four hours; gained 100+ Chrome Web Store users; achieved an NPS of 42.</div>
           </a>
         </div>
       </div>
@@ -1148,6 +1211,9 @@
           <a href="nomi/index.html">
             <div class="gallery-item-title mobile-only">Nomi</div>
             <div class="gallery-item-subtitle mobile-only">A Chrome extension for ADHD to capture tiny thoughts from any page, lets AI organize them, and turns them into actionable calendar events.</div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">AI Product Design</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1162,7 +1228,9 @@
         <div class="gallery-item-text">
           <a href="imaLogo/index.html">
             <div class="gallery-item-title desktop-only">IMA Logo</div>
-            <div class="gallery-item-subtitle desktop-only">Motion Design</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">Motion Design</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1190,7 +1258,9 @@
         <div class="gallery-item-text">
           <a href="imaLogo/index.html">
             <div class="gallery-item-title mobile-only">IMA Logo</div>
-            <div class="gallery-item-subtitle mobile-only">Motion Design</div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">Motion Design</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1205,7 +1275,9 @@
         <div class="gallery-item-text">
           <a href="letters/index.html">
             <div class="gallery-item-title desktop-only">letters i couldn't say</div>
-            <div class="gallery-item-subtitle desktop-only">Creative Coding</div>
+            <div class="gallery-item-tags desktop-only">
+              <span class="gallery-item-tag">Creative Coding</span>
+            </div>
           </a>
         </div>
       </div>
@@ -1233,7 +1305,9 @@
         <div class="gallery-item-text">
           <a href="letters/index.html">
             <div class="gallery-item-title mobile-only">letters i couldn't say</div>
-            <div class="gallery-item-subtitle mobile-only">Creative Coding</div>
+            <div class="gallery-item-tags mobile-only">
+              <span class="gallery-item-tag">Creative Coding</span>
+            </div>
           </a>
         </div>
       </div>
