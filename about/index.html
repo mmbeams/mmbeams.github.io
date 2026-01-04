@@ -32,6 +32,13 @@
       font-style: normal;
     }
 
+    @font-face {
+      font-family: 'EduAUVICWANTDots';
+      src: url('../fonts/EduAUVICWANTDots-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+
     /* =========================================================
        Reset + Root
     ========================================================= */
@@ -284,6 +291,7 @@
 
     .hero-tagline {
       font-family: 'EduAUVICWANTDots', cursive;
+      font-weight: 500;
       color: #000000;
       font-size: clamp(0.9rem, 1.0rem + .2vw, 1.2rem);
       text-align: center;
@@ -348,12 +356,15 @@
   padding-top: 20px;
 }
 
-/* Three column grid */
+/* Two by two grid */
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 80px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 100px 80px;
   margin-bottom: 60px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: 220px;
 }
 
 .info-section {
@@ -384,6 +395,10 @@
   letter-spacing: .5px;
   color: var(--primary);
   opacity: 0.6;
+}
+
+.info-item.company {
+  opacity: 1;
 }
 
 .experience-item {
@@ -466,6 +481,7 @@
 
 .flower-tagline {
   font-family: 'EduAUVICWANTDots', cursive;
+  font-weight: 500;
   color: #000000;
   font-size: clamp(0.9rem, 1.0rem + .2vw, 1.2rem);
   text-align: center;
@@ -692,6 +708,7 @@
 
 .footer-signature {
   font-family: 'EduAUVICWANTDots', cursive;
+  font-weight: 500;
   color: #FFFFFF;
   font-size: clamp(1.4rem, 1.6rem + .4vw, 1.9rem);
 }
@@ -776,26 +793,33 @@ i ship fast, iterate often, and love working<br>with teams to build better thing
             </div>
           </div>
 
+          <!-- Tools -->
+          <div class="info-section">
+            <div class="info-title">Tools</div>
+            <div class="info-list">
+              <div class="info-item">Figma</div>
+              <div class="info-item">Cursor</div>
+              <div class="info-item">Midjourney</div>
+              <div class="info-item">After Effects</div>
+              <div class="info-item">Adobe Suites</div>
+              <div class="info-item">Stable Diffusion</div>
+              <div class="info-item">SQL</div>
+            </div>
+          </div>
+
           <!-- Experience -->
           <div class="info-section">
             <div class="info-title">Experience</div>
             <div class="info-list">
-              <div class="experience-item">
-                <div class="company-name">UIUX Creative Intern - Publicis Groupe</div>
-              </div>
-              <div class="experience-item">
-                <div class="company-name">Design Assistant - iQIYI</div>
-              </div>
-              <div class="experience-item">
-                <div class="company-name">Freelance UIUX Designer</div>
-              </div>
-              <div class="experience-item">
-                <div class="company-name">Product Design Intern - XIVO Design</div>
-              </div>
-              <div class="experience-item">
-              </div>
-              <div class="experience-item">
-                <a href="resume.png" target="_blank" class="company-name" style="text-decoration: underline;">Resume</a>
+              <div class="info-item company">Publicis Groupe</div>
+              <div class="info-item">UIUX Creative Intern</div>
+              <div class="info-item company">iQIYI</div>
+              <div class="info-item">Design Assistant</div>
+              <!-- <div class="info-item company">Freelance UIUX Designer</div> -->
+              <div class="info-item company">XIVO Design</div>
+              <div class="info-item">Product Design Intern</div><br>
+              <div class="info-item">
+                <a href="resume.png" target="_blank" style="text-decoration: underline; color: var(--primary); opacity: 0.6;">Resume</a>
               </div>
             </div>
           </div>
