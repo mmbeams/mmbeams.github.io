@@ -1192,10 +1192,10 @@
       <a href="#intro1" data-section="intro">1. Intro</a>
       <a href="#section-solution" data-section="solution">2. Solution</a>
       <a href="#research1" data-section="research">3. Research</a>
-      <a href="#design1" data-section="v1">4. V1 Design</a>
+      <a href="#design1" data-section="v1">4. V1 Design + Testing</a>
       <a href="#v2testing" data-section="v2">5. Usability Testing</a>
-      <a href="#design1" data-section="v1">6. V2 Design</a>
-      <a href="#v2testing" data-section="v2">7. A/B Testing</a>
+      <a href="#v2iteration1" data-section="v2iteration">6. V2 Design</a>
+      <a href="#v2iteration3" data-section="v2iteration">7. V2 Iteration</a>
       <a href="#final1" data-section="final">8. Final Design</a>
     </div>
   </div>
@@ -1316,35 +1316,73 @@
 
         <!-- Feature rows -->
         <div style="max-width: 1000px; margin: 3rem auto 0;">
-          <div class="feature-row">
-          <div class="feature-copy">
-            <h4>Weekly Waves</h4>
-            <p>Opt in only when you have time, get one thoughtful match, and show what you're looking for and can offer, so each chat feels like a fair exchange, not a favor.</p>
+          <!-- Step 1: Onboarding (onboard.png on left, text on right) -->
+          <div class="feature-row" style="grid-template-columns: minmax(0, 1.0fr) minmax(0, 0.9fr); align-items: center; gap: 1rem;">
+            <div class="feature-visual" style="order: 1; justify-content: flex-start;">
+              <img src="onboard.png" alt="Onboarding survey">
+            </div>
+            <div class="feature-copy" style="order: 2; text-align: left;">
+              <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.5rem;">Step 1</p>
+              <h4>Complete onboarding survey: Ask + Give</h4>
+              <div style="background-color: rgba(103, 92, 60, 0.2); padding: 0.8rem; margin-top: 1.5rem; border-radius: 0; max-width: 400px;">
+                <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.24rem; margin-top: 0; font-size: 0.68rem;">Why it matters</p>
+                <p style="margin: 0; line-height: 1.15; font-size: 0.68rem;">During onboarding, users answer two core questions:<br>What do you want? and What can you offer?<br>Answers are used to match people based on mutual needs and strengths, so conversations start with clearer intent and feel more balanced.</p>
+              </div>
+            </div>
           </div>
-          <div class="feature-visual">
-            <img src="weekly.gif" alt="Weekly Waves feature">
-          </div>
-        </div>
 
-        <div class="feature-row" style="margin-top: 1.5rem; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);">
-          <div class="feature-visual" style="order: 1; justify-content: flex-start;">
-            <img src="intro.gif" alt="Ask and Give feature">
+          <!-- Step 2: Weekly opt-in (text on left, weekly.gif on right) -->
+          <div class="feature-row" style="margin-top: 1.5rem; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center;">
+            <div class="feature-copy">
+              <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.5rem;">Step 2</p>
+              <h4>Weekly opt-in to join a chat</h4>
+              <div style="background-color: rgba(103, 92, 60, 0.2); padding: 0.8rem; margin-top: 1.5rem; border-radius: 0; max-width: 400px;">
+                <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.24rem; margin-top: 0; font-size: 0.68rem;">Why it matters</p>
+                <p style="margin: 0; line-height: 1.15; font-size: 0.68rem;">Traditional networking platforms are filled with pending messages and low reply rates.<br>Instead, Wavely requires users to actively opt in each week to join a chat.<br><br>This weekly opt-in creates clearer intent, reduces inbox pressure, and increases response rates—since each wave includes only one conversation.</p>
+              </div>
+            </div>
+            <div class="feature-visual">
+              <img src="weekly.gif" alt="Weekly Waves feature">
+            </div>
           </div>
-          <div class="feature-copy" style="order: 2; text-align: left;">
-            <h4>Warm Starts</h4>
-            <p>Before each chat, Wavely gives you a quick "why you two" summary of what brought you together, so you can open with something real instead of a cold DM.</p>
-          </div>
-        </div>
 
-        <div class="feature-row">
-          <div class="feature-copy">
-            <h4>Refer &amp; Ripples</h4>
-            <p>After a good chat, you can introduce them to someone else. Over time, those warm intros turn into a web of helpful people, not just a longer contact list.</p>
+          <!-- Step 3: Get matched (intro.gif on left, text on right) -->
+          <div class="feature-row" style="margin-top: 1.5rem; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); align-items: center;">
+            <div class="feature-visual" style="order: 1; justify-content: flex-start;">
+              <img src="intro.gif" alt="Ask and Give feature">
+            </div>
+            <div class="feature-copy" style="order: 2; text-align: left;">
+              <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.5rem;">Step 3</p>
+              <h4>Get matched and see what you have in common</h4>
+              <p style="margin-bottom: 1.5rem; line-height: 1.3;">We surface shared interests and relevant ways your match can help, based on both profiles, to make starting the conversation easier.</p>
+              <div style="background-color: rgba(103, 92, 60, 0.2); padding: 0.8rem; border-radius: 0; max-width: 400px;">
+                <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.24rem; margin-top: 0; font-size: 0.68rem;">Why it matters</p>
+                <p style="margin: 0; line-height: 1.15; font-size: 0.68rem;">Showing common ground upfront removes the "cold start" problem.<br>Users can begin conversations with context, leading to higher open rates and more natural first messages.</p>
+              </div>
+            </div>
           </div>
-          <div class="feature-visual">
-            <img src="refer.gif" alt="Refer and Ripple feature">
+
+          <!-- Step 4: Chat and refer (text on left, refer.gif on right) -->
+          <div class="feature-row" style="margin-top: 1.5rem; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center;">
+            <div class="feature-copy">
+              <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.5rem;">Step 4</p>
+              <h4>Chat and refer to grow the ripple network</h4>
+              <p style="margin-bottom: 1.5rem; line-height: 1.3;">After a good conversation, users can refer their match to others in their network. It allows meaningful chats to naturally lead to new ones.</p>
+              <div style="background-color: rgba(103, 92, 60, 0.2); padding: 0.8rem; border-radius: 0; max-width: 400px;">
+                <p style="font-weight: 300; opacity: 0.7; margin-bottom: 0.24rem; margin-top: 0; font-size: 0.68rem;">Why it matters</p>
+                <p style="margin: 0; line-height: 1.15; font-size: 0.68rem;">Every connection in the network is built on a real conversation first.<br>Unlike traditional platforms with shallow or inactive connections, referrals on Wavely are grounded in trust, familiarity, and shared context.</p>
+              </div>
+            </div>
+            <div class="feature-visual">
+              <img src="refer.gif" alt="Refer and Ripple feature">
+            </div>
           </div>
-        </div>
+
+          <!-- Solution Images - Full Width -->
+          <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; margin-top: 3rem;">
+            <img src="solution1.png" alt="Solution 1" style="width: 100%; display: block;">
+            <img src="solution2.png" alt="Solution 2" style="width: 100%; display: block;">
+          </div>
         </div>
       </div>
 
@@ -1376,286 +1414,33 @@
         </div>
       </div>
 
-      <!-- V1 Video Section -->
+      <!-- V1 Section -->
       <div id="section-v1"></div>
       <div class="work-section">
-        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 1200px; margin: 0 auto;">
-          <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 2rem 0;">Search → Filter → DM.</p>
-          <video autoplay loop muted playsinline style="width: 100%; max-width: 400px; border-radius: 12px;">
-            <source src="v1.mov" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </div>
-
-      <!-- V1 Testing Images - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <!-- research0.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="research0.png" alt="Research overview" style="width: 100%; display: block;">
-        </div>
-
-        <!-- v1testing.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="v1testing.png" alt="V1 Testing part 1" style="width: 100%; display: block;">
-        </div>
-
-        <!-- v1testing2.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="v1testing2.png" alt="V1 Testing part 2" style="width: 100%; display: block;">
-        </div>
-
-        <!-- research3.png -->
-        <div style="width: 100%; background-color: #181816;">
-          <img src="research3.png" alt="Research findings part 3" style="width: 100%; display: block;">
-        </div>
-
-        <!-- iteration1.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="iteration1.png" alt="Iteration 1" style="width: 100%; display: block;">
-        </div>
-
-        <!-- trans1.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="trans1.png" alt="Transition 1" style="width: 100%; display: block;">
-        </div>
-      </div>
-
-      <!-- interact.gif Section -->
-      <div style="background-color: #000000; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 4rem 0;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
-          <div style="justify-content: flex-start;">
-            <img src="interact.gif" alt="Interact profile animation" style="width: 100%; max-width: 400px; border-radius: 12px;">
-          </div>
-          <div>
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #FFFFFF;">before</p>
-            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #FFFFFF; margin: 0 0 1.5rem 0;">Search + Interact with profile</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #FFFFFF;">6 out of 8 users said that seeing only one interest on a profile still didn't tell them how to start a conversation. They felt they had "something in common" in theory, but were stuck on what to say first.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- trans2.png - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="trans2.png" alt="Transition 2" style="width: 100%; display: block;">
-        </div>
-      </div>
-
-      <!-- askgive.gif Section -->
-      <div class="work-section">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
-          <div style="justify-content: flex-start;">
-            <img src="askgive.gif" alt="Ask and Give feature" style="width: 100%; max-width: 400px; border-radius: 12px;">
+          <div style="text-align: left;">
+            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Search → Interact → Chat</p>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">Users search using keywords and tags. When no exact match exists, AI expands the search by matching related terms and synonyms.</p>
           </div>
-          <div>
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">after</p>
-            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Ask + Give</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">So I reframed the profile as an Ask + Give card, clearly showing what each person wants and what they can offer.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- intro.gif Section -->
-      <div class="work-section">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
-          <div style="justify-content: flex-start;">
-            <img src="intro.gif" alt="Warm Intro feature" style="width: 100%; max-width: 400px; border-radius: 12px;">
-          </div>
-          <div>
-            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Warm Intro</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">Show 1–2 shared topics and how the person can help you as suggested openers, so it's easier to start a high-intent, mutually valuable conversation.</p>
+          <div style="justify-content: flex-end; display: flex;">
+            <video autoplay loop muted playsinline style="width: 100%; max-width: 300px; border-radius: 12px;">
+        <source src="v1.mov" type="video/mp4">
+      </video>
           </div>
         </div>
       </div>
 
-      <div class="section-divider"></div>
-
-      <!-- Iteration2 and Trans1 Images - Full Width -->
+      <!-- V1 Testing and V2 Iteration Images - Full Width -->
       <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <!-- iteration2.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="iteration2.png" alt="Iteration 2" style="width: 100%; display: block;">
-        </div>
-
-        <!-- trans1.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="trans1.png" alt="Transition 1" style="width: 100%; display: block;">
-        </div>
-      </div>
-
-      <!-- chats.gif Section -->
-      <div style="background-color: #000000; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 4rem 0;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
-          <div>
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #FFFFFF;">before</p>
-            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #FFFFFF; margin: 0 0 1.5rem 0;">Endless Pending Chats</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #FFFFFF;">7 out of 8 users felt overwhelmed by a long list of pending chats and reported that once they had multiple pending conversations, they were unlikely to start any of them.</p>
-          </div>
-          <div style="justify-content: flex-end;">
-            <img src="chats.gif" alt="Endless pending chats" style="width: 100%; max-width: 400px; border-radius: 12px;">
-          </div>
-        </div>
-      </div>
-
-      <!-- trans2.png - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="trans2.png" alt="Transition 2" style="width: 100%; display: block;">
-        </div>
-      </div>
-
-      <!-- weekly.gif Section -->
-      <div class="work-section">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
-          <div>
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">after</p>
-            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Weekly Waves</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">Small, time-boxed batches of matches, so networking feels low-commitment, predictable, and easier to fit into their week.</p>
-          </div>
-          <div style="justify-content: flex-end;">
-            <img src="weekly.gif" alt="Weekly Waves feature" style="width: 100%; max-width: 400px; border-radius: 12px;">
-          </div>
-        </div>
-      </div>
-
-      <div class="section-divider"></div>
-
-      <!-- Iteration3 and Trans1 Images - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <!-- iteration3.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="iteration3.png" alt="Iteration 3" style="width: 100%; display: block;">
-        </div>
-
-        <!-- trans1.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="trans1.png" alt="Transition 1" style="width: 100%; display: block;">
-        </div>
-      </div>
-
-      <!-- connection.png Section -->
-      <div style="background-color: #000000; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 4rem 0;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
-          <div style="justify-content: flex-start;">
-            <img src="connection.png" alt="Big shallow network" style="width: 100%; max-width: 400px; border-radius: 12px;">
-          </div>
-          <div>
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #FFFFFF;">before</p>
-            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #FFFFFF; margin: 0 0 1.5rem 0;">End up with a big, shallow network</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #FFFFFF;">4 of 8 users still described their networking in V1 as a "big but shallow." Conversations rarely led to the next helpful person.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- trans2.png - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="trans2.png" alt="Transition 2" style="width: 100%; display: block;">
-        </div>
-      </div>
-
-      <!-- refer.gif Section -->
-      <div class="work-section">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 3rem auto;">
-          <div style="justify-content: flex-start;">
-            <img src="refer.gif" alt="Refer and Ripple Network" style="width: 100%; max-width: 400px; border-radius: 12px;">
-          </div>
-          <div>
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">after</p>
-            <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1.5rem 0;">Refer & Ripple Network</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000;">After a good conversation, users can refer one more relevant person, and the system uses these referrals to suggest the next match.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- V2 Testing and Iteration Images - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <!-- research0.png -->
-        <div style="width: 100%; background-color: #F6F6F6;">
-          <img src="research0.png" alt="Research overview" style="width: 100%; display: block;">
-        </div>
-
-        <!-- v2testing.png -->
-        <div style="width: 100%; background-color: #F6F6F6;" id="section-v2">
-          <img src="v2testing.png" alt="V2 Testing" style="width: 100%; display: block;" id="v2testing">
-        </div>
-
-        <!-- research3.png -->
-        <div style="width: 100%; background-color: #181816;">
-          <img src="research3.png" alt="Research findings part 3" style="width: 100%; display: block;">
-        </div>
-      </div>
-
-      <!-- v2iteration1.png and v2iteration2.png - Side by Side -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; background-color: #F6F6F6; padding: 4rem 0;">
-        <div style="display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; max-width: 1200px; margin: 0 auto; padding: 0 3rem;">
-          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">Problem</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Low motivation for giver/helper to reply</p>
-            <img src="v2iteration1.png" alt="V2 Iteration 1" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
-            <div style="max-width: 350px;">
-              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Optional Message & "Buy them a coffee"</p>
-              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">Askers can add a short message and send a coffee token, giving givers a clear reason and a small reward for helping.</p>
-            </div>
-          </div>
-          <div style="background-color: rgba(0,0,0,0.1); width: 1px;"></div>
-          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.6; color: #000000;">Problem</p>
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Avoid zombie users during matching</p>
-            <img src="v2iteration2.png" alt="V2 Iteration 2" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
-            <div style="max-width: 350px;">
-              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Expiring Matches</p>
-              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">If someone doesn't reply within 12 hours, the match expires and their weekly chance reduces.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-divider" style="margin: 2.5rem 0 2rem;"></div>
-
-      <!-- v2iteration3.png, v2iteration4.mov, v2iteration5.png - Three Columns -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; background-color: #F6F6F6; padding: 4rem 0;">
-        <div style="display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr; gap: 0; max-width: 1400px; margin: 0 auto; padding: 0 3rem;">
-          <!-- Column 1: v2iteration3.png -->
-          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Avoid ghosting / unrepling during chat</p>
-            <img src="v2iteration3.png" alt="V2 Iteration 3" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
-            <div style="max-width: 350px;">
-              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">10 mins chat</p>
-              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">encourage giver to help the person who receive a coffee will gain a coffee, and they can give coffee to someone else</p>
-            </div>
-          </div>
-
-          <div style="background-color: rgba(0,0,0,0.1); width: 1px;"></div>
-
-          <!-- Column 2: v2iteration4.mov -->
-          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Improve UI Playfulness</p>
-            <div style="width: 100%; max-width: 300px; height: 300px; overflow: hidden; border-radius: 12px; margin-bottom: 2rem;">
-              <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; object-position: center 47%; display: block;">
-                <source src="v2iteration4.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div style="max-width: 350px;">
-              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Swipe to join the wave</p>
-              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">Users swipe to join each weekly wave, making the flow feel more like a fun, lightweight game.</p>
-            </div>
-          </div>
-
-          <div style="background-color: rgba(0,0,0,0.1); width: 1px;"></div>
-
-          <!-- Column 3: v2iteration5.png -->
-          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <p style="font-size: 0.95rem; line-height: 1.6; color: #000000; margin: 0 0 2rem 0;">Simplify UX flow through UI</p>
-            <img src="v2iteration5.png" alt="V2 Iteration 5" style="width: 100%; max-width: 300px; display: block; margin-bottom: 2rem;">
-            <div style="max-width: 350px;">
-              <p style="font-family: 'SF Pro Display', sans-serif !important; font-size: 22px !important; font-weight: 400 !important; line-height: 1.4 !important; color: #000000; margin: 0 0 1rem 0;">Flip button</p>
-              <p style="font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important; font-size: 0.88rem !important; line-height: 1.9 !important; font-weight: 300 !important; letter-spacing: 0.01em !important; color: #111 !important; margin: 0;">Flip card using flip button, reduce an unnecessary step to start chat.</p>
-            </div>
-          </div>
-        </div>
+        <img src="trans1.png" alt="Transition 1" style="width: 100%; display: block;">
+        <img src="v1testing.png" alt="V1 Testing" style="width: 100%; display: block;">
+        <img src="trans2.png" alt="Transition 2" style="width: 100%; display: block;">
+        <img src="v2iteration1.png" alt="V2 Iteration 1" style="width: 100%; display: block;" id="v2iteration1">
+        <img src="v2iteration2.png" alt="V2 Iteration 2" style="width: 100%; display: block;">
+        <img src="v2iteration3.png" alt="V2 Iteration 3" style="width: 100%; display: block;" id="v2iteration3">
+        <img src="v2iteration4.png" alt="V2 Iteration 4" style="width: 100%; display: block;">
+        <img src="v2iteration5.png" alt="V2 Iteration 5" style="width: 100%; display: block;">
+        <img src="v2iteration6.png" alt="V2 Iteration 6" style="width: 100%; display: block;">
       </div>
 
       <!-- Final Images - Full Width -->
