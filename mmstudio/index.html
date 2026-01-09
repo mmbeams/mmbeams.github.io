@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>newZ</title>
+  <title>MMStudio</title>
   <link rel="icon" type="image/png" href="../images/signature.png?v=1" />
 
   <!-- Preload key images -->
-  <link rel="preload" href="cover_bg.png" as="image">
   <link rel="preload" href="cover.png" as="image">
 
   <style>
@@ -46,8 +45,8 @@
     html, body { margin: 0; padding: 0; }
     body{
       font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background-color: #000000;
-      color: #FFFFFF;
+      background-color: #FFFFFF;
+      color: #000000;
       line-height: 1.6;
       font-weight: 200;
       overflow-x: hidden;
@@ -67,7 +66,7 @@
       left: 0;
       width: 8px;
       height: 8px;
-      background: #FFF;
+      background: #000;
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
@@ -84,7 +83,7 @@
       position: absolute;
       width: 16px;
       height: 16px;
-      background: #FFF;
+      background: #000;
       border-radius: 50%;
       pointer-events: none;
       opacity: 1;
@@ -127,7 +126,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: var(--cover-height); /* set at DOMContentLoaded */
-      background: url('cover_bg.png') top center / cover no-repeat;
+      background: #FFFFFF;
       z-index: -2; /* behind all content */
     }
 
@@ -155,9 +154,10 @@
     /* Reserve space for the cover image immediately (prevents first-paint jump)
        Adjust aspect ratio via --cover-aspect-w / --cover-aspect-h if needed. */
     .work-image.large{
-      margin: 4rem 0 2rem 0;
+      margin: 4rem auto 2rem auto;
       border-radius: 0;
-      aspect-ratio: calc(var(--cover-aspect-w) / var(--cover-aspect-h));
+      max-width: 800px;
+      width: 100%;
     }
     .work-image{
       border-radius: 12px;
@@ -248,7 +248,7 @@
       font-size: 30px;
       line-height: 36px;
       font-weight: 400;
-      color: #FFFFFF;
+      color: #000000;
     }
 
     /* Research Section */
@@ -532,7 +532,7 @@
       align-items: center;
     }
     .project-nav a{
-      color: #FFFFFF;
+      color: #000000;
       text-decoration: none;
       font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 18px;
@@ -798,29 +798,29 @@
 
       <div class="hero-content">
         <div class="hero-left">
-          <h1 class="work-title">newZ</h1>
-          <p class="work-subtitle">From Tweets to Trends — It’s All on NewZ.</p>
+          <h1 class="work-title">mmStudio</h1>
+          <p class="work-subtitle">Turning multimodal image generation from "prompting" into "directing" by letting users draw, write, and mark intent directly onto the image itself.</p>
         </div>
         <div class="hero-right">
           <div class="work-meta">
             <div class="work-meta-row">
               <div class="work-meta-item">
                 <div class="work-meta-label">Type</div>
-                <div class="work-meta-value">Web3 App Design</div>
+                <div class="work-meta-value">AI Image Generator</div>
               </div>
               <div class="work-meta-item">
                 <div class="work-meta-label">Role</div>
-                <div class="work-meta-value">UIUX Designer</div>
+                <div class="work-meta-value">Product Designer & Developer</div>
               </div>
             </div>
             <div class="work-meta-row">
               <div class="work-meta-item">
                 <div class="work-meta-label">Timeline</div>
-                <div class="work-meta-value">09/2025 - Present</div>
+                <div class="work-meta-value">Dec 2025 - Present</div>
               </div>
               <div class="work-meta-item">
                 <div class="work-meta-label">Team</div>
-                <div class="work-meta-value">Moira Huang, Kevin Gu</div>
+                <div class="work-meta-value">Michael Tseng, Moira Huang</div>
               </div>
             </div>
           </div>
@@ -847,15 +847,10 @@
         <p>More to come...</p>
       </div>
 
-      <!-- Work in Progress Notice -->
-      <div class="wip-notice">
-        Project details coming soon
-      </div>
-
       <!-- Project Navigation -->
       <div class="project-nav">
-        <a href="../googleIO/index.html" class="prev">← Google I/O Connect</a>
-        <a href="../oovo/index.html" class="next">Oovo →</a>
+        <a href="../googleIO/index.html" class="prev">Google I/O Connect</a>
+        <a href="../oovo/index.html" class="next">Oovo</a>
       </div>
     </div>
   </div>
