@@ -6,10 +6,6 @@
   <title>Nomi</title>
   <link rel="icon" type="image/png" href="../images/signature.png?v=1" />
 
-  <!-- Preload key images -->
-  <link rel="preload" href="cover_bg.png" as="image">
-  <link rel="preload" href="cover.png" as="image">
-
   <style>
 
     @font-face {
@@ -488,6 +484,30 @@
       opacity: 0.8;
     }
 
+    /* Figma Link Button (same as Huawei) */
+    .figma-link-container{
+      text-align: center;
+      margin-top: 16rem;
+      margin-bottom: 20rem;
+    }
+    .figma-link-button{
+      display: inline-block;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #000000;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border: 2px solid #000000;
+      border-radius: 40px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .figma-link-button:hover{
+      background-color: #000000;
+      color: #FFFFFF;
+    }
+
     /* Project Navigation */
     .project-nav{
       padding: 4rem 0 2rem;
@@ -656,193 +676,21 @@
   <!-- Custom Cursor -->
   <div class="custom-cursor"></div>
 
-  <!-- Section Navigation -->
-  <div class="section-nav">
-    <div class="section-nav-progress">
-      <svg>
-        <circle class="progress-bg" cx="28" cy="28" r="26"></circle>
-        <circle class="progress-bar" cx="28" cy="28" r="26" id="progressCircle"></circle>
-      </svg>
-      <button class="section-nav-toggle" id="sectionNavToggle">1</button>
-    </div>
-    <div class="section-nav-menu" id="sectionNavMenu">
-      <a href="#intro1" data-section="intro">1. Problem</a>
-      <a href="#solution1" data-section="solution">2. Solution</a>
-      <a href="#research1" data-section="research">3. Research</a>
-      <a href="#design1" data-section="design">4. Design Thinking</a>
-      <a href="#iteration1" data-section="iteration">5. Iteration</a>
-      <a href="#download" data-section="download">6. Final & Next Step</a>
-    </div>
-  </div>
-
   <!-- Navigation -->
   <nav>
     <a href="../index.html" class="back-btn">←</a>
   </nav>
 
-  <!-- Main Content -->
   <div class="container">
-    <!-- Hero Section -->
-    <div class="work-hero">
-      <div class="work-image large">
-        <img src="cover.png" alt="Nomi Cover">
-      </div>
-
-      <div class="hero-content">
-        <div class="hero-left">
-          <h1 class="work-title">Nomi</h1>
-          <p class="work-subtitle">A Chrome extension for ADHD to capture tiny thoughts from any page, lets AI organize them, and turns them into actionable calendar events.</p>
-        </div>
-        <div class="hero-right">
-          <div class="work-meta">
-            <div class="work-meta-row">
-              <div class="work-meta-item">
-                <div class="work-meta-label">Type</div>
-                <div class="work-meta-value">AI Product Design</div>
-              </div>
-              <div class="work-meta-item">
-                <div class="work-meta-label">Role</div>
-                <div class="work-meta-value">Product Designer</div>
-              </div>
-            </div>
-            <div class="work-meta-row">
-              <div class="work-meta-item">
-                <div class="work-meta-label">Timeline</div>
-                <div class="work-meta-value">2025</div>
-              </div>
-              <div class="work-meta-item">
-                <div class="work-meta-label">Team</div>
-                <div class="work-meta-value">Moira Huang, Muhan Liu, Jonathan Zhai</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- View Project Button -->
+    <div class="figma-link-container">
+      <a href="https://www.figma.com/deck/KIhjEdx8gaAXTixJg96GiR" class="figma-link-button" target="_blank">View Project</a>
     </div>
 
-    <!-- Divider -->
-    <div class="section-divider"></div>
-
-    <div class="white-content">
-      <!-- Intro Image - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <img src="intro1.png" alt="Introduction" style="width: 100%; display: block;" id="intro1">
-        <img src="intro2.png" alt="Introduction" style="width: 100%; display: block;" id="intro2">
-      </div>
-
-      <!-- Solution Image - Full Width -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <img src="solution1.png" alt="Solution" style="width: 100%; display: block;" id="solution1">
-      </div>
-
-      <div class="section-divider"></div>
-
-      <!-- Feature Sections -->
-      <div class="work-section" id="section-features">
-        <div style="max-width: 1000px; margin: 0 auto;">
-          <!-- Feature 1: Instant Note Capture (video on right, text on left) -->
-          <div class="feature-row">
-            <div class="feature-copy" style="text-align: right;">
-              <h4>Instant Note Capture</h4>
-              <p>Click the extension and start typing immediately. No tab switching. No onboarding. No friction.</p>
-            </div>
-            <div class="feature-visual">
-              <video autoplay loop muted playsinline>
-                <source src="instantcapture.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-
-          <!-- Feature 2: Smart Categories (video on left, text on right) -->
-          <div class="feature-row" style="margin-top: 1.5rem; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);">
-            <div class="feature-visual" style="order: 1; justify-content: flex-start;">
-              <video autoplay loop muted playsinline>
-                <source src="AIcategorize.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="feature-copy" style="order: 2; text-align: left;">
-              <h4>Smart Categories</h4>
-              <p>Notes are automatically categorized by AI. Users can easily rename, add, or remove categories to match their mental model.</p>
-            </div>
-          </div>
-
-          <!-- Feature 3: Add to Google Calendar (video on right, text on left) -->
-          <div class="feature-row">
-            <div class="feature-copy" style="text-align: right;">
-              <h4>Add to Google Calendar</h4>
-              <p>Turn notes into todos and add them to Google Calendar in a single click.</p>
-            </div>
-            <div class="feature-visual">
-              <video autoplay loop muted playsinline>
-                <source src="addtocalendar.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-
-          <!-- Feature 4: Context as a Bookmark (video on left, text on right) -->
-          <div class="feature-row" style="margin-top: 1.5rem; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);">
-            <div class="feature-visual" style="order: 1; justify-content: flex-start;">
-              <video autoplay loop muted playsinline>
-                <source src="bookmark.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div class="feature-copy" style="order: 2; text-align: left;">
-              <h4>Context as a Bookmark</h4>
-              <p>Each note saves the URL of the page where it was created, allowing users to revisit the original context later.</p>
-            </div>
-          </div>
-
-          <!-- Feature 5: History & Editing (video on right, text on left) -->
-          <div class="feature-row">
-            <div class="feature-copy" style="text-align: right;">
-              <h4>History & Editing</h4>
-              <p>View and manage past notes—edit content, update categories, add details, favorite important items, or delete what's no longer needed.</p>
-            </div>
-            <div class="feature-visual">
-              <video autoplay loop muted playsinline>
-                <source src="history.mov" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-divider"></div>
-
-      <!-- Full Width Images Section -->
-      <div style="width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
-        <img src="team.png" alt="Team" style="width: 100%; display: block;">
-        <img src="team2.png" alt="Team" style="width: 100%; display: block;">
-        <img src="research1.png" alt="Research 1" style="width: 100%; display: block;" id="research1">
-        <img src="research2.png" alt="Research 2" style="width: 100%; display: block;">
-        <img src="research3.png" alt="Research 3" style="width: 100%; display: block;">
-        <img src="design1.png" alt="Design 1" style="width: 100%; display: block;" id="design1">
-        <img src="design2.png" alt="Design 2" style="width: 100%; display: block;">
-        <img src="design3.png" alt="Design 3" style="width: 100%; display: block;">
-        <img src="iteration1.png" alt="Iteration 1" style="width: 100%; display: block;" id="iteration1">
-        <img src="iteration2.png" alt="Iteration 2" style="width: 100%; display: block;">
-        <img src="iteration3.png" alt="Iteration 3" style="width: 100%; display: block;">
-        <img src="iteration4.png" alt="Iteration 4" style="width: 100%; display: block;">
-        <img src="iteration5.png" alt="Iteration 5" style="width: 100%; display: block;">
-        <img src="metrics.png" alt="Team" style="width: 100%; display: block;">
-        <img src="nextstep.png" alt="Team" style="width: 100%; display: block;">
-      </div>
-
-      <!-- Download Button -->
-      <div style="text-align: center; margin: 8rem 0 4rem;" id="download">
-        <a href="https://mmbeams.github.io/Nomi/" class="download-button" target="_blank">Download</a>
-      </div>
-
-      <!-- Project Navigation -->
-      <div class="project-nav">
-        <a href="../huawei/index.html" class="prev">Huawei Connect</a>
-        <a href="../googleIO/index.html" class="next">Google I/O Connect</a>
-      </div>
+    <!-- Project Navigation -->
+    <div class="project-nav">
+      <a href="../huawei/index.html" class="prev">Huawei Connect</a>
+      <a href="../googleIO/index.html" class="next">Google I/O Connect</a>
     </div>
   </div>
 
@@ -867,22 +715,17 @@
 
 
   <script>
-    // Reveal sections on scroll
-    const sections = document.querySelectorAll('.work-section');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-    sections.forEach(s => observer.observe(s));
-
     // Hide/show top nav on scroll
     let lastScrollY = window.scrollY;
     const nav = document.querySelector('nav');
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      if (y > lastScrollY && y > 100) nav.style.transform = 'translateY(-100%)';
-      else nav.style.transform = 'translateY(0)';
-      lastScrollY = y;
-    });
+    if (nav) {
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (y > lastScrollY && y > 100) nav.style.transform = 'translateY(-100%)';
+        else nav.style.transform = 'translateY(0)';
+        lastScrollY = y;
+      });
+    }
 
     // Custom cursor
     (function cursor(){
@@ -921,93 +764,6 @@
       });
       document.addEventListener('mouseenter',() => {
         cursor.style.opacity = '1';
-      });
-    })();
-
-    // Set cover height
-    function setCoverHeight(){
-      const divider = document.querySelector('.section-divider');
-      if (!divider) return;
-      const y = divider.getBoundingClientRect().top + window.scrollY;
-      document.documentElement.style.setProperty('--cover-height', y + 'px');
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      setCoverHeight();
-      requestAnimationFrame(setCoverHeight);
-    });
-
-    window.addEventListener('resize', setCoverHeight);
-
-    // Section Navigation
-    (function() {
-      const toggle = document.getElementById('sectionNavToggle');
-      const menu = document.getElementById('sectionNavMenu');
-      const progressCircle = document.getElementById('progressCircle');
-      const radius = 26;
-      const circumference = 2 * Math.PI * radius;
-
-      progressCircle.style.strokeDasharray = circumference;
-      progressCircle.style.strokeDashoffset = circumference;
-
-      toggle.addEventListener('click', () => {
-        menu.classList.toggle('active');
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.section-nav')) {
-          menu.classList.remove('active');
-        }
-      });
-
-      // Update progress on scroll
-      function updateProgress() {
-        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height);
-        const offset = circumference - (scrolled * circumference);
-        progressCircle.style.strokeDashoffset = offset;
-
-        // Update section number
-        const sections = ['intro1', 'solution1', 'research1', 'design1', 'iteration1', 'download'];
-        let currentSection = 1;
-
-        for (let i = sections.length - 1; i >= 0; i--) {
-          const element = document.getElementById(sections[i]);
-          if (element && element.getBoundingClientRect().top <= 200) {
-            currentSection = i + 1;
-            break;
-          }
-        }
-
-        toggle.textContent = currentSection;
-
-        // Update active link
-        const links = menu.querySelectorAll('a');
-        links.forEach((link, index) => {
-          if (index + 1 === currentSection) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
-        });
-      }
-
-      window.addEventListener('scroll', updateProgress);
-      updateProgress();
-
-      // Smooth scroll to sections
-      menu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = link.getAttribute('href').substring(1);
-          const target = document.getElementById(targetId);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          menu.classList.remove('active');
-        });
       });
     })();
   </script>
