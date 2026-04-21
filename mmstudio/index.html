@@ -230,6 +230,63 @@
       margin-bottom: 8rem;
     }
 
+    .demo-video-wrap{
+      max-width: 960px;
+      margin: 0 auto;
+      border-radius: 0;
+      overflow: hidden;
+      background: #000;
+      box-shadow: none;
+    }
+    .demo-video-wrap video{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Intro copy (same rhythm as Huawei / Nomi body text) */
+    .case-intro{
+      max-width: 400px;
+      margin: 0 auto 2.5rem;
+      text-align: left;
+    }
+    .case-intro p{
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      color: #000000;
+      margin: 0 0 1.25rem 0;
+    }
+    .case-intro p:last-child{
+      margin-bottom: 0;
+    }
+
+    /* Figma-style CTA (same as Huawei "View full prototype in Figma" button) */
+    .figma-link-container{
+      text-align: center;
+      margin-top: 2.5rem;
+      margin-bottom: 4rem;
+    }
+    .figma-link-button{
+      display: inline-block;
+      font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 30px;
+      line-height: 36px;
+      font-weight: 400;
+      color: #000000;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border: 2px solid #000000;
+      border-radius: 40px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .figma-link-button:hover{
+      background-color: #000000;
+      color: #FFFFFF;
+    }
+
     /* Problem Title Section */
     .problem-title-section{
       text-align: center;
@@ -672,6 +729,7 @@
       .motion-text{ padding: 0 1rem; }
       .motion-gif img{ max-width: 300px; }
       .project-nav{ flex-direction: column; gap: 1rem; text-align: center; }
+      .case-intro{ max-width: 100%; }
     }
 
     /* Footer */
@@ -816,7 +874,7 @@
             <div class="work-meta-row">
               <div class="work-meta-item">
                 <div class="work-meta-label">Timeline</div>
-                <div class="work-meta-value">Dec 2025 - Present</div>
+                <div class="work-meta-value">Oct 2025 - Dec 2025</div>
               </div>
               <div class="work-meta-item">
                 <div class="work-meta-label">Team</div>
@@ -842,9 +900,24 @@
         <!-- Add your images here -->
       </div>
 
-      <!-- More to come section -->
       <div class="problem-title-section closer-text">
-        <p>More to come...</p>
+        <div class="case-intro">
+          <p>We created the first sketch based image editor.</p>
+          <p>These days, image generators depend heavily on text prompts. As creators, we want to make the image editing process more intuitive.</p>
+          <p>When we use Midjourney, we usually have a shape in mind before we start generating. However, it is hard to describe the shape and the specific part of the image we want to create using only text prompts.</p>
+          <p>That is why we created mmStudio, it is the easiest tool for quickly iterating on your logos, UI components, or marketing assets without a learning curve.</p>
+        </div>
+        <div class="demo-video-wrap">
+          <video src="v2.mov" controls playsinline preload="metadata" aria-label="mmStudio demo"></video>
+        </div>
+        <div class="figma-link-container">
+          <a
+            href="https://www.linkedin.com/posts/activity-7420003289934766080-pgNT?utm_source=share&utm_medium=member_ios&rcm=ACoAAEZVhO8BwAPKmu3xjAsH-s-ke1cWMyKkkYM"
+            class="figma-link-button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >View on LinkedIn</a>
+        </div>
       </div>
 
       <!-- Project Navigation -->
