@@ -244,9 +244,10 @@
       display: block;
     }
 
-    /* Intro copy (same rhythm as Huawei / Nomi body text) */
+    /* Intro copy (same rhythm as Huawei / Nomi body text; wider measure on large screens) */
     .case-intro{
-      max-width: 400px;
+      width: 100%;
+      max-width: min(820px, 100%);
       margin: 0 auto 2.5rem;
       text-align: left;
     }
@@ -908,7 +909,7 @@
           <p>That is why we created mmStudio, it is the easiest tool for quickly iterating on your logos, UI components, or marketing assets without a learning curve.</p>
         </div>
         <div class="demo-video-wrap">
-          <video src="v2.mov" controls playsinline preload="metadata" aria-label="mmStudio demo"></video>
+          <video src="v2-web.mp4" controls playsinline preload="metadata" aria-label="mmStudio demo"></video>
         </div>
         <div class="figma-link-container">
           <a
