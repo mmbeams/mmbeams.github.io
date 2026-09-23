@@ -6,8 +6,18 @@
   <title>About — Moira Huang</title>
   <meta name="description" content="Moira Huang — AI product designer, creative thinker, and builder. Projects, experiments, and a little about me.">
   <link rel="icon" href="images/signature.png">
-  <link rel="stylesheet" href="landing.css?v=smooth-motion">
-  <script src="landing.js?v=smooth-motion" defer></script>
+  <link rel="preload" href="images/flower2.png" as="image">
+  <script>
+    const openingNavigation = performance.getEntriesByType('navigation')[0]?.type;
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && Element.prototype.animate && (openingNavigation === 'reload' || (!location.hash && openingNavigation !== 'back_forward'))) {
+      history.scrollRestoration = 'manual';
+      document.documentElement.classList.add('opening-pending');
+      window.openingFallback = setTimeout(() => document.documentElement.classList.remove('opening-pending'), 4500);
+    }
+  </script>
+  <link rel="stylesheet" href="landing.css?v=personal-bentos">
+  <link rel="stylesheet" href="about-bentos.css?v=stable-opening-landing">
+  <script src="landing.js?v=flower-garden-lighter" defer></script>
 </head>
 <body class="desk-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -15,19 +25,34 @@
   <div class="page">
     <header class="header">
       <nav aria-label="Primary"><a href="index.html" aria-current="page">About</a><a href="work/index.html">Work</a></nav>
+      <div class="header-clock" aria-label="Your local time"><time data-local-time></time></div>
       <a class="header-contact" href="mailto:moirahuang18@gmail.com">Say hello <svg aria-hidden="true"><use href="#arrow"/></svg></a>
     </header>
     <main id="main" class="desk-grid">
-      <article class="card desk-intro">
-        <h1>Hi, I'm Moira.<br><span>I make things feel human.</span></h1>
-        <div class="intro-body"><p>I'm an AI product designer turning complex problems into simple, human experiences.</p></div>
+      <article class="card desk-intro identity-card" data-flip tabindex="0" aria-label="About Moira. Hover or focus to turn the card.">
+        <div class="identity-turner">
+        <div class="identity-face identity-front">
+        <img class="identity-flower" src="images/flower2.png" alt="" width="32" height="32">
+        <h1>Hi, I'm Moira.</h1>
+        <p class="identity-line">I make things feel human.</p>
+        <div class="identity-footer"><span>AI product designer</span><span class="signature" aria-hidden="true">mo.</span></div>
+        </div>
+        <div class="identity-face identity-back"><p>Currently an <strong>AI PM</strong> building <strong>Creative Agent at MiniMax</strong>, previously an <strong>AI Creator at Publicis Groupe.</strong></p></div>
+        </div>
       </article>
-      <figure class="card about-portrait"><img src="about/photo.jpeg" alt="Moira sitting on a bench" width="1576" height="1050"><figcaption>Behind the pixels.</figcaption></figure>
+      <figure class="card about-portrait photo-stack" data-gallery aria-label="Behind the pixels photo gallery">
+        <button class="photo-stack-stage" type="button" aria-label="Show next photo: exhibition installation" aria-describedby="photo-stack-status">
+          <img src="about/photo.jpeg" alt="Moira sitting on a bench in a subway station" width="1576" height="1050" data-photo-title="Subway portrait">
+          <img src="letters/live1.jpeg" alt="Visitors gathered around Moira's interactive installation" width="3024" height="4032" loading="lazy" data-photo-title="Exhibition installation">
+          <img src="letters/live3.jpeg" alt="A visitor typing into Moira's illuminated interactive artwork" width="3024" height="4032" loading="lazy" data-photo-title="Interactive artwork">
+        </button>
+        <span class="sr-only" id="photo-stack-status" role="status">Photo 1 of 3: Subway portrait. Activate to show the next photo.</span>
+      </figure>
       <article class="card music-card cover-player" aria-label="Moira's playlist player">
         <img class="playlist-cover" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d0000b2737c20fb440980c4f2f24346c5" alt="Album cover for 飛機場的10:30 by David Tao">
         <a class="playlist-brand" href="https://open.spotify.com/playlist/2O2a0EjOAMLzZirBV7KEEo" target="_blank" rel="noopener noreferrer" aria-label="Open blv playlist on Spotify"><svg aria-hidden="true"><use href="#spotify"/></svg></a>
         <div class="playlist-bottom">
-          <h2>飛機場的10:30</h2><p>David Tao · blv</p>
+          <h2 class="sr-only">飛機場的10:30</h2><p class="sr-only">David Tao · blv</p>
           <div class="playlist-controls" role="group" aria-label="Playlist controls">
             <button type="button" data-audio="previous" aria-label="Previous song" title="Previous song" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5v14M19 5 7 12l12 7z"/></svg></button>
             <button type="button" data-audio="play" aria-label="Play song preview" title="Play song preview"><svg aria-hidden="true" viewBox="0 0 24 24"><path class="play-symbol" d="m7 4 14 8-14 8z"/><path class="pause-symbol" d="M8 5v14M16 5v14"/></svg></button>
@@ -38,20 +63,25 @@
         <audio preload="none" src="https://p.scdn.co/mp3-preview/6b6bc27fcc50e03a0e03a013a61cf0734e714ed2"></audio>
       </article>
       <a class="card desk-project desk-project-1" href="mmstudio/index.html" aria-label="View MMStudio"><img src="images/mmstudio2.png" alt="MMStudio project preview" fetchpriority="high"></a>
-      <article class="card about-story"><section><p>I'm Moira, an AI product designer who cares about making complex things feel simple and human. I work across research, interaction design, and front-end development to turn ideas into experiences people can actually use.</p></section></article>
       <a class="card desk-project desk-project-2" href="wavely/index.html" aria-label="View Wavely"><img src="images/wavely1-static.png" alt="Wavely project preview" fetchpriority="high"></a>
       <a class="card desk-project desk-project-3" href="nomi/index.html" aria-label="View Nomi"><img src="images/nomi1.png" alt="Nomi project preview" loading="lazy"></a>
-      <article class="card about-story"><section><p>My experience spans product design at MiniMax, creative UI/UX at Publicis Groupe, and content design at iQIYI. Across each, I've explored how thoughtful design can bring people and technology a little closer.</p></section></article>
-      <a class="card photo-card" href="https://www.instagram.com/mmfi1ms/" target="_blank" rel="noopener noreferrer"><img src="images/letters3.jpeg" alt="An image from my creative practice" loading="lazy"><span>Through my lens <svg aria-hidden="true"><use href="#arrow"/></svg></span></a>
+      <a class="card photo-card lens-card" href="https://www.instagram.com/mmfi1ms/" target="_blank" rel="noopener noreferrer" aria-label="Explore Moira's photography on Instagram"><img src="images/letters3.jpeg" alt="An image from my creative practice" loading="lazy"></a>
       <a class="card desk-project desk-project-4" href="googleIO/index.html" aria-label="View Google I/O Connect"><img src="images/google1.png" alt="Google I/O Connect project preview" loading="lazy"></a>
       <a class="card desk-project desk-project-5" href="huawei/index.html" aria-label="View Huawei Connect"><img src="huawei/1.png" alt="Huawei Connect project preview" loading="lazy"></a>
-      <article class="card about-story"><section><p>At New York University, I studied Interactive Media Arts, with a minor in Web Programming and Applications, class of 2026. It's where my interests in design, technology, and creative expression came together.</p></section></article>
-      <article class="card about-story"><section><p>I move between user research, rapid prototyping, usability testing, and motion design. I like building something early, learning from people, and refining the details along the way.</p></section></article>
+      <article class="card about-story education-card">
+        <div class="education-top"><img src="images/nyulogo.png" alt="" width="30" height="40" loading="lazy"><span>Class of 2026</span></div>
+        <h2>New York<br>University.</h2>
+        <p>Interactive Media Arts</p>
+        <p class="education-minor">Web Programming &amp; Applications minor</p>
+      </article>
       <a class="card desk-project desk-project-6" href="oovo/index.html" aria-label="View Oovo"><img src="images/oovo1.png" alt="Oovo project preview" loading="lazy"></a>
       <a class="card desk-project desk-project-7" href="imaLogo/index.html" aria-label="View IMA Logo"><img src="images/ima1.png" alt="IMA Logo project preview" loading="lazy"></a>
-      <article class="card about-story"><section><p>I'm a photographer, bedroom DJ, bento UI lover, and an INTJ Scorpio. As a human, I love building deep connections with people.</p></section></article>
+      <article class="card about-story personal-card">
+        <p class="personal-lines">Photographer.<br>Bedroom DJ.<br>Bento enthusiast.</p>
+        <p class="personal-detail">An INTJ Scorpio who loves deep connections with people.</p>
+      </article>
       <a class="card desk-project desk-project-8" href="letters/index.html" aria-label="View Letters I Couldn't Say"><img src="images/letters1.jpeg" alt="Letters I Couldn't Say project preview" loading="lazy"></a>
-      <article class="card about-story"><section><p>I like making ideas tangible — through research, thoughtful interfaces, and working prototypes.</p><p>A little curiosity. A little play. A lot of care for the details.</p></section></article>
+      <article class="card about-story text-note closing-note"><section><p>Design, technology, and creative expression have always overlapped for me. At NYU, I found a place to bring them together. These projects are a little of each.</p></section></article>
     </main>
     <footer><span class="signature">mo.</span><p>Designed in New York with love ☺</p><div><a href="https://www.linkedin.com/in/moira-huang" target="_blank" rel="noopener noreferrer">LinkedIn <svg aria-hidden="true"><use href="#arrow"/></svg></a><button id="copy-email" type="button">Copy email <svg aria-hidden="true"><use href="#mail"/></svg></button></div></footer>
     <p class="sr-only" id="copy-status" role="status"></p>

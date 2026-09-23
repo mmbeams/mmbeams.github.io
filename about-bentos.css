@@ -1,0 +1,122 @@
+/* About's personal objects. Shared grid, navigation and Work stay in landing.css. */
+/* Preserve layout width while the opening temporarily locks scrolling. */
+html { scrollbar-gutter: stable; }
+.desk-page {
+  background: #fff;
+  --about-primary: #1d1d1f;
+  --about-secondary: #606067;
+  --about-rule: #eeefec;
+  --about-purple: #57068c;
+  --shadow: none;
+  --border: #eeefec;
+}
+.desk-page .card,
+.desk-page .card:hover,
+.desk-page .card-view .focused-card,
+.desk-page .identity-face { box-shadow: none; }
+
+/* A calling card: greeting, a small personal mark, then a quiet identity line. */
+.desk-page .identity-card {
+  padding: 0;
+  min-height: 252px;
+  display: block;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  perspective: 1100px;
+  cursor: default;
+}
+.desk-page .identity-turner { display: grid; min-height: 252px; transform-style: preserve-3d; transition: transform 650ms cubic-bezier(.22,.75,.2,1); }
+.desk-page .identity-face { grid-area: 1 / 1; min-width: 0; padding: 26px 26px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; align-items: flex-start; }
+.desk-page .identity-back { transform: rotateY(180deg); justify-content: center; padding: 26px; }
+.desk-page .identity-back p { font-size: 1.1875rem; line-height: 1.55; letter-spacing: -.025em; color: var(--about-secondary); }
+.desk-page .identity-back strong { font-weight: 500; color: var(--about-primary); }
+@media (hover: hover) and (pointer: fine) {
+  .desk-page .identity-card:hover .identity-turner { transform: rotateY(180deg); }
+}
+.desk-page .identity-card:focus-visible .identity-turner { transform: rotateY(180deg); }
+.desk-page .header-clock { margin-right: auto; min-height: 44px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .875rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.desk-page .header-clock time { font-weight: 500; }
+.desk-page .identity-flower { width: 32px; height: 32px; margin-bottom: 22px; object-fit: contain; }
+
+/* The opening uses an exact-size copy, so its landing matches the real card. */
+.opening-pending .desk-page > .page { visibility: hidden; }
+html.opening-pending { overflow: hidden; }
+.desk-page .opening-scene { position: fixed; inset: 0; z-index: 1000; background: #fff; pointer-events: none; }
+.desk-page .opening-garden { position: absolute; inset: 0; overflow: hidden; }
+.desk-page .opening-bloom { position: absolute; display: block; opacity: 0; mask: url('images/flower2.png') center / contain no-repeat; -webkit-mask: url('images/flower2.png') center / contain no-repeat; }
+.desk-page .opening-scene .identity-card { position: absolute; margin: 0; transform: none; }
+.desk-page .opening-scene .identity-turner { transform: none !important; transition: none; }
+.desk-page .opening-scene .identity-back { visibility: hidden; }
+.desk-page .opening-scene .identity-front { border-color: transparent; }
+.desk-page .opening-scene .identity-front > :not(.identity-flower) { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .opening-pending .desk-page > .page { visibility: visible; }
+  .desk-page .opening-scene { display: none; }
+}
+.desk-page .identity-card h1 { font-size: 1.625rem; line-height: 1.15; letter-spacing: -.045em; font-weight: 600; }
+.desk-page .identity-line { margin-top: 7px; font-size: 1.1875rem; line-height: 1.3; letter-spacing: -.025em; color: var(--about-secondary); }
+.desk-page .identity-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; margin-top: 23px; padding-top: 10px; border-top: 1px solid var(--about-rule); font-size: .8125rem; color: var(--about-secondary); }
+.desk-page .identity-footer .signature { font-size: 1.625rem; line-height: 1.2; }
+
+/* Text notes share the same quiet stroke as the other text cards. */
+.desk-page .text-note,
+.desk-page .card-view .focused-card.text-note {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+  background: #fff;
+  padding: 22px 18px;
+}
+.desk-page .text-note section p { font-size: 1rem; line-height: 1.55; color: var(--about-secondary); letter-spacing: -.018em; }
+.desk-page .text-note strong { display: block; margin-bottom: 13px; font-size: 1.3125rem; line-height: 1.28; letter-spacing: -.035em; font-weight: 500; color: var(--about-primary); }
+.desk-page .closing-note section p { font-size: 1.125rem; line-height: 1.5; letter-spacing: -.025em; }
+
+/* An academic keepsake, with one authentic spot of NYU purple. */
+.desk-page .education-card { padding: 24px; }
+.desk-page .education-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.desk-page .education-top img { width: 30px; height: 40px; object-fit: contain; }
+.desk-page .education-top span { font-size: .8125rem; color: var(--about-secondary); }
+.desk-page .education-card h2 { font-size: 1.5rem; line-height: 1.16; letter-spacing: -.04em; font-weight: 550; margin-bottom: 15px; }
+.desk-page .education-card > p { font-size: .9375rem; line-height: 1.5; color: var(--about-purple); }
+.desk-page .education-card > .education-minor { margin-top: 3px; font-size: .8125rem; line-height: 1.45; color: var(--about-secondary); }
+
+/* A folded note's quieter silhouette; all the interest stays in the words. */
+.desk-page .paper-note { padding: 26px; border-radius: 12px 12px 24px 12px; }
+.desk-page .paper-note section p { font-size: .9375rem; line-height: 1.6; color: var(--about-secondary); }
+.desk-page .paper-note strong { font-weight: 550; color: var(--about-primary); }
+.desk-page .personal-card { padding: 25px; }
+.desk-page .personal-lines { font-size: 1.4375rem; line-height: 1.35; letter-spacing: -.035em; font-weight: 500; }
+.desk-page .personal-detail { margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--about-rule); font-size: .875rem; line-height: 1.5; color: var(--about-secondary); }
+
+/* Artwork is the entire surface. The photo stack retains no shell or shadows. */
+.desk-page .desk-project { isolation: isolate; }
+.desk-page .lens-card,
+.desk-page .card-view .focused-card.lens-card { border: 0; box-shadow: none; }
+.desk-page .photo-stack { isolation: isolate; }
+.desk-page .photo-stack .photo-stack-stage img { box-shadow: none; }
+
+/* The album cover itself is the music bento; glass belongs only to its controls. */
+.desk-page .playlist-bottom { padding: 18px; background: none; }
+.desk-page .playlist-controls { width: 68%; min-width: 144px; margin: 0 auto; padding: 2px 4px; background: rgb(29 29 31 / 60%); backdrop-filter: blur(18px) saturate(1.2); }
+.desk-page .playlist-controls button svg { opacity: .82; }
+.desk-page .playlist-controls button:is(:hover, :focus-visible, :active) svg { opacity: 1; }
+.desk-page .playlist-brand { background: rgb(29 29 31 / 72%); backdrop-filter: blur(12px); }
+.desk-page .playlist-brand svg { color: #1db954; opacity: .95; }
+
+@media (max-width: 620px) {
+  .desk-page .text-note { padding: 16px 20px; }
+  .desk-page .text-note section p,
+  .desk-page .paper-note section p { font-size: 1rem; }
+  .desk-page .closing-note section p { font-size: 1.125rem; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .desk-page .playlist-controls,
+  .desk-page .playlist-brand { background: #29292e; backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  .desk-page { --about-secondary: #303034; --about-rule: #7c7c80; }
+  .desk-page .playlist-controls { background: #1d1d1f; }
+  .desk-page .playlist-controls button svg { opacity: 1; }
+}

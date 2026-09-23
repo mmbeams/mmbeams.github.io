@@ -1,6 +1,86 @@
 # Moira's portfolio — About and Work
 
+## Latest desktop refinement
+
+Reserve a stable scrollbar gutter on About. Locking/unlocking scrolling during the opening must not change grid width or card coordinates; this removes the horizontal jump when the animated copy hands off to the real introduction.
+
+Reduce the overall opening flower field by removing one third of candidate positions, retaining the central thinning, varied sizes, local overlaps, and fully opaque entrance.
+
+Opening garden refinement: thin alternating flowers within the central region, preserving dense overlapping edges. Background flowers now enter at full opacity while rotating/scaling, with no fade-in. Keep the existing fade-out during the card's return.
+
+Opening garden density revision: 72 flowers in a staggered, overlapping field, with varied sizes and rotations. Each flower settles at 100% opacity; only entrance/exit transitions fade. The white introduction card stays above the flowers for readability. This replaces the earlier sparse twelve-flower treatment.
+
+During the opening's text reveal, twelve flowers surround the centered introduction, using the original flower PNG's alpha mask with pastel lavender, pink, blue, green and warm yellow fills. Sizes, positions and angles vary deliberately; the center remains clear for reading. Flowers fade away as the introduction returns to the grid. No background flowers persist on the final page.
+
+Every About refresh replays the opening, even after scrolling or with a URL fragment. Disable automatic scroll restoration for the opening and return to the top before measuring the landing position. Reduced Motion still skips the animation; ordinary back/forward navigation does not replay it.
+
+About opening: reuse transparent `images/flower2.png` for the introduction mark and the centered opening. Spin the flower (750 ms), settle it into the centered introduction while revealing its content (480 ms), draw in the existing thin border (280 ms), then move the exact-size card into its grid slot (680 ms). Reveal other cards and the header afterward. White canvas and shadow-free surfaces remain unchanged. Reduced Motion, history restoration, and hash links skip the opening; Escape or Tab can skip it. Resize, image errors, and a safety timeout always release the page. Work is unchanged.
+
+Focused text and project cards now preserve the thumbnail's measured width/height and scale the complete layout uniformly, including text, padding and artwork. A shared centered stage fits the viewport; both types use the same subtle cursor-driven 3D tilt. Pointer coordinates are measured against the stable stage, including after window resizing. Escape and clicking outside still dismiss the view. Existing project destinations remain available from the focused cover.
+
+Current surface preference: restore the thin #EEEFEC card strokes and use #FFFFFF for both the About page background and card fills. Keep all bento shadows disabled. This supersedes the grey-background and transparent-stroke trials below. The photo stack remains borderless.
+
+Borderless surface trial: About card strokes are transparent, including both introduction faces and focused cards. Retain existing border widths to avoid layout shifts, pure-white fills, #FAFAFA canvas, and no shadows. Internal content dividers and keyboard focus indicators remain.
+
+About background refinement: use the barely grey #FAFAFA page canvas with pure-white #FFFFFF card surfaces. Preserve the shadow-free treatment and existing strokes; the photo stack remains transparent. The focused-card canvas retains its existing white appearance.
+
+Surface trial: every About bento is shadow-free, including hover states, both introduction faces, and focused views. Plain-text notes now have the shared thin stroke and rounded white surface. The photo stack keeps its borderless presentation. Navigation and Work styling are unchanged. The header clock displays only local HH:MM:SS; no UTC offset suffix is shown.
+
+Desktop is the current review target; further mobile adaptation is deferred until requested. The introduction is now a two-sided card: pointer hover (or keyboard focus) rotates it 180 degrees, revealing “Currently an AI PM building Creative Agent at MiniMax, previously an AI Creator at Publicis Groupe.” Both faces keep the existing white surface, border and light shadow. The front sentence “I make things feel human.” wraps naturally without a forced break. This card flips in place instead of opening the focus modal. Reduced Motion disables its transition.
+
+The standalone MiniMax / Publicis Groupe / iQIYI experience card is removed. Above the first grid column, a live 24-hour clock and numeric UTC offset reflect the visitor's computer time and time zone, updating every second. The clock aligns horizontally with Say hello and with the left edge of the grid. Earlier descriptions of the separate experience card are historical.
+
+## About: a collection of personal objects — September 22, 2026
+
+This section is the current specification and supersedes historical directions below. About is `index.html`; `about/index.html` redirects there. Shared layout and navigation live in `landing.css`; the new type-specific visual language lives in `about-bentos.css`, loaded only by About. Work keeps its current layout.
+
+The design thesis: a designer's personal desktop, with a different structure for each kind of content. Moira's real photographs, work, musical taste, and biography provide the character. Apple foundations guide the typography, space, grouping, and response to input; this is a web portfolio, not an imitation of native app chrome.
+
+### The bento family
+
+- **Calling card:** the existing flower mark, a compact greeting, a two-line personal statement, then a hairline and profession/signature. White surface, existing light border and shadow; natural height around 250px at desktop size.
+- **Photo stack:** only three overlapping images. No outer shell, captions, count, image shadows, opacity changes, or filter effects. Click/Enter/Space cycles the photographs through the existing positions. Reduced Motion makes the switch immediate.
+- **Open text note:** frameless, transparent, generous inset; 21px medium lead and 16px body, or an uninterrupted 18px personal paragraph. No decorative section labels or bottom links. Its focused view also stays frameless.
+- **Project cover:** only full-bleed artwork, clipped to the existing radius. Preserve all eight case-study links and the existing varied ratios; no external labels, badges, or invented project metadata.
+- **Music:** a square album cover with the small Spotify link and a narrow, translucent three-button control strip. Song title, artist, and status remain available to assistive technology but are visually hidden. No extra controls or fake playback state. Existing real audio previews and next/previous behavior remain.
+- **Experience card:** three compact rows for MiniMax, Publicis Groupe, and iQIYI, each with its actual role; quiet dividers communicate grouping. No dates or current-employment claims have been invented.
+- **Academic card:** the existing NYU mark, class of 2026, a two-line institution name, program and minor. NYU purple is reserved for the existing institutional identity.
+- **Paper note:** close-set prose and one emphasized sentence about building, learning, and refining. A subtly different corner silhouette distinguishes it without decorative stationery controls.
+- **Personal card:** three short stacked interests, followed by a smaller personality note. Expresses the person behind the work using existing biography details.
+
+### Rhythm, tokens, and behavior
+
+Regular layout remains three equal columns; below 1000px, two; below 620px, one. Rows align to the top and take the tallest item's height. Existing 940px canvas and 40/32/28px responsive gaps remain. Text cards grow with content. Source order stays readable on phones:
+
+```text
+[calling card] [photo stack]  [music]
+[cover]        [open note]   [cover]
+[cover]        [experience]  [photograph]
+[cover]        [cover]       [academic]
+[paper note]   [cover]       [cover]
+[personal]     [cover]       [open note]
+```
+
+Primary #1D1D1F, secondary #606067, white #FFFFFF, rules #EEEFEC, institutional accent #57068C. Contrast on white: primary 16.83:1, secondary 6.24:1, purple 11.60:1. The 60% dark player bar with 82% white icons has a calculated worst-case contrast of 3.58:1 over white artwork. System sans is the body, title, and control face; the existing Caveat signature is the only handwritten accent. Hierarchy is 26px greeting, 24px institution, 23px interests, 21px note lead, 15–18px prose, and 13px supporting text. Sizes use rem units. Existing navigation and surface tokens are preserved.
+
+Keep the existing scroll reveal, card focus/tilt, keyboard focus, and working player/gallery. Unframed notes preserve their own appearance in the modal. Glass is limited to the player controls. Reduced Transparency and Increased Contrast have explicit fallbacks. No autoplay or new continuous animation.
+
+Verified locally at desktop width, 768px, and 320px: no horizontal overflow or clipped text cards. Gallery activation advances without image opacity changes or shadows; keyboard opening/Escape dismissal preserve the frameless note appearance. Music next/pause controls update real player state. About/Work navigation works, and Work keeps two desktop columns without loading the About-specific stylesheet.
+
+### Structural references and judgment
+
+- [Marco's About](https://www.marco.fyi/about): personal writing interspersed with distinct social, music, and photography modules. Borrow the content-led composition, not its copy or full interface.
+- [Apple Layout](https://developer.apple.com/design/human-interface-guidelines/layout), “Best practices”: group related items with space and clear hierarchy.
+- [Apple Image views](https://developer.apple.com/design/human-interface-guidelines/image-views), “Best practices”: use an image button for interactive imagery.
+- [Apple Motion](https://developer.apple.com/design/human-interface-guidelines/motion), “Providing feedback”: brief, precise feedback; optional motion.
+
+The specific object metaphors, card silhouettes, type sizes, and arrangements are design judgments for Moira's portfolio, not Apple-specified templates. The result is intentionally restrained: existing photography and artwork carry the color; no new generic slogan cards, filler statistics, fake controls, or background illustrations are needed.
+
 ## Latest consolidation
+
+Bare photo stack refinement: remove the visible bento shell, fill, border, shadow, caption, and counter from the photo gallery. Only the three overlapping photographs remain visible, with no shadows on the images. Switching changes position and stacking order without opacity or filter transitions, so no photo fades out. The full image stack stays clickable and keyboard-accessible, with position updates preserved as screen-reader-only text.
+
+Photo stack update: replace the single “Behind the pixels” portrait with a three-photo, full-image gallery using the subway portrait and two behind-the-scenes installation photographs. The active image sits above two visible cards rotated 4.5° and 8° to the right. Activating the image moves the front photo away and advances the stack; screen-reader-only status text communicates position. The entire image is a semantic button with keyboard support and a visible focus ring. Reduced Motion switches instantly without opacity changes. Guidance: `image-views.md › Best practices` recommends an image button for interactive imagery; `accessibility.md › Mobility` requires keyboard-accessible, sufficiently sized controls; `motion.md › Providing feedback` calls for brief, precise feedback motion.
 
 Motion refinement (Apple-design component review): retain the existing visual tokens and grid; the portfolio's imagery remains the signature. Cards reveal once on entering the viewport, rising 32px with opacity 0→1 over 620ms using cubic-bezier(.22,.75,.2,1), with up to 110ms sibling staggering. The easing moves briskly then settles without bounce. Navigation uses one shared selected-state pill, sliding horizontally over 320ms before normal page navigation; links, modified clicks, browser history, and direct URLs remain intact. Keyboard focus reveals content immediately. Reduced Motion removes both effects, including when enabled mid-session. No animation is needed for revisiting an already revealed card. Guidance: `motion.md › Best practices`: “Make motion optional”; `motion.md › Providing feedback`: “Aim for brevity and precision in feedback animations.” Durations and distances are implementation judgment, not Apple-specified values.
 
