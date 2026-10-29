@@ -254,6 +254,16 @@
   viewer.setAttribute('aria-label', 'Focused card. Press Escape or click outside the card to close.');
   document.body.append(viewer);
   let sourceCard;
+  const projectDetails = {
+    mmstudio: { title: 'mmStudio', tags: ['AI Image Generator'], side: 'left' },
+    wavely: { title: 'Wavely', tags: ['App Design'], side: 'right' },
+    nomi: { title: 'Nomi', tags: [], side: 'left' },
+    googleIO: { title: 'Google I/O Connect', tags: ['Graphic Design'], side: 'right' },
+    huawei: { title: 'Huawei Connect Website Redesign', tags: ['UI/UX Design', 'Website Design'], side: 'left' },
+    oovo: { title: 'Oovo', tags: ['App Design'], side: 'right' },
+    imaLogo: { title: 'IMA Logo', tags: ['Motion Design', 'Brand Identity'], side: 'left' },
+    letters: { title: "letters i couldn't say", tags: ['Creative coding'], side: 'right' }
+  };
   let resizeFocusedCard;
   window.addEventListener('resize', () => resizeFocusedCard?.());
   function closeCard() { viewer.close(); }
@@ -294,6 +304,29 @@
     focused.tabIndex = 0;
     // A second click on a linked card still opens its original destination.
     viewer.replaceChildren(stage);
+    const projectKey = card.matches('.desk-project, .work-project')
+      ? new URL(card.href).pathname.split('/').slice(-2, -1)[0] : null;
+    const project = projectDetails[projectKey];
+    if (project) {
+      const backdrop = document.createElement('section');
+      backdrop.className = `project-backdrop project-backdrop--${project.side}`;
+      if (project.title.length > 12) backdrop.classList.add('project-backdrop--long');
+      const title = document.createElement('h2');
+      title.className = 'project-backdrop-title';
+      title.textContent = project.title;
+      const tags = document.createElement('p');
+      tags.className = 'project-backdrop-tags';
+      project.tags.forEach(tag => {
+        const label = document.createElement('span');
+        label.textContent = tag;
+        tags.append(label);
+      });
+      backdrop.append(title, tags);
+      viewer.prepend(backdrop);
+      viewer.setAttribute('aria-label', `${project.title}. Press Escape or click outside the card to close.`);
+    } else {
+      viewer.setAttribute('aria-label', 'Focused card. Press Escape or click outside the card to close.');
+    }
     viewer.showModal();
     resizeFocusedCard = () => {
       const padding = getComputedStyle(viewer);

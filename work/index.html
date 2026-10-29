@@ -6,8 +6,11 @@
   <title>Work — Moira Huang</title>
   <meta name="description" content="Moira Huang — AI product designer, creative thinker, and builder. Projects, experiments, and a little about me.">
   <link rel="icon" href="../images/signature.png">
-  <link rel="stylesheet" href="../landing.css?v=smooth-motion">
-  <script src="../landing.js?v=smooth-motion" defer></script>
+  <link rel="stylesheet" href="../landing.css?v=project-backdrops">
+  <link rel="preload" href="../fonts/Caveat/static/Caveat-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="gallery.css?v=handwritten-titles">
+  <script src="../landing.js?v=project-backdrops" defer></script>
+  <script src="gallery.js?v=exhibition" defer></script>
 </head>
 <body class="work-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -17,16 +20,64 @@
       <nav aria-label="Primary"><a href="../index.html">About</a><a href="../work/index.html" aria-current="page">Work</a></nav>
       <a class="header-contact" href="mailto:moirahuang18@gmail.com">Say hello <svg aria-hidden="true"><use href="#arrow"/></svg></a>
     </header>
-    <main id="main" class="work-grid" aria-label="Selected work">
+    <main id="main" class="work-exhibition" aria-label="Selected work">
       <h1 class="sr-only">Selected work</h1>
-      <a class="card work-project" href="../mmstudio/index.html"><div class="work-copy"><h2>MMStudio</h2><p>An AI image-making canvas that turns prompting into directing.</p></div><div class="work-image"><img src="../images/mmstudio2.png" alt="MMStudio project preview" loading="lazy"></div></a>
-      <a class="card work-project" href="../wavely/index.html"><div class="work-copy"><h2>Wavely</h2><p>An AI-matching coffee chat platform for real, human connections.</p></div><div class="work-image"><img src="../images/wavely1-static.png" alt="Wavely project preview" loading="lazy"></div></a>
-      <a class="card work-project" href="../nomi/index.html"><div class="work-copy"><h2>Nomi</h2><p>A thoughtful home for scattered ideas, notes, and next steps.</p></div><div class="work-image"><img src="../images/nomi1.png" alt="Nomi project preview" loading="lazy"></div></a>
-      <a class="card work-project" href="../googleIO/index.html"><div class="work-copy"><h2>Google I/O Connect</h2><p>An interactive event experience bringing Gemini to developers.</p></div><div class="work-image"><img src="../images/google1.png" alt="Google I/O Connect project preview" loading="lazy"></div></a>
-      <a class="card work-project" href="../huawei/index.html"><div class="work-copy"><h2>Huawei Connect</h2><p>A clearer, more intuitive experience for a technology conference.</p></div><div class="work-image"><img src="../huawei/1.png" alt="Huawei Connect project preview" loading="lazy"></div></a>
-      <a class="card work-project" href="../oovo/index.html"><div class="work-copy"><h2>Oovo</h2><p>An AI companion encouraging small steps toward greener commuting.</p></div><div class="work-image"><img src="../images/oovo1.png" alt="Oovo project preview" loading="lazy"></div></a>
-      <a class="card work-project" href="../imaLogo/index.html"><div class="work-copy"><h2>IMA Logo</h2><p>An exploration of identity through motion.</p></div><div class="work-image"><img src="../images/ima1.png" alt="IMA Logo project preview" loading="lazy"></div></a>
-      <a class="card work-project" href="../letters/index.html"><div class="work-copy"><h2>Letters I Couldn't Say</h2><p>An interactive experiment in the things we leave unsaid.</p></div><div class="work-image"><img src="../images/letters1.jpeg" alt="Letters I Couldn't Say project preview" loading="lazy"></div></a>
+      <article class="exhibit" style="--exhibit-ink: #dfe6d6">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">mmStudio</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../mmstudio/index.html" aria-label="View mmStudio"><img src="../images/mmstudio2.png" alt="mmStudio project preview" fetchpriority="high"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>mmStudio</h2><p class="exhibit-tags">AI Image Generator</p></div><p class="exhibit-description">An AI image-making canvas that turns prompting into directing.</p></div>
+      </article>
+      <article class="exhibit" style="--exhibit-ink: #e2dfca">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">Wavely</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../wavely/index.html" aria-label="View Wavely"><img src="../images/wavely1-static.png" alt="Wavely project preview" loading="lazy"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>Wavely</h2><p class="exhibit-tags">App Design</p></div><p class="exhibit-description">An AI-matching coffee chat platform for real, human connections.</p></div>
+      </article>
+      <article class="exhibit" style="--exhibit-ink: #dcdde9">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">Nomi</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../nomi/index.html" aria-label="View Nomi"><img src="../images/nomi1.png" alt="Nomi project preview" loading="lazy"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>Nomi</h2></div><p class="exhibit-description">A thoughtful home for scattered ideas, notes, and next steps.</p></div>
+      </article>
+      <article class="exhibit exhibit--long" style="--exhibit-ink: #d5e4dc">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">Google I/O Connect</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../googleIO/index.html" aria-label="View Google I/O Connect"><img src="../images/google1.png" alt="Google I/O Connect project preview" loading="lazy"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>Google I/O Connect</h2><p class="exhibit-tags">Graphic Design</p></div><p class="exhibit-description">An interactive event experience bringing Gemini to developers.</p></div>
+      </article>
+      <article class="exhibit exhibit--long" style="--exhibit-ink: #eadbdb">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">Huawei Connect</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../huawei/index.html" aria-label="View Huawei Connect"><img src="../huawei/1.png" alt="Huawei Connect project preview" loading="lazy"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>Huawei Connect</h2><p class="exhibit-tags">UI/UX Design · Website Design</p></div><p class="exhibit-description">A clearer, more intuitive experience for a technology conference.</p></div>
+      </article>
+      <article class="exhibit" style="--exhibit-ink: #d8e6db">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">Oovo</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../oovo/index.html" aria-label="View Oovo"><img src="../images/oovo1.png" alt="Oovo project preview" loading="lazy"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>Oovo</h2><p class="exhibit-tags">App Design</p></div><p class="exhibit-description">An AI companion encouraging small steps toward greener commuting.</p></div>
+      </article>
+      <article class="exhibit" style="--exhibit-ink: #e4dcf0">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">IMA Logo</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../imaLogo/index.html" aria-label="View IMA Logo"><img src="../images/ima1.png" alt="IMA Logo project preview" loading="lazy"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>IMA Logo</h2><p class="exhibit-tags">Motion Design · Brand Identity</p></div><p class="exhibit-description">An exploration of identity through motion.</p></div>
+      </article>
+      <article class="exhibit exhibit--long" style="--exhibit-ink: #e9dfd3">
+        <div class="exhibit-scene">
+          <div class="exhibit-title" aria-hidden="true">letters i couldn't say</div>
+          <div class="exhibit-float"><a class="exhibit-cover" href="../letters/index.html" aria-label="View letters i couldn&#39;t say"><img src="../images/letters1.jpeg" alt="letters i couldn&#39;t say project preview" loading="lazy"><span class="exhibit-open" aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="exhibit-caption"><div><h2>letters i couldn't say</h2><p class="exhibit-tags">Creative coding</p></div><p class="exhibit-description">An interactive experiment in the things we leave unsaid.</p></div>
+      </article>
     </main>
     <footer><span class="signature">mo.</span><p>Designed in New York with love ☺</p><div><a href="https://www.linkedin.com/in/moira-huang" target="_blank" rel="noopener noreferrer">LinkedIn <svg aria-hidden="true"><use href="#arrow"/></svg></a><button id="copy-email" type="button">Copy email <svg aria-hidden="true"><use href="#mail"/></svg></button></div></footer>
     <p class="sr-only" id="copy-status" role="status"></p>

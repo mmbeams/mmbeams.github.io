@@ -197,6 +197,13 @@ body.card-open > .page { visibility: hidden; }
 .card-view .focused-card:focus { outline: none; }
 .card-view .focused-card .intro-body p { display: block; }
 .card-focus-stage { position: relative; flex: 0 0 auto; margin: auto; }
+.project-backdrop { position: absolute; inset: auto 4vw 5vh; min-height: 38vh; display: flex; flex-direction: column; justify-content: flex-end; pointer-events: none; }
+.project-backdrop--right { text-align: right; align-items: flex-end; }
+.project-backdrop-title { max-width: 92vw; margin: 0; color: #d9d9de; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: clamp(110px, 19vw, 320px); font-weight: 600; line-height: .88; letter-spacing: -.065em; overflow-wrap: anywhere; }
+.project-backdrop--long .project-backdrop-title { max-width: 85vw; font-size: clamp(80px, 11vw, 190px); }
+.project-backdrop-tags { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 24px; color: #606067; font-size: 14px; font-weight: 500; letter-spacing: .02em; }
+.project-backdrop--right .project-backdrop-tags { justify-content: flex-end; }
+.project-backdrop ~ .card-focus-stage { z-index: 1; }
 .card-focus-scale { position: absolute; inset: 0 auto auto 0; transform-origin: top left; }
 .card-view .card-focus-scale .focused-card { margin: 0; max-width: none; transform-origin: center; transform: perspective(1100px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); }
 @media (max-width: 440px) { .card-view { padding: 20px; } }

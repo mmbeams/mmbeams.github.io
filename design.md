@@ -2,6 +2,16 @@
 
 ## Latest desktop refinement
 
+Work title revision: use the already-downloaded Caveat Regular for expressive handwritten display titles. Place them in front of covers with a slight alternating angle; pointer events pass through to the project links. Captions retain the readable system sans. This supersedes the earlier behind-cover sans-serif title treatment on Work only.
+
+Work exhibition replaces the two-column bento grid: eight full-width project posters, each about 85vh tall, with a centered 3:2 cover, alternating oversized decorative title, sourced Type tags, and one-sentence description. The cover is a native link directly to the project (no intermediate modal). Work-specific CSS/JS keep About unchanged.
+
+Design thesis: Moira's actual project covers become the exhibited objects; pale title colors echo their artwork. White remains the explicitly requested canvas. System sans display type scales from 100–300px (70–170px for long titles); readable project labels are repeated at 16px, tags at 13px, descriptions at 15px. Text #1D1D1F and secondary #606067 have 16.83:1 and 6.24:1 contrast on white. Pale background titles are decorative and aria-hidden, with accessible dark headings in the captions. Layout: regular desktop = centered cover over giant title, caption/description at opposite edges; compact/mobile adaptation is deferred at the user's request.
+
+Apple-design principles applied: visible keyboard focus, native scrolling without scroll capture or snapping, small 4-degree pointer tilt, one-time layered reveals (650–850ms), and Reduced Motion disabling both reveals and tilt. No extra counters or decorative framing. References: accessibility.md (Vision), typography.md (Conveying hierarchy), motion.md (Best practices), scroll-views.md (Best practices). This is a web portfolio, not native macOS chrome.
+
+Project focus views on About and Work include oversized, left/right-alternating background project titles and small Type tags sourced from the detail pages. The typography occupies roughly the lower third to half of the viewport behind the centered 3D card. Nomi has no Type metadata and therefore no invented tag. Text-only cards retain their plain focus canvas. Escape/outside click and project links remain unchanged.
+
 Reserve a stable scrollbar gutter on About. Locking/unlocking scrolling during the opening must not change grid width or card coordinates; this removes the horizontal jump when the animated copy hands off to the real introduction.
 
 Reduce the overall opening flower field by removing one third of candidate positions, retaining the central thinning, varied sizes, local overlaps, and fully opaque entrance.
