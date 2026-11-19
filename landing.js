@@ -1,449 +1,431 @@
 (() => {
-  const localTime = document.querySelector('[data-local-time]');
-  if (localTime) {
-    const updateClock = () => {
-      const now = new Date();
-      localTime.textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' });
-      localTime.dateTime = now.toISOString();
-    };
-    updateClock();
-    setInterval(updateClock, 1000);
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) updateClock(); });
-  }
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const cards = [...document.querySelectorAll('main > .card')];
-  const revealAnimations = new Map();
-  let revealObserver;
-  const showCard = (card, delay = 0) => {
-    card.classList.remove('reveal-pending');
-    revealObserver?.unobserve(card);
-    if (reducedMotion.matches || card.contains(document.activeElement)) return;
-    const animation = card.animate([
-      { opacity: 0, translate: '0 32px' },
-      { opacity: 1, translate: '0 0' }
-    ], { duration: 620, delay, easing: 'cubic-bezier(.22, .75, .2, 1)', fill: 'backwards' });
-    revealAnimations.set(card, animation);
-    animation.finished.then(() => revealAnimations.delete(card)).catch(() => {});
+  const shell=document.querySelector('.site-shell');
+  const loader=document.querySelector('.loader');
+  const roll=document.querySelector('.roll');
+  const buttons=[...document.querySelectorAll('.rail-button')];
+  const cursor=document.createElement('div');
+  cursor.className='cursor-square';
+  document.body.appendChild(cursor);
+  window.addEventListener('pointermove', e=>{
+    cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';
+  },{passive:true});
+  const petals=[...loader.querySelectorAll('.loader-petal')];
+  const finishLoading=()=>{
+    loader.classList.add('is-done');
+    shell.classList.add('is-ready');
   };
-  const startCardReveals = (skipIntro = false) => {
-  if (!reducedMotion.matches && 'IntersectionObserver' in window && Element.prototype.animate) {
-    revealObserver = new IntersectionObserver(entries => {
-      entries.filter(entry => entry.isIntersecting).forEach((entry, index) => {
-        showCard(entry.target, Math.min(index, 2) * 55);
-      });
-    }, { threshold: 0, rootMargin: '0px 0px -20px 0px' });
-    cards.forEach(card => {
-      if (skipIntro && card.matches('.identity-card')) return;
-      card.classList.add('reveal-pending');
-      revealObserver.observe(card);
-      card.addEventListener('focusin', () => {
-        card.classList.remove('reveal-pending');
-        revealObserver.unobserve(card);
-        revealAnimations.get(card)?.cancel();
-      });
+  const placePetals=t=>{
+    // One cubic arc, repeated by the four SVG groups at 90-degree intervals.
+    // The circles keep their radius; the central square never moves.
+    const x=18*t*(1-t);
+    const y=-10*t*t*(3-2*t);
+    petals.forEach(petal=>{
+      petal.setAttribute('cx',x);
+      petal.setAttribute('cy',y);
     });
+  };
+  const fillPetals=progress=>{
+    // Shrink the centered stroke inward so the outer radius stays exactly 8.
+    const stroke=.75*(1-progress);
+    petals.forEach(petal=>{
+      petal.setAttribute('r',8-stroke/2);
+      petal.setAttribute('stroke-width',stroke);
+      petal.setAttribute('fill-opacity',1-Math.pow(1-progress,.25));
+    });
+    loader.querySelector('.loader-core').setAttribute('opacity',progress===1?1:0);
+  };
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+    fillPetals(1); placePetals(1);
+    setTimeout(finishLoading,250);
+  }else{
+    const retract=()=>{
+      const started=performance.now();
+      const logo=loader.querySelector('.loader-logo');
+      logo.style.transformOrigin='50% 50%';
+      const tick=now=>{
+        const elapsed=now-started;
+        const progress=Math.min(1,elapsed/200);
+        // Retract and shrink in one continuous, accelerating movement.
+        const eased=progress*progress;
+        placePetals(1-eased);
+        logo.style.transform=`scale(${1-eased})`;
+        if(progress<1) requestAnimationFrame(tick);
+        else finishLoading();
+      };
+      requestAnimationFrame(tick);
+    };
+    const started=performance.now();
+    const unfold=now=>{
+      const elapsed=now-started;
+      const fill=Math.max(0,Math.min(1,(elapsed-350)/350));
+      fillPetals(fill*fill*(3-2*fill));
+      const progress=Math.max(0,Math.min(1,(elapsed-780)/950));
+      // Strong acceleration out of the overlap, then a soft final landing.
+      const eased=progress<.5?16*Math.pow(progress,5):1-Math.pow(-2*progress+2,5)/2;
+      placePetals(eased);
+      if(progress<1) requestAnimationFrame(unfold);
+      else setTimeout(retract,250);
+    };
+    requestAnimationFrame(unfold);
   }
-  };
 
-  const playOpening = async () => {
-    const root = document.documentElement;
-    const intro = document.querySelector('.desk-page main > .identity-card');
-    if (!root.classList.contains('opening-pending') || !intro || reducedMotion.matches) {
-      root.classList.remove('opening-pending');
-      clearTimeout(window.openingFallback);
-      startCardReveals();
-      return;
-    }
-    // Every refresh starts the opening at the top, not at a restored scroll offset.
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    const page = document.querySelector('.desk-page > .page');
-    const scene = document.createElement('div');
-    scene.className = 'opening-scene';
-    scene.setAttribute('aria-hidden', 'true');
-    scene.inert = true;
-    const copy = intro.cloneNode(true);
-    copy.removeAttribute('tabindex');
-    copy.removeAttribute('data-flip');
-    const target = intro.getBoundingClientRect();
-    const left = (innerWidth - target.width) / 2;
-    const top = (innerHeight - target.height) / 2;
-    const openingWidth = innerWidth;
-    const openingHeight = innerHeight;
-    Object.assign(copy.style, { width: `${target.width}px`, height: `${target.height}px`, left: `${left}px`, top: `${top}px` });
-    const garden = document.createElement('div');
-    garden.className = 'opening-garden';
-    // Use the original PNG's alpha silhouette, tinted without new image assets.
-    const flowerPalette = ['#b9b2e4', '#edcc75', '#adcdb7', '#e9afb5', '#9fc8df', '#edb98c', '#c0b5dd', '#e8cf87', '#b5ceb3', '#e6b4c9', '#a9c9dc', '#e9b797'];
-    // A dense, staggered field: adjacent silhouettes intentionally overlap.
-    const blooms = Array.from({ length: 72 }, (_, index) => {
-      // Keep the established composition, with fewer flowers across the field.
-      if (index % 3 === 1) return null;
-      const column = index % 12;
-      const row = Math.floor(index / 12);
-      const x = column * 9.1 + (row % 2 ? 3 : -2) + Math.sin(index * 2.4) * 3;
-      const y = row * 20 + Math.cos(index * 1.7) * 5;
-      // Thin the center without changing the dense, overlapping outer edge.
-      if (x > 24 && x < 76 && y > 24 && y < 76 && (column + row) % 2 === 0) return null;
-      const size = 130 + ((index * 73) % 170);
-      const angle = (index * 47) % 360;
-      const color = flowerPalette[(index * 5 + row) % flowerPalette.length];
-      const bloom = document.createElement('span');
-      bloom.className = 'opening-bloom';
-      Object.assign(bloom.style, { left: `${x}%`, top: `${y}%`, width: `${size}px`, height: `${size}px`, backgroundColor: color });
-      garden.append(bloom);
-      return { bloom, angle };
-    }).filter(Boolean);
-    scene.append(garden, copy);
-    document.body.append(scene);
-    const wasInert = page.inert;
-    page.inert = true;
-    const animations = [];
-    let finished = false;
-    const finish = (reason = 'complete') => {
-      if (finished) return;
-      finished = true;
-      root.dataset.openingResult = typeof reason === 'string' ? reason : reason.type;
-      clearTimeout(window.openingFallback);
-      window.removeEventListener('resize', onOpeningResize);
-      window.removeEventListener('pagehide', finish);
-      document.removeEventListener('keydown', skip);
-      reducedMotion.removeEventListener('change', finish);
-      animations.forEach(animation => animation.cancel());
-      scene.remove();
-      page.inert = wasInert;
-      startCardReveals(true);
-      root.classList.remove('opening-pending');
-      if (!reducedMotion.matches) {
-        page.querySelectorAll('.header, footer').forEach(element => element.animate(
-          [{ opacity: 0 }, { opacity: 1 }], { duration: 480, easing: 'ease-out' }
-        ));
-      }
-    };
-    const skip = event => { if (event.key === 'Escape' || event.key === 'Tab') finish(); };
-    // Scrollbar/layout settling can dispatch resize without a real window resize.
-    const onOpeningResize = () => {
-      if (Math.abs(innerWidth - openingWidth) > 48 || Math.abs(innerHeight - openingHeight) > 48) finish('resize');
-    };
-    window.addEventListener('resize', onOpeningResize);
-    window.addEventListener('pagehide', finish);
-    document.addEventListener('keydown', skip);
-    reducedMotion.addEventListener('change', finish);
-    clearTimeout(window.openingFallback);
-    window.openingFallback = setTimeout(finish, 4500);
-    const animate = (element, frames, duration, easing = 'cubic-bezier(.22,.75,.2,1)') => {
-      if (finished) throw new Error('Opening skipped');
-      const animation = element.animate(frames, { duration, easing, fill: 'forwards' });
-      animations.push(animation);
-      return animation.finished;
-    };
-    try {
-      const flower = copy.querySelector('.identity-flower');
-      const bounds = flower.getBoundingClientRect();
-      const x = innerWidth / 2 - bounds.left - bounds.width / 2;
-      const y = innerHeight / 2 - bounds.top - bounds.height / 2;
-      const centered = `translate(${x}px, ${y}px) scale(2.5)`;
-      flower.style.transform = centered;
-      await Promise.race([flower.decode(), new Promise(resolve => setTimeout(resolve, 600))]);
-      scene.dataset.stage = 'flower';
-      await animate(flower, [{ transform: `${centered} rotate(-100deg)`, opacity: 0 }, { transform: `${centered} rotate(260deg)`, opacity: 1 }], 750);
-      scene.dataset.stage = 'content';
-      await Promise.all([
-        ...blooms.map(({ bloom, angle }) => animate(bloom, [
-          { opacity: 1, transform: `translate(-50%, -50%) scale(.8) rotate(${angle - 22}deg)` },
-          { opacity: 1, transform: `translate(-50%, -50%) scale(1) rotate(${angle}deg)` }
-        ], 620)),
-        animate(flower, [{ transform: `${centered} rotate(260deg)` }, { transform: 'translate(0, 0) scale(1) rotate(360deg)' }], 480),
-        ...[...copy.querySelector('.identity-front').children].filter(child => child !== flower).map(child =>
-          animate(child, [{ opacity: 0, translate: '0 10px' }, { opacity: 1, translate: '0 0' }], 480))
-      ]);
-      scene.dataset.stage = 'border';
-      await animate(copy.querySelector('.identity-front'), [{ borderColor: 'transparent' }, { borderColor: getComputedStyle(intro).getPropertyValue('--border').trim() }], 280);
-      scene.dataset.stage = 'landing';
-      await Promise.all([
-        animate(garden, [{ opacity: 1 }, { opacity: 0 }], 460),
-        animate(copy, [{ transform: 'translate(0, 0)' }, { transform: `translate(${target.left - left}px, ${target.top - top}px)` }], 680)
-      ]);
-    } catch (error) {
-      // Asset errors or interrupted animations must never block the portfolio.
-      if (!finished) console.warn('Opening animation could not finish:', error);
-    } finally {
-      finish();
-    }
-  };
-  playOpening();
-  reducedMotion.addEventListener('change', event => {
-    if (!event.matches) return;
-    revealObserver?.disconnect();
-    cards.forEach(card => card.classList.remove('reveal-pending'));
-    revealAnimations.forEach(animation => animation.cancel());
-    revealAnimations.clear();
+  // The year stays visible; only its two digits roll during scroll motion.
+  const year = document.querySelector('.date-marker span');
+  year.textContent = '';
+  year.append('[');
+  const digits = [...'26'].map(value => {
+    const slot = document.createElement('span');
+    slot.className = 'year-digit';
+    const strip = document.createElement('span');
+    strip.className = 'year-strip';
+    const cells = Array.from({length:3}, () => {
+      const cell = document.createElement('span');
+      strip.appendChild(cell);
+      return cell;
+    });
+    slot.appendChild(strip);
+    year.appendChild(slot);
+    return {slot, strip, cells, value:Number(value), position:Number(value), finishDelay:0};
   });
-
-  document.querySelectorAll('[data-gallery]').forEach(gallery => {
-    const stage = gallery.querySelector('.photo-stack-stage');
-    const photos = [...stage.querySelectorAll('img')];
-    const status = gallery.querySelector('[role="status"]');
-    let active = 0;
-    let switching = false;
-    const render = () => {
-      photos.forEach((photo, index) => {
-        const offset = (index - active + photos.length) % photos.length;
-        photo.dataset.stackPosition = offset === 0 ? 'front' : offset === 1 ? 'middle' : 'back';
+  year.append(']');
+  year.setAttribute('aria-label', '[26]');
+  digits.forEach(digit => digit.slot.setAttribute('aria-hidden', 'true'));
+  let yearRaf = 0, yearMotion = 0, yearTick = 0, yearDirection = 1, yearFinish = 0;
+  const renderYear = () => digits.forEach(digit => {
+    const base = Math.floor(digit.position);
+    digit.cells.forEach((cell,index) => { cell.textContent = ((base+index-1)%10+10)%10; });
+    digit.strip.style.transform = `translateY(${-100/3*(1+digit.position-base)}%)`;
+  });
+  const tickYear = now => {
+    const dt = Math.min(40,now-yearTick)/1000;
+    yearTick = now;
+    if (!yearFinish && now-yearMotion > 140) {
+      yearFinish = now;
+      digits.forEach((digit,index) => {
+        digit.finishDelay = index * 70;
+        digit.start = digit.position;
+        digit.target = yearDirection > 0
+          ? Math.ceil((digit.position+2-digit.value)/10)*10+digit.value
+          : Math.floor((digit.position-2-digit.value)/10)*10+digit.value;
       });
-      const next = photos[(active + 1) % photos.length];
-      stage.setAttribute('aria-label', `Show next photo: ${next.dataset.photoTitle}`);
-      status.textContent = `Photo ${active + 1} of ${photos.length}: ${photos[active].dataset.photoTitle}. Activate to show the next photo.`;
-    };
-    const advance = () => {
-      if (switching) return;
-      switching = true;
-      if (!reducedMotion.matches) stage.classList.add('is-switching');
-      const delay = reducedMotion.matches ? 0 : 230;
-      setTimeout(() => {
-        active = (active + 1) % photos.length;
-        render();
-        stage.classList.remove('is-switching');
-        setTimeout(() => { switching = false; }, reducedMotion.matches ? 0 : 300);
-      }, delay);
-    };
-    render();
-    stage.addEventListener('click', advance);
-  });
+    }
+    const progress = yearFinish ? Math.min(1,(now-yearFinish)/450) : 0;
+    digits.forEach((digit,index) => {
+      const localProgress = yearFinish ? Math.min(1,Math.max(0,(now-yearFinish-digit.finishDelay)/380)) : 0;
+      digit.position = yearFinish
+        ? digit.start+(digit.target-digit.start)*(1-Math.pow(1-localProgress,4))
+        : digit.position+yearDirection*(10+index*3)*dt;
+    });
+    renderYear();
+    if (yearFinish && progress === 1) {
+      digits.forEach(digit => { digit.position = digit.value; });
+      renderYear();
+      yearRaf = 0;
+    } else yearRaf = requestAnimationFrame(tickYear);
+  };
+  const spinYear = direction => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    yearDirection = direction;
+    yearMotion = performance.now();
+    yearFinish = 0;
+    if (!yearRaf) { yearTick = yearMotion; yearRaf = requestAnimationFrame(tickYear); }
+  };
+  renderYear();
 
-  // Keep real page links and browser history; animate only ordinary tab clicks.
-  const nav = document.querySelector('.header nav');
-  if (nav) {
-    const selected = nav.querySelector('[aria-current="page"]');
-    const indicator = document.createElement('span');
-    indicator.className = 'nav-indicator';
-    indicator.setAttribute('aria-hidden', 'true');
-    nav.prepend(indicator);
-    let destination = selected;
-    let navigationTimer;
-    const positionIndicator = link => {
-      indicator.style.width = link.offsetWidth + 'px';
-      indicator.style.height = link.offsetHeight + 'px';
-      indicator.style.top = link.offsetTop + 'px';
-      indicator.style.transform = `translateX(${link.offsetLeft}px)`;
+  const fixedCopy = document.querySelector('.frame-copy').cloneNode(true);
+  fixedCopy.classList.add('fixed-copy');
+  fixedCopy.setAttribute('aria-live', 'polite');
+  roll.appendChild(fixedCopy);
+  let copyKey = '', copyRevision = 0;
+  const copyAnimations = [];
+  const showCopy = (frame, direction = 1, animate = true) => {
+    const key = frame.dataset.title + '\n' + frame.dataset.subtitle;
+    if (key === copyKey) return;
+    const previous = [...fixedCopy.children].map(label => label.dataset.text || label.textContent || '');
+    copyKey = key;
+    const revision = ++copyRevision;
+    copyAnimations.splice(0).forEach(animation => animation.cancel());
+    [...fixedCopy.children].forEach((label, line) => {
+      const text = line === 0 ? frame.dataset.title : frame.dataset.subtitle;
+      label.textContent = text;
+      label.classList.remove('is-reeling');
+      label.dataset.text = text;
+      if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const node = label.firstChild;
+      if (!node) return;
+      const box = label.getBoundingClientRect();
+      const overlay = document.createElement('span');
+      overlay.className = 'copy-reels';
+      overlay.setAttribute('aria-hidden', 'true');
+      let offset = 0;
+      [...text].forEach((char, index) => {
+        const range = document.createRange();
+        range.setStart(node, offset); offset += char.length; range.setEnd(node, offset);
+        if (!char.trim()) return;
+        const rect = range.getBoundingClientRect();
+        const height = rect.height + 4;
+        const slot = document.createElement('span');
+        slot.className = 'copy-reel-slot';
+        slot.style.cssText = `left:${rect.left-box.left}px;top:${rect.top-box.top-2}px;width:${rect.width+1}px;height:${height}px`;
+        const strip = document.createElement('span');
+        const alphabet = /[A-Z]/.test(char) ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : /[a-z]/.test(char) ? 'abcdefghijklmnopqrstuvwxyz' : '0123456789';
+        const origin = Math.max(0, alphabet.indexOf(char));
+        const from = previous[line][index] || char;
+        const letters=[from, ...[3,2,1].map(n => alphabet[(origin-direction*n+alphabet.length)%alphabet.length]), char];
+        if(direction<0) letters.reverse();
+        letters.forEach(letter => {
+          const cell = document.createElement('span');
+          cell.textContent = letter;
+          cell.style.cssText = `display:block;height:${height}px;line-height:${height}px`;
+          strip.appendChild(cell);
+        });
+        slot.appendChild(strip); overlay.appendChild(slot);
+        const distance = height*4;
+        const animation = strip.animate(
+          direction > 0 ? [{transform:`translateY(0)`},{transform:`translateY(${-distance}px)`}] : [{transform:`translateY(${-distance}px)`},{transform:'translateY(0)'}],
+          {duration:380, delay:Math.min(index*4,72), easing:'cubic-bezier(.33,1,.68,1)', fill:'both'}
+        );
+        copyAnimations.push(animation);
+      });
+      label.appendChild(overlay);
+      label.classList.add('is-reeling');
+    });
+    Promise.all(copyAnimations.map(animation => animation.finished)).then(() => {
+      if (revision !== copyRevision) return;
+      [...fixedCopy.children].forEach(label => { label.textContent = label.dataset.text; label.classList.remove('is-reeling'); });
+      copyAnimations.length = 0;
+    }, () => {});
+  };
+  const syncCopy = (track, direction = 1, animate = true) => {
+    if (!track.getClientRects().length) return;
+    const center = track.getBoundingClientRect().top + track.clientHeight/2;
+    let nearest, distance = Infinity;
+    for (const frame of track.children) {
+      const rect = frame.getBoundingClientRect();
+      const delta = Math.abs((rect.top+rect.bottom)/2-center);
+      if (delta < distance) { nearest = frame; distance = delta; }
+    }
+    if (nearest) showCopy(nearest, direction, animate);
+  };
+
+  const detail = document.createElement('section');
+  detail.className = 'project-detail';
+  detail.hidden = true;
+  detail.setAttribute('aria-hidden','true');
+  detail.innerHTML = `<button class="detail-close" type="button" aria-label="Back to projects">×</button><div class="detail-inner"><div class="detail-header"><div class="detail-switcher"><button class="detail-tab is-active" data-view="gallery">Gallery</button><button class="detail-tab" data-view="case">Case study</button></div><h1 class="detail-title"></h1></div><div class="detail-hero"><div class="detail-placeholder"></div></div><div class="detail-content"><p class="detail-kicker">Gallery</p><p class="detail-description">Project details and selected work will be added here.</p></div></div>`;
+  document.body.appendChild(detail);
+  const detailTitle=detail.querySelector('.detail-title');
+  const detailPlaceholder=detail.querySelector('.detail-placeholder');
+  const detailKicker=detail.querySelector('.detail-kicker');
+  const detailDescription=detail.querySelector('.detail-description');
+  const detailGallery=document.createElement('div');
+  detailGallery.className='detail-gallery';
+  detail.querySelector('.detail-inner').appendChild(detailGallery);
+  document.querySelectorAll('[data-cover]').forEach(frame=>{ const cover=new Image(); cover.src=frame.dataset.cover; });
+  let detailOpen=false, detailTransitionImage=null, detailTransitionTimer=0;
+  const clearDetailTransition=()=>{
+    clearTimeout(detailTransitionTimer);
+    if(detailTransitionImage){ detailTransitionImage.remove(); detailTransitionImage=null; }
+    detail.classList.remove('is-opening');
+  };
+  const closeProject=()=>{
+    clearDetailTransition();
+    detail.classList.remove('is-open'); detail.setAttribute('aria-hidden','true'); detailOpen=false;
+    detailTransitionTimer=setTimeout(()=>{detail.hidden=true},420);
+  };
+  const openProject=frame=>{
+    const image=frame.querySelector('.image-hover')||frame.querySelector('.image-unhover');
+    const from=image.getBoundingClientRect();
+    clearDetailTransition();
+    detail.hidden=false; detailOpen=true; detail.scrollTop=0;
+    detailTitle.textContent=frame.dataset.title.replace(/\n/g,' ');
+    detailPlaceholder.style.backgroundImage=`url("${frame.dataset.cover || image.getAttribute('src')}")`;
+    detailGallery.replaceChildren();
+    (frame.dataset.gallery || '').split(',').filter(Boolean).forEach((src,index)=>{
+      const picture=document.createElement('img'); picture.src=src;
+      picture.alt=`${detailTitle.textContent} — ${index+1}`; picture.loading='lazy';
+      detailGallery.appendChild(picture);
+    });
+    detail.querySelectorAll('.detail-tab').forEach(tab=>tab.classList.toggle('is-active',tab.dataset.view==='gallery'));
+    detailKicker.textContent='Gallery';
+    detailDescription.textContent=frame.dataset.subtitle;
+    detail.classList.add('is-open','is-opening'); detail.setAttribute('aria-hidden','false');
+
+    // Start at the thumbnail left edge and reveal toward the right while
+    // moving into the detail bounds. Keep the central crop at the start.
+    const target=detail.querySelector('.detail-hero').getBoundingClientRect();
+    const transitionImage=document.createElement('div');
+    transitionImage.className='detail-transition-image';
+    transitionImage.setAttribute('aria-hidden','true');
+    const artwork=document.createElement('div');
+    artwork.className='detail-transition-artwork';
+    artwork.style.backgroundImage=detailPlaceholder.style.backgroundImage;
+    transitionImage.appendChild(artwork);
+    Object.assign(transitionImage.style,{
+      left:`${target.left}px`,top:`${target.top}px`,
+      width:`${target.width}px`,height:`${target.height}px`
+    });
+    detail.appendChild(transitionImage);
+    detailTransitionImage=transitionImage;
+    const scale=from.height/target.height;
+    const crop=Math.max(0,(target.width-from.width/scale)/2);
+    const x=from.left-target.left;
+    const y=from.top-target.top;
+    const timing={
+      duration:matchMedia('(prefers-reduced-motion: reduce)').matches?0:820,
+      easing:'cubic-bezier(.22,.75,.25,1)',fill:'both'
     };
-    positionIndicator(selected);
-    nav.classList.add('has-indicator');
-    requestAnimationFrame(() => nav.classList.add('indicator-ready'));
-    new ResizeObserver(() => positionIndicator(destination)).observe(nav);
-    nav.addEventListener('click', event => {
-      const link = event.target.closest('a');
-      if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches) return;
+    artwork.animate([
+      {transform:`translateX(${-crop}px)`},
+      {transform:'translateX(0)'}
+    ],timing);
+    const animation=transitionImage.animate([
+      {transform:`translate(${x}px,${y}px) scale(${scale})`,clipPath:`inset(0 ${crop*2}px 0 0)`},
+      {transform:'translate(0,0) scale(1)',clipPath:'inset(0 0px)'}
+    ],timing);
+    animation.finished.then(()=>{
+      if(detailOpen && detailTransitionImage===transitionImage) clearDetailTransition();
+    },()=>{});
+  };
+  detail.querySelector('.detail-close').addEventListener('click',closeProject);
+  detail.querySelectorAll('.detail-tab').forEach(tab=>tab.addEventListener('click',()=>{
+    detail.querySelectorAll('.detail-tab').forEach(item=>item.classList.toggle('is-active',item===tab));
+    const caseView=tab.dataset.view==='case'; detailKicker.textContent=caseView?'Case study':'Gallery'; // Both views share project content until separate case study material is supplied.
+  }));
+  window.addEventListener('keydown',event=>{if(event.key==='Escape'&&detailOpen) closeProject()});
+
+  const controllers=new Map();
+  document.querySelectorAll('.film-track').forEach(track=>{
+    const originals=[...track.children];
+    originals.forEach(frame => {
+      const copy = frame.querySelector('.frame-copy');
+      copy.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+      frame.dataset.title = copy.querySelector('h2').textContent;
+      frame.dataset.subtitle = copy.querySelector('p').textContent;
+      copy.remove();
+    });
+    track.addEventListener('pointerover', event=>{
+      const frame=event.target.closest('.film-frame');
+      if(frame && track.contains(frame)) frame.classList.add('is-hovered');
+    });
+    track.addEventListener('pointerout', event=>{
+      const frame=event.target.closest('.film-frame');
+      if(frame && !frame.contains(event.relatedTarget)) frame.classList.remove('is-hovered');
+    });
+    track.addEventListener('click', event=>{
+      const image=event.target.closest('.frame-image');
+      const frame=image?.closest('.film-frame');
+      if(frame && track.contains(frame)){
+        track.querySelectorAll('.film-frame.is-selected').forEach(item=>item.classList.remove('is-selected'));
+        frame.classList.add('is-selected');
+        openProject(frame);
+      }
+    });
+    let yearPosition = track.scrollTop;
+    track.addEventListener('scroll', () => {
+      const delta = track.scrollTop-yearPosition;
+      yearPosition = track.scrollTop;
+      if (delta && Math.abs(delta)<track.clientHeight*2) {
+        spinYear(Math.sign(delta));
+      }
+      syncCopy(track, Math.sign(delta) || 1);
+    }, {passive:true});
+    let step=0,timer,animation=0,snapping=false;
+    let glide=0,gliding=false,destination=0,glidePosition=0,lastTick=0,lastInput=0;
+    const reduced=matchMedia("(prefers-reduced-motion: reduce)");
+    const visible=()=>track.getClientRects().length>0;
+    const interrupt=()=>{
+      cancelAnimationFrame(animation);
+      cancelAnimationFrame(glide);gliding=false;
+      snapping=false;
+      clearTimeout(timer);
+      timer=setTimeout(settle,180);
+    };
+    const settle=()=>{
+      if(!visible()||!step||snapping||gliding) return;
+      const center=track.getBoundingClientRect().top+track.clientHeight/2;
+      let delta=Infinity;
+      for(const frame of track.children){
+        const rect=frame.getBoundingClientRect();
+        const distance=rect.top+rect.height/2-center;
+        if(Math.abs(distance)<Math.abs(delta)) delta=distance;
+      }
+      if(Math.abs(delta)<1){roll.classList.remove('is-scrolling');return;}
+      const start=track.scrollTop;
+      const target=start+delta;
+      const started=performance.now();
+      const duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:360;
+      snapping=true;
+      roll.classList.add('is-scrolling');
+      const tick=now=>{
+        if(!visible()){snapping=false;return;}
+        const progress=duration?Math.min(1,(now-started)/duration):1;
+        track.scrollTop=start+delta*(1-Math.pow(1-progress,3));
+        if(progress<1) animation=requestAnimationFrame(tick);
+        else {
+          track.scrollTop=target;
+          snapping=false;
+          roll.classList.remove('is-scrolling');
+        }
+      };
+      animation=requestAnimationFrame(tick);
+    };
+    for(const event of ['touchstart','pointerdown','keydown']){
+      track.addEventListener(event,interrupt,{passive:true});
+    }
+    const glideTick=now=>{
+      if(!visible()){gliding=false;return;}
+      const dt=Math.min(40,now-lastTick||16.7);
+      lastTick=now;
+      // Keep subpixel motion in memory; scrollTop can round and stall easing.
+      const remainder=destination-glidePosition;
+      glidePosition+=remainder*(1-Math.exp(-dt/75));
+      track.scrollTop=glidePosition;
+      if(now-lastInput>90 && (Math.abs(destination-glidePosition)<1 || now-lastInput>300)){
+        track.scrollTop=destination;
+        gliding=false;
+        clearTimeout(timer);timer=setTimeout(settle,100);
+      }else glide=requestAnimationFrame(glideTick);
+    };
+    track.addEventListener('wheel',event=>{
+      if(event.ctrlKey||reduced.matches||!step||!visible()) return;
       event.preventDefault();
-      clearTimeout(navigationTimer);
-      destination = link;
-      positionIndicator(link);
-      if (link === selected) return;
-      navigationTimer = setTimeout(() => location.assign(link.href), 320);
-    });
-    window.addEventListener('pageshow', () => {
-      clearTimeout(navigationTimer);
-      destination = selected;
-      nav.classList.remove('indicator-ready');
-      positionIndicator(selected);
-      requestAnimationFrame(() => nav.classList.add('indicator-ready'));
-    });
-  }
-  const page = document.querySelector('.page');
-  const viewer = document.createElement('dialog');
-  viewer.className = 'card-view';
-  viewer.setAttribute('aria-label', 'Focused card. Press Escape or click outside the card to close.');
-  document.body.append(viewer);
-  let sourceCard;
-  const projectDetails = {
-    mmstudio: { title: 'mmStudio', tags: ['AI Image Generator'], side: 'left' },
-    wavely: { title: 'Wavely', tags: ['App Design'], side: 'right' },
-    nomi: { title: 'Nomi', tags: [], side: 'left' },
-    googleIO: { title: 'Google I/O Connect', tags: ['Graphic Design'], side: 'right' },
-    huawei: { title: 'Huawei Connect Website Redesign', tags: ['UI/UX Design', 'Website Design'], side: 'left' },
-    oovo: { title: 'Oovo', tags: ['App Design'], side: 'right' },
-    imaLogo: { title: 'IMA Logo', tags: ['Motion Design', 'Brand Identity'], side: 'left' },
-    letters: { title: "letters i couldn't say", tags: ['Creative coding'], side: 'right' }
-  };
-  let resizeFocusedCard;
-  window.addEventListener('resize', () => resizeFocusedCard?.());
-  function closeCard() { viewer.close(); }
-  viewer.addEventListener('click', event => {
-    if (event.target === viewer) closeCard();
-  });
-  viewer.addEventListener('close', () => {
-    resizeFocusedCard = null;
-    document.body.classList.remove('card-open');
-    page.inert = false;
-    viewer.replaceChildren();
-    sourceCard?.focus({ preventScroll: true });
-  });
-  function openCard(card) {
-    sourceCard = card;
-    const sourceStyle = getComputedStyle(card);
-    const width = parseFloat(sourceStyle.width);
-    const height = parseFloat(sourceStyle.height);
-    const focused = card.cloneNode(true);
-    focused.classList.remove('reveal-pending');
-    focused.classList.add('focused-card');
-    focused.removeAttribute('id');
-    focused.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-    focused.querySelectorAll('img').forEach(img => img.loading = 'eager');
-    // Keep the thumbnail's actual layout, scaling text, padding and artwork together.
-    focused.style.width = width + 'px';
-    focused.style.height = height + 'px';
-    focused.style.minHeight = '0';
-    focused.style.aspectRatio = 'auto';
-    const stage = document.createElement('div');
-    stage.className = 'card-focus-stage';
-    const scaleLayer = document.createElement('div');
-    scaleLayer.className = 'card-focus-scale';
-    scaleLayer.style.width = width + 'px';
-    scaleLayer.style.height = height + 'px';
-    scaleLayer.append(focused);
-    stage.append(scaleLayer);
-    focused.tabIndex = 0;
-    // A second click on a linked card still opens its original destination.
-    viewer.replaceChildren(stage);
-    const projectKey = card.matches('.desk-project, .work-project')
-      ? new URL(card.href).pathname.split('/').slice(-2, -1)[0] : null;
-    const project = projectDetails[projectKey];
-    if (project) {
-      const backdrop = document.createElement('section');
-      backdrop.className = `project-backdrop project-backdrop--${project.side}`;
-      if (project.title.length > 12) backdrop.classList.add('project-backdrop--long');
-      const title = document.createElement('h2');
-      title.className = 'project-backdrop-title';
-      title.textContent = project.title;
-      const tags = document.createElement('p');
-      tags.className = 'project-backdrop-tags';
-      project.tags.forEach(tag => {
-        const label = document.createElement('span');
-        label.textContent = tag;
-        tags.append(label);
-      });
-      backdrop.append(title, tags);
-      viewer.prepend(backdrop);
-      viewer.setAttribute('aria-label', `${project.title}. Press Escape or click outside the card to close.`);
-    } else {
-      viewer.setAttribute('aria-label', 'Focused card. Press Escape or click outside the card to close.');
-    }
-    viewer.showModal();
-    resizeFocusedCard = () => {
-      const padding = getComputedStyle(viewer);
-      const availableWidth = viewer.clientWidth - parseFloat(padding.paddingLeft) - parseFloat(padding.paddingRight) - 32;
-      const availableHeight = viewer.clientHeight - parseFloat(padding.paddingTop) - parseFloat(padding.paddingBottom) - 32;
-      const scale = Math.max(.1, Math.min(Math.min(Math.max(width, 480), 900) / width, availableWidth / width, availableHeight / height));
-      stage.style.width = width * scale + 'px';
-      stage.style.height = height * scale + 'px';
-      scaleLayer.style.transform = `scale(${scale})`;
+      cancelAnimationFrame(animation);snapping=false;
+      clearTimeout(timer);
+      if(!gliding) destination=glidePosition=track.scrollTop;
+      const unit=event.deltaMode===1?16:event.deltaMode===2?track.clientHeight:1;
+      destination=Math.max(0,Math.min(track.scrollHeight-track.clientHeight,destination+Math.max(-step,Math.min(step,event.deltaY*unit))));
+      lastInput=performance.now();
+      roll.classList.add('is-scrolling');
+      if(!gliding){gliding=true;lastTick=lastInput;glide=requestAnimationFrame(glideTick);}
+    },{passive:false});
+    const measure=()=>{
+      if(!visible()) return;
+      step=originals.length>1 ? originals[1].getBoundingClientRect().top-originals[0].getBoundingClientRect().top : originals[0].getBoundingClientRect().height;
+      track.scrollTop=Math.max(0,Math.min(track.scrollTop,track.scrollHeight-track.clientHeight));
     };
-    resizeFocusedCard();
-    page.inert = true;
-    document.body.classList.add('card-open');
-    focused.focus({ preventScroll: true });
-    const canTilt = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-    focused.addEventListener('pointermove', event => {
-      if (!canTilt.matches || event.pointerType === 'touch') return;
-      const area = stage.getBoundingClientRect();
-      const x = Math.max(-1, Math.min(1, (event.clientX - area.left) / area.width * 2 - 1));
-      const y = Math.max(-1, Math.min(1, (event.clientY - area.top) / area.height * 2 - 1));
-      focused.style.setProperty('--tilt-x', (-y * 5).toFixed(2) + 'deg');
-      focused.style.setProperty('--tilt-y', (x * 5).toFixed(2) + 'deg');
-    });
-    focused.addEventListener('pointerleave', () => {
-      focused.style.setProperty('--tilt-x', '0deg');
-      focused.style.setProperty('--tilt-y', '0deg');
-    });
-  }
-  document.querySelectorAll('main .card').forEach(card => {
-    // The embedded player is interactive in place rather than a cloned modal.
-    if (card.matches('.cover-player, [data-gallery], [data-flip]')) return;
-    if (!card.matches('a, button')) card.tabIndex = 0;
-    card.addEventListener('click', event => {
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      // Explicit links inside text cards retain their normal behavior.
-      if (event.target.closest('a, button') && event.target.closest('a, button') !== card) return;
-      event.preventDefault();
-      openCard(card);
-    });
-    card.addEventListener('keydown', event => {
-      if (event.target === card && (event.key === 'Enter' || event.key === ' ')) {
-        event.preventDefault();
-        openCard(card);
-      }
-    });
-  });
-  document.querySelectorAll('.cover-player').forEach(card => {
-    const audio = card.querySelector('audio');
-    const play = card.querySelector('[data-audio="play"]');
-    const previous = card.querySelector('[data-audio="previous"]');
-    const next = card.querySelector('[data-audio="next"]');
-    let tracks = [];
-    let index = 0;
-    let request = 0;
-    const status = card.querySelector('.preview-status');
-    const sync = () => {
-      card.classList.toggle('is-playing', !audio.paused);
-      play.setAttribute('aria-label', audio.paused ? 'Play song preview' : 'Pause song preview');
-      play.title = play.getAttribute('aria-label');
+    const reset=()=>{
+      cancelAnimationFrame(animation);snapping=false;
+      cancelAnimationFrame(glide);gliding=false;
+      measure();track.scrollTop=0;
+      syncCopy(track, 1, !!copyKey);
+      clearTimeout(timer);
+      timer=setTimeout(settle,180);
     };
-    const start = async () => {
-      const current = ++request;
-      status.textContent = 'Loading preview…';
-      try {
-        await audio.play();
-        if (current === request) status.textContent = 'Playing preview · full playlist on Spotify';
-      } catch (error) {
-        if (current === request && error.name !== 'AbortError') status.textContent = 'Preview unavailable. Try next or open Spotify.';
-      }
-    };
-    const changeTrack = step => {
-      if (!tracks.length) return;
-      ++request;
-      audio.pause();
-      index = (index + step + tracks.length) % tracks.length;
-      const track = tracks[index];
-      card.querySelector('.playlist-bottom h2').textContent = track.title;
-      card.querySelector('.playlist-bottom > p').textContent = track.artist + ' · blv';
-      const cover = card.querySelector('.playlist-cover');
-      cover.src = track.cover;
-      cover.alt = 'Album cover for ' + track.title + ' by ' + track.artist;
-      audio.src = track.preview;
-      start();
-    };
-    play.addEventListener('click', () => {
-      if (!audio.paused) { ++request; audio.pause(); }
-      else start();
-    });
-    previous.addEventListener('click', () => changeTrack(-1));
-    next.addEventListener('click', () => changeTrack(1));
-    fetch('playlist-tracks.json').then(response => {
-      if (!response.ok) throw new Error('Playlist unavailable');
-      return response.json();
-    }).then(data => {
-      tracks = data;
-      previous.disabled = next.disabled = tracks.length < 2;
-    }).catch(() => { status.textContent = 'Only the first preview is available. Full playlist on Spotify.'; });
-    audio.addEventListener('play', sync);
-    audio.addEventListener('pause', () => { sync(); status.textContent = 'Preview paused · full playlist on Spotify'; });
-    audio.addEventListener('ended', () => { if (tracks.length > 1) changeTrack(1); else sync(); });
-    audio.addEventListener('error', () => { sync(); status.textContent = 'Preview unavailable. Open the playlist on Spotify.'; });
+    track.addEventListener('scroll',()=>{
+      if(!visible()||!step||snapping||gliding) return;
+      roll.classList.add('is-scrolling');
+      clearTimeout(timer);timer=setTimeout(settle,180);
+    },{passive:true});
+    new ResizeObserver(measure).observe(track);
+    controllers.set(track,reset);
+    reset();
   });
-  const copyButton = document.querySelector('#copy-email');
-  if (!copyButton) return;
-  const original = copyButton.innerHTML;
-  let resetTimer;
-  copyButton.addEventListener('click', async () => {
-    const status = document.querySelector('#copy-status');
-    try {
-      await navigator.clipboard.writeText('moirahuang18@gmail.com');
-      copyButton.textContent = 'Email copied ✓';
-      status.textContent = 'Email address copied to clipboard.';
-      clearTimeout(resetTimer);
-      resetTimer = setTimeout(() => { copyButton.innerHTML = original; }, 2500);
-    } catch {
-      status.textContent = 'Email Moira at moirahuang18@gmail.com';
-      copyButton.textContent = 'moirahuang18@gmail.com';
-    }
-  });
+  buttons.forEach(button=>button.addEventListener('click',()=>{
+    buttons.forEach(item=>{item.classList.toggle('is-active',item===button);item.setAttribute('aria-pressed',String(item===button));});
+    shell.dataset.roll=button.dataset.roll;
+    const target=document.querySelector(`.film-track[data-roll="${button.dataset.roll}"]`);
+    target.hidden=false;
+    controllers.get(target)();
+  }));
 })();

@@ -1,90 +1,41 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>About — Moira Huang</title>
-  <meta name="description" content="Moira Huang — AI product designer, creative thinker, and builder. Projects, experiments, and a little about me.">
-  <link rel="icon" href="images/signature.png">
-  <link rel="preload" href="images/flower2.png" as="image">
-  <script>
-    const openingNavigation = performance.getEntriesByType('navigation')[0]?.type;
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && Element.prototype.animate && (openingNavigation === 'reload' || (!location.hash && openingNavigation !== 'back_forward'))) {
-      history.scrollRestoration = 'manual';
-      document.documentElement.classList.add('opening-pending');
-      window.openingFallback = setTimeout(() => document.documentElement.classList.remove('opening-pending'), 4500);
-    }
-  </script>
-  <link rel="stylesheet" href="landing.css?v=project-backdrops">
-  <link rel="stylesheet" href="about-bentos.css?v=stable-opening-landing">
-  <script src="landing.js?v=project-backdrops" defer></script>
-</head>
-<body class="desk-page">
-  <a class="skip-link" href="#main">Skip to content</a>
-  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><symbol id="arrow" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></symbol><symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol><symbol id="spotify" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/><path d="M6.5 9c4-1.2 7.5-.7 11 1M7 12c3.5-1 6.7-.5 9.7 1M7.5 15c3-.7 5.8-.3 8.3 1" stroke="white" stroke-width="1.5"/></symbol></defs></svg>
-  <div class="page">
-    <header class="header">
-      <nav aria-label="Primary"><a href="index.html" aria-current="page">About</a><a href="work/index.html">Work</a></nav>
-      <div class="header-clock" aria-label="Your local time"><time data-local-time></time></div>
-      <a class="header-contact" href="mailto:moirahuang18@gmail.com">Say hello <svg aria-hidden="true"><use href="#arrow"/></svg></a>
-    </header>
-    <main id="main" class="desk-grid">
-      <article class="card desk-intro identity-card" data-flip tabindex="0" aria-label="About Moira. Hover or focus to turn the card.">
-        <div class="identity-turner">
-        <div class="identity-face identity-front">
-        <img class="identity-flower" src="images/flower2.png" alt="" width="32" height="32">
-        <h1>Hi, I'm Moira.</h1>
-        <p class="identity-line">I make things feel human.</p>
-        <div class="identity-footer"><span>AI product designer</span><span class="signature" aria-hidden="true">mo.</span></div>
-        </div>
-        <div class="identity-face identity-back"><p>Currently an <strong>AI PM</strong> building <strong>Creative Agent at MiniMax</strong>, previously an <strong>AI Creator at Publicis Groupe.</strong></p></div>
-        </div>
-      </article>
-      <figure class="card about-portrait photo-stack" data-gallery aria-label="Behind the pixels photo gallery">
-        <button class="photo-stack-stage" type="button" aria-label="Show next photo: exhibition installation" aria-describedby="photo-stack-status">
-          <img src="about/photo.jpeg" alt="Moira sitting on a bench in a subway station" width="1576" height="1050" data-photo-title="Subway portrait">
-          <img src="letters/live1.jpeg" alt="Visitors gathered around Moira's interactive installation" width="3024" height="4032" loading="lazy" data-photo-title="Exhibition installation">
-          <img src="letters/live3.jpeg" alt="A visitor typing into Moira's illuminated interactive artwork" width="3024" height="4032" loading="lazy" data-photo-title="Interactive artwork">
-        </button>
-        <span class="sr-only" id="photo-stack-status" role="status">Photo 1 of 3: Subway portrait. Activate to show the next photo.</span>
-      </figure>
-      <article class="card music-card cover-player" aria-label="Moira's playlist player">
-        <img class="playlist-cover" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d0000b2737c20fb440980c4f2f24346c5" alt="Album cover for 飛機場的10:30 by David Tao">
-        <a class="playlist-brand" href="https://open.spotify.com/playlist/2O2a0EjOAMLzZirBV7KEEo" target="_blank" rel="noopener noreferrer" aria-label="Open blv playlist on Spotify"><svg aria-hidden="true"><use href="#spotify"/></svg></a>
-        <div class="playlist-bottom">
-          <h2 class="sr-only">飛機場的10:30</h2><p class="sr-only">David Tao · blv</p>
-          <div class="playlist-controls" role="group" aria-label="Playlist controls">
-            <button type="button" data-audio="previous" aria-label="Previous song" title="Previous song" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5v14M19 5 7 12l12 7z"/></svg></button>
-            <button type="button" data-audio="play" aria-label="Play song preview" title="Play song preview"><svg aria-hidden="true" viewBox="0 0 24 24"><path class="play-symbol" d="m7 4 14 8-14 8z"/><path class="pause-symbol" d="M8 5v14M16 5v14"/></svg></button>
-            <button type="button" data-audio="next" aria-label="Next song" title="Next song" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 5v14M5 5l12 7-12 7z"/></svg></button>
-          </div>
-          <p class="preview-status" role="status">Song preview · full playlist on Spotify</p>
-        </div>
-        <audio preload="none" src="https://p.scdn.co/mp3-preview/6b6bc27fcc50e03a0e03a013a61cf0734e714ed2"></audio>
-      </article>
-      <a class="card desk-project desk-project-1" href="mmstudio/index.html" aria-label="View MMStudio"><img src="images/mmstudio2.png" alt="MMStudio project preview" fetchpriority="high"></a>
-      <a class="card desk-project desk-project-2" href="wavely/index.html" aria-label="View Wavely"><img src="images/wavely1-static.png" alt="Wavely project preview" fetchpriority="high"></a>
-      <a class="card desk-project desk-project-3" href="nomi/index.html" aria-label="View Nomi"><img src="images/nomi1.png" alt="Nomi project preview" loading="lazy"></a>
-      <a class="card photo-card lens-card" href="https://www.instagram.com/mmfi1ms/" target="_blank" rel="noopener noreferrer" aria-label="Explore Moira's photography on Instagram"><img src="images/letters3.jpeg" alt="An image from my creative practice" loading="lazy"></a>
-      <a class="card desk-project desk-project-4" href="googleIO/index.html" aria-label="View Google I/O Connect"><img src="images/google1.png" alt="Google I/O Connect project preview" loading="lazy"></a>
-      <a class="card desk-project desk-project-5" href="huawei/index.html" aria-label="View Huawei Connect"><img src="huawei/1.png" alt="Huawei Connect project preview" loading="lazy"></a>
-      <article class="card about-story education-card">
-        <div class="education-top"><img src="images/nyulogo.png" alt="" width="30" height="40" loading="lazy"><span>Class of 2026</span></div>
-        <h2>New York<br>University.</h2>
-        <p>Interactive Media Arts</p>
-        <p class="education-minor">Web Programming &amp; Applications minor</p>
-      </article>
-      <a class="card desk-project desk-project-6" href="oovo/index.html" aria-label="View Oovo"><img src="images/oovo1.png" alt="Oovo project preview" loading="lazy"></a>
-      <a class="card desk-project desk-project-7" href="imaLogo/index.html" aria-label="View IMA Logo"><img src="images/ima1.png" alt="IMA Logo project preview" loading="lazy"></a>
-      <article class="card about-story personal-card">
-        <p class="personal-lines">Photographer.<br>Bedroom DJ.<br>Bento enthusiast.</p>
-        <p class="personal-detail">An INTJ Scorpio who loves deep connections with people.</p>
-      </article>
-      <a class="card desk-project desk-project-8" href="letters/index.html" aria-label="View Letters I Couldn't Say"><img src="images/letters1.jpeg" alt="Letters I Couldn't Say project preview" loading="lazy"></a>
-      <article class="card about-story text-note closing-note"><section><p>Design, technology, and creative expression have always overlapped for me. At NYU, I found a place to bring them together. These projects are a little of each.</p></section></article>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Moira Huang — Film roll</title><link rel="stylesheet" href="landing.css"><script src="landing.js" defer></script></head>
+<body>
+<div class="loader" role="status" aria-label="Loading portfolio">
+  <svg class="loader-logo" viewBox="0 0 36 36" aria-hidden="true">
+    <g transform="translate(18 18)" fill="currentColor">
+      <g transform="rotate(0)"><circle class="loader-petal" r="7.625" fill-opacity="0" stroke="currentColor" stroke-width="0.75"/></g>
+      <g transform="rotate(90)"><circle class="loader-petal" r="7.625" fill-opacity="0" stroke="currentColor" stroke-width="0.75"/></g>
+      <g transform="rotate(180)"><circle class="loader-petal" r="7.625" fill-opacity="0" stroke="currentColor" stroke-width="0.75"/></g>
+      <g transform="rotate(270)"><circle class="loader-petal" r="7.625" fill-opacity="0" stroke="currentColor" stroke-width="0.75"/></g>
+      <rect class="loader-core" x="-3" y="-3" width="6" height="6" opacity="0"/>
+    </g>
+  </svg>
+</div>
+<div class="site-shell">
+  <aside class="rail" aria-label="Choose a collection">
+    <svg class="rail-logo" width="16" height="16" viewBox="0 0 36 36" aria-hidden="true" fill="currentColor"><circle cx="18" cy="8" r="8"/><circle cx="28" cy="18" r="8"/><circle cx="18" cy="28" r="8"/><circle cx="8" cy="18" r="8"/><rect x="15" y="15" width="6" height="6"/></svg>
+    <button class="rail-button is-active" data-roll="work" type="button" aria-label="1 — Work" aria-pressed="true">1</button>
+    <button class="rail-button" data-roll="about" type="button" aria-label="2 — About" aria-pressed="false">2</button>
+  </aside>
+  <div class="roll">
+    <div class="date-marker"><span>[26]</span></div>
+    <main class="film-track" data-roll="work">
+      <article class="film-frame" data-cover="images/projects/mmdesign/cover.png" data-gallery="images/projects/mmdesign/gallery1.png,images/projects/mmdesign/gallery2.png"><div class="frame-image"><img class="image-unhover" src="images/mmdesign-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/mmdesign-hover.png" alt=""></div><div class="frame-copy"><h2>MiniMax Design</h2><p>Building a new creative language for generative video.</p></div></article>
+      <article class="film-frame" data-cover="images/projects/mmstudio/cover.png"><div class="frame-image"><img class="image-unhover" src="images/mmstudio-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/mmstudio-hover.png" alt=""></div><div class="frame-copy"><h2>MMStudio</h2><p>Building a new creative language for generative video.</p></div></article>
+      <article class="film-frame" data-cover="images/projects/wavely/cover.png"><div class="frame-image"><img class="image-unhover" src="images/wavely-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/wavely-hover.png" alt=""></div><div class="frame-copy"><h2>Wavely</h2><p>A calmer way to make sense of your week.</p></div></article>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="images/mmdesign-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/mmdesign-hover.png" alt=""></div><div class="frame-copy"><h2>Nomi</h2><p>Making every conversation with an AI feel more human.</p></div></article>
+      <article class="film-frame" data-cover="images/projects/google/cover.png"><div class="frame-image"><img class="image-unhover" src="images/google-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/google-hover.png" alt=""></div><div class="frame-copy"><h2>Google I/O<br>Connect</h2><p>A digital stage for ideas moving at the speed of the web.</p></div></article>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="images/huawei-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/huawei-hover.png" alt=""></div><div class="frame-copy"><h2>Huawei<br>Connect</h2><p>Turning a global event into an intimate, tactile story.</p></div></article>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="images/wavely-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/wavely-hover.png" alt=""></div><div class="frame-copy"><h2>Oovo</h2><p>A playful identity for the next generation of travel.</p></div></article>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="letters/cover.jpeg" alt="Experimental artwork placeholder"><img class="image-hover" src="letters/cover.jpeg" alt=""></div><div class="frame-copy"><h2>Letters I<br>Couldn't Say</h2><p>An interactive archive of the things left unsaid.</p></div></article>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="images/wavely-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/wavely-hover.png" alt=""></div><div class="frame-copy"><h2>IMA Logo</h2><p>A mark for a community that keeps making.</p></div></article>
     </main>
-    <footer><span class="signature">mo.</span><p>Designed in New York with love ☺</p><div><a href="https://www.linkedin.com/in/moira-huang" target="_blank" rel="noopener noreferrer">LinkedIn <svg aria-hidden="true"><use href="#arrow"/></svg></a><button id="copy-email" type="button">Copy email <svg aria-hidden="true"><use href="#mail"/></svg></button></div></footer>
-    <p class="sr-only" id="copy-status" role="status"></p>
+    <main class="film-track about-track" data-roll="about" hidden>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="images/mmdesign-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/mmdesign-hover.png" alt=""></div><div class="frame-copy"><h2>Moira Huang</h2><p>AI product designer, creative thinker, and builder.</p></div></article>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="images/wavely-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/wavely-hover.png" alt=""></div><div class="frame-copy"><h2>Make things<br>feel human.</h2><p>Design, technology, and creative expression have always overlapped for me.</p></div></article>
+      <article class="film-frame"><div class="frame-image"><img class="image-unhover" src="images/mmdesign-unhover.png" alt="Experimental artwork placeholder"><img class="image-hover" src="images/mmdesign-hover.png" alt=""></div><div class="frame-copy"><h2>NYU<br>IMA '26</h2><p>Interactive Media Arts · Web Programming & Applications.</p></div></article>
+    </main>
   </div>
-</body>
-</html>
+</div>
+</body></html>
