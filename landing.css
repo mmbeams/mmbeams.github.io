@@ -228,3 +228,15 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
   .roll.is-scrolling .film-frame .image-unhover{opacity:1}
   .roll.is-scrolling .film-frame .image-hover{opacity:0}
 }
+.detail-gallery video{display:block;grid-column:1 / -1;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#000}
+
+.clean-player{grid-column:1 / -1;min-width:0}
+.clean-controls{display:flex;align-items:center;gap:12px;padding:8px 0;background:transparent;color:var(--ink)}
+.clean-controls button{border:0;background:none;color:inherit;padding:0;min-width:42px;font:14px Outfit,sans-serif;cursor:pointer}
+.clean-controls input{flex:1;min-width:0;margin:0;accent-color:var(--ink);cursor:pointer}
+
+.detail-gallery.has-thirds{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+.detail-gallery.has-thirds img.gallery-half{grid-column:span 3}
+.detail-gallery.has-thirds img.gallery-third{grid-column:span 2}
+
+.detail-switcher[hidden]{display:none}

@@ -373,7 +373,7 @@
   const detailRole=detail.querySelector('.detail-role');
   const detailTeam=detail.querySelector('.detail-team');
   const detailDescription=detail.querySelector('.detail-description');
-  const gallerySizes={"images/projects/mmdesign/gallery/1.png":[3360,2200],"images/projects/mmdesign/gallery/2.png":[3360,2200],"images/projects/mmdesign/gallery/3.png":[1683,1102],"images/projects/mmdesign/gallery/4.png":[1122,735],"images/projects/mmdesign/gallery/5.png":[1134,1134],"images/projects/mmdesign/gallery/6.png":[1134,1134],"images/projects/mmdesign/gallery/7.png":[1134,1134],"images/projects/mmdesign/gallery/8.png":[1134,1134],"images/projects/mmdesign/gallery/9.png":[2276,930],"images/projects/mmdesign/gallery/10.png":[2292,930],"images/projects/mmdesign/gallery/11.png":[2276,1204],"images/projects/mmdesign/gallery/12.png":[1134,742],"images/projects/mmdesign/gallery/13.png":[1134,742],"images/projects/wavely/gallery/1-cb83deb5898a.png":[2292,1080],"images/projects/wavely/gallery/2-e08b04d0edf4.png":[2292,1058],"images/projects/wavely/gallery/3-863ceea04a3e.png":[2292,1058],"images/projects/wavely/gallery/4-cffdaad114d5.png":[2292,1058],"images/projects/wavely/gallery/5-fafb5d637c64.png":[2292,2134],"images/projects/wavely/gallery/6-325625068636.png":[2292,1058],"images/projects/wavely/gallery/7-07c68c5369f1.png":[2292,1058],"images/projects/wavely/gallery/8-8840dcf3baaa.png":[2292,1058],"images/projects/wavely/gallery/9-6000761a59fb.png":[2292,1058],"images/projects/wavely/gallery/10-99b78f7c242d.png":[2292,1058],"images/projects/wavely/gallery/11-786690442e85.png":[2292,1058],"images/projects/wavely/gallery/12-2fb4758dbc36.png":[2292,1058]};
+  const gallerySizes={"images/projects/mmdesign/gallery/1.png":[3360,2200],"images/projects/mmdesign/gallery/2.png":[3360,2200],"images/projects/mmdesign/gallery/3.png":[1683,1102],"images/projects/mmdesign/gallery/4.png":[1122,735],"images/projects/mmdesign/gallery/5.png":[1134,1134],"images/projects/mmdesign/gallery/6.png":[1134,1134],"images/projects/mmdesign/gallery/7.png":[1134,1134],"images/projects/mmdesign/gallery/8.png":[1134,1134],"images/projects/mmdesign/gallery/9.png":[2276,930],"images/projects/mmdesign/gallery/10.png":[2292,930],"images/projects/mmdesign/gallery/11.png":[2276,1204],"images/projects/mmdesign/gallery/12.png":[1134,742],"images/projects/mmdesign/gallery/13.png":[1134,742],"images/projects/wavely/gallery/1-cb83deb5898a.png":[2292,1080],"images/projects/wavely/gallery/2-e08b04d0edf4.png":[2292,1058],"images/projects/wavely/gallery/3-863ceea04a3e.png":[2292,1058],"images/projects/wavely/gallery/4-cffdaad114d5.png":[2292,1058],"images/projects/wavely/gallery/5-fafb5d637c64.png":[2292,2134],"images/projects/wavely/gallery/6-325625068636.png":[2292,1058],"images/projects/wavely/gallery/7-07c68c5369f1.png":[2292,1058],"images/projects/wavely/gallery/8-8840dcf3baaa.png":[2292,1058],"images/projects/wavely/gallery/9-6000761a59fb.png":[2292,1058],"images/projects/wavely/gallery/10-99b78f7c242d.png":[2292,1058],"images/projects/wavely/gallery/11-786690442e85.png":[2292,1058],"images/projects/wavely/gallery/12-2fb4758dbc36.png":[2292,1058],"mmstudio/cover.png":[1080,1080],"images/mmstudio1.png":[1080,1080],"images/mmstudio2.png":[1080,1080],"images/mmstudio3.png":[1080,1080],"googleIO/cover.png":[3840,2160],"googleIO/1.png":[3840,2160],"googleIO/ooh1.png":[3840,2160],"googleIO/ooh2.png":[3840,2160],"googleIO/ooh3.png":[3840,2160],"googleIO/ooh5.png":[3840,2160],"googleIO/ooh4.png":[3840,2160],"googleIO/game1.png":[3840,2160],"googleIO/game2.png":[3840,2160],"googleIO/game3.png":[3840,2160],"googleIO/game4.png":[3840,2160],"images/google1.png":[2400,2400],"images/google2.png":[2160,2160],"images/google3.png":[2160,2160],"huawei/1.png":[3840,2160],"huawei/problem.png":[4000,3403],"huawei/solution1.png":[2880,1920],"huawei/solution2.png":[2880,1920],"huawei/solution3.png":[2880,1920],"huawei/motion1.gif":[2090,1520],"huawei/motion2.gif":[2090,1520],"huawei/motion3.gif":[2090,1520],"huawei/motion4.gif":[2090,1520],"huawei/element.png":[2844,320],"huawei/element2.png":[1372,256],"huawei/element3.png":[1372,256],"huawei/element4.png":[1372,880],"huawei/element5.png":[1372,880],"huawei/element6.png":[2844,964],"huawei/bg.png":[3080,1468],"images/huawei1.gif":[2090,1520],"images/huawei3.gif":[2090,1520],"letters/1.jpeg":[4160,5546],"letters/cover.jpeg":[4014,5352],"letters/2.jpeg":[4160,5546],"letters/3.jpeg":[4148,5531],"letters/live1.jpeg":[3024,4032],"letters/live2.jpeg":[3024,4032],"letters/live3.jpeg":[3024,4032],"letters/setup.png":[1534,1026],"letters/cover_bg.png":[6160,3566],"images/letters1.jpeg":[4014,5352],"images/letters2.jpeg":[4160,5546],"images/letters3.jpeg":[4148,5531]};
   const detailGallery=document.createElement('div');
   detailGallery.className='detail-gallery';
   detail.querySelector('.detail-inner').appendChild(detailGallery);
@@ -454,6 +454,7 @@
   };
   const closeProject=()=>{
     clearDetailTransition();
+    detail.querySelectorAll('video').forEach(video=>video.pause());
     rail.classList.remove('has-detail');
     collapseNav();
     detail.classList.remove('is-open'); detail.setAttribute('aria-hidden','true'); detailOpen=false;
@@ -474,15 +475,37 @@
     detail.hidden=false; detailOpen=true; detail.scrollTop=0;
     rail.classList.add('has-detail');collapseNav();
     detailTitle.textContent=frame.dataset.title.replace(/\n/g,' ');
+    detail.querySelector('.detail-switcher').hidden=frame.dataset.caseStudy!=='true';
     detailPlaceholder.style.backgroundImage=`url("${frame.dataset.cover || image.getAttribute('src')}")`;
     detailGallery.replaceChildren();
+    const thirdImages=new Set((frame.dataset.galleryThirds || "").split(",").map(Number));
+    detailGallery.classList.toggle("has-thirds",thirdImages.size>1);
     const pairedImages=new Set((frame.dataset.galleryPairs || "").split(",").map(Number));
     (frame.dataset.gallery || '').split(',').filter(Boolean).forEach((src,index)=>{
-      const picture=document.createElement('img'); picture.src=src;
-      picture.alt=`${detailTitle.textContent} — ${index+1}`; picture.loading='lazy';
+      const isVideo=/\.(mp4|webm|mov)(?:\?|$)/i.test(src);
+      const picture=document.createElement(isVideo?'video':'img'); picture.src=src;
+      const label=`${detailTitle.textContent} — ${index+1}`;
+      if(isVideo){
+        const cleanVideo=frame.dataset.cleanVideo==='true';
+        picture.controls=!cleanVideo;picture.playsInline=true;picture.preload='metadata';picture.setAttribute('aria-label',label);
+      }
+      else {picture.alt=label;picture.loading='lazy';}
       if(gallerySizes[src]) [picture.width,picture.height]=gallerySizes[src];
       if(pairedImages.has(index+1)) picture.classList.add("gallery-half");
-      detailGallery.appendChild(picture);
+      if(thirdImages.has(index+1)) picture.classList.add("gallery-third");
+      if(isVideo && frame.dataset.cleanVideo==='true'){
+        const player=document.createElement('div');player.className='clean-player';
+        const controls=document.createElement('div');controls.className='clean-controls';
+        const toggle=document.createElement('button');toggle.type='button';toggle.textContent='Play';toggle.setAttribute('aria-label','Play video');
+        const seek=document.createElement('input');seek.type='range';seek.min='0';seek.max='100';seek.step='.1';seek.value='0';seek.disabled=true;seek.setAttribute('aria-label','Video progress');
+        toggle.addEventListener('click',()=>{if(picture.paused) picture.play().catch(()=>{});else picture.pause();});
+        const sync=()=>{toggle.textContent=picture.paused?'Play':'Pause';toggle.setAttribute('aria-label',picture.paused?'Play video':'Pause video');};
+        picture.addEventListener('play',sync);picture.addEventListener('pause',sync);picture.addEventListener('ended',sync);
+        picture.addEventListener('loadedmetadata',()=>{seek.disabled=!Number.isFinite(picture.duration);});
+        picture.addEventListener('timeupdate',()=>{if(picture.duration) seek.value=String(picture.currentTime/picture.duration*100);});
+        seek.addEventListener('input',()=>{if(Number.isFinite(picture.duration)) picture.currentTime=Number(seek.value)/100*picture.duration;});
+        controls.append(toggle,seek);player.append(picture,controls);detailGallery.appendChild(player);
+      }else detailGallery.appendChild(picture);
     });
     detail.querySelectorAll('.detail-tab').forEach(tab=>tab.classList.toggle('is-active',tab.dataset.view==='gallery'));
     detailDescription.textContent=frame.dataset.subtitle ? `"${frame.dataset.subtitle}"` : '';
