@@ -148,7 +148,7 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
 .rail-button,.date-marker > span{font-family:"Cutive Mono",monospace;font-weight:400}
 .year-digit{width:.6em}
 
-.frame-copy .project-category{font-family:"Cutive Mono",monospace}
+.frame-copy .project-category{font-family:Outfit,sans-serif}
 .date-marker:before{width:.5px}
 
 .personal-caption{font-family:"Cutive Mono",monospace}
