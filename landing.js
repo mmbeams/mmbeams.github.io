@@ -100,6 +100,7 @@
     if(pointerVisible && openDetail){
       const bounds=openDetail.querySelector('.detail-inner').getBoundingClientRect();
       if(pointerX<bounds.left || pointerX>bounds.right) label='BACK';
+      if(document.elementFromPoint(pointerX,pointerY)?.closest('.detail-next')) label='NEXT';
     }
     if(pointerVisible){
       let navDistance=8;
@@ -368,6 +369,17 @@
   const detailGallery=document.createElement('div');
   detailGallery.className='detail-gallery';
   detail.querySelector('.detail-inner').appendChild(detailGallery);
+  let currentProject=null;
+  const nextFooter=document.createElement('footer');
+  nextFooter.className='detail-next';
+  nextFooter.innerHTML='<span class="next-line" aria-hidden="true"></span><button type="button">NEXT</button>';
+  detail.appendChild(nextFooter);
+  nextFooter.querySelector('button').addEventListener('click',event=>{
+    event.stopPropagation();
+    const projects=[...document.querySelectorAll('.film-track[data-roll="work"] .film-frame:not([data-detail-disabled])')];
+    const next=projects[(projects.indexOf(currentProject)+1)%projects.length];
+    if(next) openProject(next,true);
+  });
   const revealObserver=new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
       if(!entry.isIntersecting) return;
@@ -377,7 +389,7 @@
   },{root:detail,threshold:0,rootMargin:'0px 0px -24px 0px'});
   const prepareReveals=()=>{
     revealObserver.disconnect();
-    [detailDescription,...detailGallery.children].forEach(element=>{
+    [detailDescription,...detailGallery.children,nextFooter].forEach(element=>{
       element.classList.add('detail-reveal');
       element.classList.remove('is-revealed');
       revealObserver.observe(element);
@@ -441,11 +453,13 @@
   };
   mobileBack.addEventListener('click',()=>closeProject());
   detail.addEventListener('click',event=>{
+    if(event.target.closest('.detail-next')) return;
     const bounds=detail.querySelector('.detail-inner').getBoundingClientRect();
     if(detailOpen && (event.clientX<bounds.left || event.clientX>bounds.right)) closeProject();
   });
-  const openProject=frame=>{
+  const openProject=(frame,fromNext=false)=>{
     if(frame.hasAttribute('data-detail-disabled')) return;
+    currentProject=frame;
     const image=frame.querySelector('.image-hover')||frame.querySelector('.image-unhover');
     const from=image.getBoundingClientRect();
     clearDetailTransition();
@@ -471,6 +485,7 @@
     detailTeam.textContent=frame.dataset.team || '';
     prepareReveals();
     detail.classList.add('is-open','is-opening'); detail.setAttribute('aria-hidden','false');
+    if(fromNext){detail.classList.remove('is-opening');return;}
 
     // Start at the thumbnail left edge and reveal toward the right while
     // moving into the detail bounds. Keep the central crop at the start.

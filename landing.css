@@ -198,3 +198,11 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
 .detail-reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s cubic-bezier(.22,.75,.25,1)}
 .detail-reveal.is-revealed{opacity:1;transform:translateY(0)}
 @media(prefers-reduced-motion:reduce){.detail-reveal{opacity:1;transform:none}}
+
+.detail-next{display:flex;align-items:center;gap:8px;width:100%;padding:0 0 80px}
+.next-line{display:block;flex:none;width:33.333vw;height:.5px;background:var(--ink);opacity:.4;transform-origin:left}
+.detail-next button{border:0;padding:8px 0;background:none;color:#000;font:400 14px/1 "Cutive Mono",monospace;cursor:pointer}
+.detail-next:not(.is-revealed) .next-line{transform:scaleX(0)}
+.detail-next.is-revealed .next-line{transform:scaleX(1);transition:transform .7s cubic-bezier(.22,.75,.25,1)}
+.project-detail.is-locked .detail-next{display:none}
+@media(max-width:767px){.detail-next{padding-bottom:48px}}
