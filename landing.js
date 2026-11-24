@@ -43,9 +43,6 @@
   const themeToggle=document.querySelector('.theme-toggle');
   const navLogo=themeToggle.querySelector('.rail-logo');
   const rail=document.querySelector('.rail');
-  const mobileBack=document.createElement('button');
-  mobileBack.className='mobile-back'; mobileBack.textContent='back'; mobileBack.type='button';
-  rail.appendChild(mobileBack);
   const collapseNav=()=>{rail.classList.remove('is-expanded');if(mobile.matches) themeToggle.setAttribute('aria-expanded','false');else themeToggle.removeAttribute('aria-expanded');};
   const syncNav=()=>{
     collapseNav();
@@ -451,7 +448,6 @@
     detail.classList.remove('is-open'); detail.setAttribute('aria-hidden','true'); detailOpen=false;
     detailTransitionTimer=setTimeout(()=>{detail.hidden=true},420);
   };
-  mobileBack.addEventListener('click',()=>closeProject());
   detail.addEventListener('click',event=>{
     if(event.target.closest('.detail-next')) return;
     const bounds=detail.querySelector('.detail-inner').getBoundingClientRect();

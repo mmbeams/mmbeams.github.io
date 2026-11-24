@@ -152,16 +152,15 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
 .date-marker:before{width:.5px}
 
 .personal-caption{font-family:"Cutive Mono",monospace}
-.mobile-copy,.mobile-back{display:none}
+.mobile-copy{display:none}
 @media(max-width:767px){
   :root{--side-gap:20px;--edge:20px;--content-width:calc(100vw - 40px);--content-inset:20px;--a4w:var(--content-width);--a4h:var(--a4w);--row-gap:32px;--image-right:20px}
   html,body,button{cursor:auto}
   .cursor-square,.date-marker,.frame-copy.fixed-copy{display:none!important}
-  .rail{top:16px;left:20px;transform:none;flex-direction:row;gap:8px;background:var(--paper);padding:4px 8px 4px 0;min-height:36px}
+  .rail{top:16px;left:20px;transform:none;flex-direction:row;gap:8px;background:transparent;padding:4px 8px 4px 0;min-height:36px}
   .rail .theme-toggle{height:28px;width:24px}
-  .rail .rail-button,.rail .mobile-back{display:none}
+  .rail .rail-button{display:none}
   .rail.is-expanded .rail-button{display:grid;min-height:28px;min-width:32px}
-  .rail.is-expanded.has-detail .mobile-back{display:block;min-height:28px;border:0;padding:0 8px;background:none;font:14px "Cutive Mono",monospace}
   .theme-toggle:hover:not(.is-reset) .rail-logo{transform:none}
   .rail.is-expanded .rail-logo{transform:rotate(45deg)!important}
   .film-track[data-roll="work"]{padding:88px 20px 40px;overscroll-behavior-y:contain}
