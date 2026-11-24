@@ -161,6 +161,7 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
   .rail .theme-toggle{height:28px;width:24px}
   .rail .rail-button{display:grid;min-height:28px;min-width:32px}
   .rail.has-detail .rail-button{display:none}
+  .rail.has-detail.is-expanded .rail-button{display:grid}
   .theme-toggle:hover:not(.is-reset) .rail-logo{transform:none}
   .rail.is-expanded .rail-logo{transform:rotate(45deg)!important}
   .film-track[data-roll="work"]{padding:88px 20px 40px;overscroll-behavior-y:contain}
