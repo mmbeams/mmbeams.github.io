@@ -8,6 +8,9 @@
   // Scroll-linked letter motion uses stable offsets, so scrolling back reverses it exactly.
   const intro=document.querySelector('.intro-copy');
   const introTrack=intro.closest('.film-track');
+  const mobileIntro=intro.cloneNode(true);
+  mobileIntro.classList.add('mobile-intro');
+  roll.appendChild(mobileIntro);
   const walker=document.createTreeWalker(intro,NodeFilter.SHOW_TEXT);
   const introNodes=[];
   while(walker.nextNode()) introNodes.push(walker.currentNode);
@@ -43,18 +46,19 @@
   const themeToggle=document.querySelector('.theme-toggle');
   const navLogo=themeToggle.querySelector('.rail-logo');
   const rail=document.querySelector('.rail');
-  const collapseNav=()=>{rail.classList.remove('is-expanded');if(mobile.matches) themeToggle.setAttribute('aria-expanded','false');else themeToggle.removeAttribute('aria-expanded');};
+  const collapseNav=()=>{
+    rail.classList.remove('is-expanded');
+    themeToggle.removeAttribute('aria-expanded');
+  };
   const syncNav=()=>{
     collapseNav();
-    themeToggle.setAttribute('aria-label',mobile.matches?'Toggle navigation':'Dark mode');
-    if(mobile.matches) themeToggle.removeAttribute('aria-pressed');
-    else {themeToggle.removeAttribute('aria-expanded');themeToggle.setAttribute('aria-pressed',String(document.documentElement.dataset.theme==='dark'));}
+    themeToggle.setAttribute('aria-label','Dark mode');
+    themeToggle.setAttribute('aria-pressed',String(document.documentElement.dataset.theme==='dark'));
   };
   mobile.addEventListener('change',syncNav);syncNav();
   let logoReturn;
   themeToggle.addEventListener('pointerleave',()=>themeToggle.classList.remove('is-reset'));
   themeToggle.addEventListener('click',()=>{
-    if(mobile.matches){const expanded=rail.classList.toggle('is-expanded');themeToggle.setAttribute('aria-expanded',String(expanded));return;}
     const start=getComputedStyle(navLogo).transform;
     if(logoReturn) logoReturn.cancel();
     themeToggle.classList.add('is-reset');
@@ -338,6 +342,7 @@
     const center = track.getBoundingClientRect().top + track.clientHeight/2;
     let nearest, distance = Infinity;
     for (const frame of track.children) {
+      if(!frame.getClientRects().length) continue;
       const rect = frame.getBoundingClientRect();
       const delta = Math.abs((rect.top+rect.bottom)/2-center);
       if (delta < distance) { nearest = frame; distance = delta; }
@@ -564,7 +569,7 @@
       }
       syncCopy(track, Math.sign(delta) || 1);
     }, {passive:true});
-    let step=0,timer,animation=0,snapping=false;
+    let step=0,timer,animation=0,snapping=false,touchActive=false;
     let glide=0,gliding=false,destination=0,glidePosition=0,lastTick=0,lastInput=0;
     const reduced=matchMedia("(prefers-reduced-motion: reduce)");
     const visible=()=>track.getClientRects().length>0;
@@ -576,11 +581,12 @@
       timer=setTimeout(settle,180);
     };
     const settle=()=>{
-      if(mobile.matches||!visible()||!step||snapping||gliding) return;
+      if(touchActive||!visible()||!step||snapping||gliding) return;
       if(track.scrollTop<=1){roll.classList.remove('is-scrolling');return;}
       const center=track.getBoundingClientRect().top+track.clientHeight/2;
       let delta=Infinity;
       for(const frame of track.children){
+        if(!frame.getClientRects().length) continue;
         const rect=frame.getBoundingClientRect();
         const distance=rect.top+rect.height/2-center;
         if(Math.abs(distance)<Math.abs(delta)) delta=distance;
@@ -608,6 +614,8 @@
     for(const event of ['touchstart','pointerdown','keydown']){
       track.addEventListener(event,interrupt,{passive:true});
     }
+    track.addEventListener('touchstart',()=>{touchActive=true;},{passive:true});
+    for(const event of ['touchend','touchcancel']) track.addEventListener(event,()=>{touchActive=false;clearTimeout(timer);timer=setTimeout(settle,180);},{passive:true});
     const glideTick=now=>{
       if(!visible()){gliding=false;return;}
       const dt=Math.min(40,now-lastTick||16.7);
@@ -623,7 +631,7 @@
       }else glide=requestAnimationFrame(glideTick);
     };
     track.addEventListener('wheel',event=>{
-      if(mobile.matches||event.ctrlKey||reduced.matches||!step||!visible()) return;
+      if(event.ctrlKey||reduced.matches||!step||!visible()) return;
       event.preventDefault();
       cancelAnimationFrame(animation);snapping=false;
       clearTimeout(timer);
@@ -648,7 +656,7 @@
       roll.classList.remove('is-scrolling');
     };
     track.addEventListener('scroll',()=>{
-      if(mobile.matches||!visible()||!step||snapping||gliding) return;
+      if(!visible()||!step||snapping||gliding) return;
       roll.classList.add('is-scrolling');
       clearTimeout(timer);timer=setTimeout(settle,180);
     },{passive:true});
