@@ -213,7 +213,6 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
 .mobile-intro{display:none}
 @media(max-width:767px){
   .mobile-intro{display:block;position:absolute;top:88px;left:20px;right:20px;bottom:auto;width:auto;text-align:left;line-height:1.5}
-  .site-shell[data-roll=about] .mobile-intro{display:none}
   .film-track[data-roll="work"]{top:244px;left:20px;right:20px;bottom:auto;height:calc(100vw - 40px);padding:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;touch-action:pan-y}
   .film-track[data-roll="work"] .film-spacer{display:none}
   .film-track[data-roll="work"] .film-frame{height:calc(100vw - 40px);margin:0;gap:0;display:block}
@@ -324,7 +323,6 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
 .corner-music{left:24px;font:400 14px/1.5 Outfit,sans-serif}
 .corner-linkedin{right:24px;display:grid;place-items:center;width:24px;height:24px;cursor:pointer}
 .corner-linkedin svg{width:18px;height:18px}
-.site-shell[data-roll=about] .home-corners{display:none}
 @media(max-width:767px){
   .mobile-intro{top:20px;left:20px;bottom:auto;right:auto}
   .shanghai-clock{top:20px;right:20px;bottom:auto;font-size:12px}
@@ -409,7 +407,6 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
   .mobile-intro{left:20px;right:20px;width:auto}
   .frame-copy.fixed-copy{left:20px;right:20px;width:auto}
 }
-.site-shell[data-roll=about] .intro-copy{display:none}
 
 /* Keep all four corner controls fully visible at rest. */
 .intro-handle,.shanghai-clock,.corner-music,.corner-linkedin{opacity:1}
@@ -439,7 +436,7 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
 
 @media(max-width:767px){
   .frame-copy .project-category{display:none}
-  .welcome-content p:nth-child(n+3){display:none}
+  .welcome-content p:nth-child(n+4){display:none}
 }
 
 /* Align mobile navigation with the top corner labels. */
@@ -459,3 +456,52 @@ body:has(.loader:not(.is-done)) > .rail{visibility:hidden}
 @media(max-width:767px){
   .frame-copy.fixed-copy{right:calc(50% + var(--a4w)/2 + var(--label-gap))}
 }
+
+/* The home link remains reachable above project details. */
+.intro-copy,.mobile-intro{z-index:46}
+a.intro-handle{text-decoration:none}
+a.intro-handle{position:relative;display:inline-block}
+a.intro-handle::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.22,.75,.25,1)}
+a.intro-handle:hover::after,a.intro-handle:focus-visible::after{transform:scaleX(1)}
+
+/* Text follows the same spherical surface as project images. */
+.welcome-content.has-sphere>p{visibility:hidden}
+.sphere-text{position:absolute;left:0;width:100%;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left}
+
+/* Use clean white on image midtones, retaining difference on light/dark areas. */
+.cursor-square.on-midtone,.rail.on-midtone{mix-blend-mode:normal;color:#fff}
+.rail.on-midtone .rail-button{opacity:1}
+
+/* Keep the original about artwork size; only the transparent opening scrolls. */
+.personal-stage{position:relative;width:100%;aspect-ratio:1;isolation:isolate}
+.personal-stage>.personal-image{position:absolute;inset:0;z-index:2;pointer-events:none}
+.personal-window{position:absolute;left:33.8155515%;top:1.4466546%;width:64.556962%;height:96.925859%;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;scroll-snap-type:none;overscroll-behavior:contain;overflow-anchor:none;touch-action:pan-y}
+.personal-window::-webkit-scrollbar{display:none}
+.personal-window>img{display:block;width:100%;height:100%;object-fit:cover;margin-bottom:8px;scroll-snap-align:start;scroll-snap-stop:always}
+.personal-window>img:last-child{margin-bottom:0}
+.personal-window:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+
+/* Expose the rear film strip across the viewport, behind the stationary frame. */
+.personal-window{position:fixed;top:0;bottom:0;height:100%;box-sizing:border-box}
+.personal-window>img{height:var(--personal-photo-height);flex:none}
+
+/* Place the personal copy above the frame, beside the rear photo strip. */
+.personal-footer{top:50%;bottom:auto;left:auto;right:calc(66.1844485% + 8px);width:max-content;max-width:calc(50vw - var(--a4w) * .161844485 - 28px);padding:0;transform:translateY(-50%);z-index:3;text-align:right}
+.personal-footer .personal-caption{text-align:right;width:auto}
+.personal-footer .personal-links{justify-content:flex-end}
+
+.personal-footer{top:auto;bottom:1.6274864%;transform:none}
+
+/* Social links unfold left from the fixed LinkedIn corner. */
+.corner-social-extras{position:absolute;right:100%;bottom:0;display:flex;align-items:center;gap:12px;padding-right:12px;opacity:0;visibility:hidden;transform:translateX(20px);pointer-events:none;transition:opacity .2s ease,transform .25s cubic-bezier(.22,.75,.25,1),visibility 0s linear .25s}
+.linkedin-corner.social-open .corner-social-extras{opacity:1;visibility:visible;transform:translateX(0);pointer-events:auto;transition-delay:0s}
+.corner-social-link{display:grid;place-items:center;width:24px;height:24px;color:var(--ink);text-decoration:none;flex:none}
+.corner-social-link svg{width:18px;height:18px}
+@media(pointer:fine){.corner-social-link{cursor:none}}
+@media(prefers-reduced-motion:reduce){.corner-social-extras{transition:none}}
+
+@media(hover:hover){
+  .detail-next.is-revealed .next-line{transform:scaleX(0);transition:transform .35s cubic-bezier(.22,.75,.25,1)}
+  .detail-next.is-revealed:has(button:hover) .next-line,.detail-next.is-revealed:focus-within .next-line{transform:scaleX(1)}
+}
+@media(prefers-reduced-motion:reduce){a.intro-handle::after,.detail-next.is-revealed .next-line{transition:none}}

@@ -13,7 +13,7 @@
   roll.appendChild(intro);oldSpacer.remove();
   const welcome=document.createElement('article');
   welcome.className='film-frame welcome-frame';welcome.dataset.detailDisabled='true';
-  welcome.innerHTML='<div class="frame-image welcome-content">'+intro.querySelector('.intro-popover').innerHTML+'<p>exploring ideas through design and code</p><p>making room for curiosity and play</p><p>from small experiments to everyday tools</p></div><div class="frame-copy"><h2></h2><p></p><p class="project-category"></p></div>';
+  welcome.innerHTML='<div class="frame-image welcome-content"><p>hi, i&#39;m moira :)</p>'+intro.querySelector('.intro-popover').innerHTML+'<p>i explore the intersection of</p><p>ai/human/philosophy/aesthetic</p></div><div class="frame-copy"><h2></h2><p></p><p class="project-category"></p></div>';
   document.querySelector('.film-track[data-roll="work"]').prepend(welcome);
 
   const cornerLinks=document.createElement('div');cornerLinks.className='home-corners';
@@ -75,6 +75,25 @@
   });
   const linkedinWrapper=document.createElement('div');linkedinWrapper.className='linkedin-corner';
   linkedin.replaceWith(linkedinWrapper);linkedinWrapper.appendChild(linkedin);
+  const socialExtras=document.createElement('div');socialExtras.className='corner-social-extras';
+  const gmail=document.querySelector('.personal-links a[aria-label="Email mmbeams.mo@gmail.com"]').cloneNode(true);gmail.className='corner-social-link';
+  const instagram=document.createElement('a');instagram.className='corner-social-link';instagram.setAttribute('aria-label','Instagram');instagram.href='https://www.instagram.com/mmfi1ms?jplx=cm82aGQzMWppZjIz';instagram.target='_blank';instagram.rel='noopener noreferrer';
+  instagram.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>';
+  socialExtras.append(gmail,instagram);linkedinWrapper.appendChild(socialExtras);
+  document.querySelector('.personal-links').remove();
+  const showSocial=open=>{
+    linkedinWrapper.classList.toggle('social-open',open);socialExtras.inert=!open;
+    socialExtras.setAttribute('aria-hidden',String(!open));
+  };
+  showSocial(false);
+  linkedinWrapper.addEventListener('pointerenter',event=>{if(event.pointerType!=='touch') showSocial(true);});
+  linkedinWrapper.addEventListener('pointerleave',event=>{if(event.pointerType!=='touch') showSocial(false);});
+  linkedinWrapper.addEventListener('focusin',()=>showSocial(true));
+  linkedinWrapper.addEventListener('focusout',event=>{if(!linkedinWrapper.contains(event.relatedTarget)) showSocial(false);});
+  linkedin.addEventListener('click',event=>{if(matchMedia('(hover: none)').matches&&!linkedinWrapper.classList.contains('social-open')){event.preventDefault();showSocial(true);}});
+  document.addEventListener('pointerdown',event=>{if(!linkedinWrapper.contains(event.target)) showSocial(false);});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape') showSocial(false);});
+
   const clockFormat=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
   const updateClock=()=>{
     const now=new Date();
@@ -96,7 +115,8 @@
   [intro,mobileIntro].forEach(container=>{
     const profile=container.querySelector('.intro-profile');
     const handle=profile.querySelector('button');
-    const name=document.createElement('span');name.className='intro-handle';name.textContent=handle.textContent;
+    const name=document.createElement('a');name.className='intro-handle';name.textContent=handle.textContent;
+    const homeURL=new URL(location.href);homeURL.searchParams.delete('project');homeURL.searchParams.delete('page');homeURL.hash='';name.href=homeURL.href;
     handle.replaceWith(name);
     profile.querySelector('.intro-popover').remove();
   });
@@ -145,9 +165,54 @@
   cursorDate.className='cursor-date';
   cursor.appendChild(cursorDate);
   document.body.appendChild(cursor);
+  // Read a small cached image sample; midtones need white rather than gray inversion.
+  const contrastSamples=new WeakMap();
+  const imageTone=(image,u,v)=>{
+    if(!image?.complete||!image.naturalWidth) return null;
+    let sample=contrastSamples.get(image);
+    if(!sample||sample.src!==image.currentSrc){
+      try{
+        const canvas=document.createElement('canvas');canvas.width=64;canvas.height=64;
+        const context=canvas.getContext('2d',{willReadFrequently:true});
+        context.drawImage(image,0,0,64,64);
+        sample={src:image.currentSrc,data:context.getImageData(0,0,64,64).data};contrastSamples.set(image,sample);
+      }catch{return null;}
+    }
+    const offset=(Math.max(0,Math.min(63,Math.floor(v*64)))*64+Math.max(0,Math.min(63,Math.floor(u*64))))*4;
+    return (sample.data[offset]*.2126+sample.data[offset+1]*.7152+sample.data[offset+2]*.0722)/255;
+  };
+  const onMidtone=(x,y)=>{
+    if(document.querySelector('.project-detail.is-open')) return false;
+    const track=document.querySelector('.film-track[data-roll="work"]');
+    if(!track.getClientRects().length) return false;
+    const bounds=track.getBoundingClientRect();
+    for(const imageBox of track.querySelectorAll('.frame-image:not(.welcome-content)')){
+      const rect=imageBox.getBoundingClientRect();
+      if(y<rect.top||y>rect.bottom) continue;
+      const radius=Math.max(bounds.height*.95,rect.height*1.4);
+      const normalized=Math.min(.92,Math.abs(y-bounds.top-bounds.height/2)/radius);
+      const width=rect.width*(imageBox.classList.contains('has-sphere')?Math.sqrt(1-normalized*normalized):1);
+      const u=(x-(rect.left+rect.width/2-width/2))/width,v=(y-rect.top)/rect.height;
+      if(u<0||u>1) continue;
+      const images=[...imageBox.querySelectorAll(':scope > img')];
+      let tone=0,weight=0;
+      for(const image of images){
+        const scale=Math.max(rect.width/image.naturalWidth,rect.height/image.naturalHeight);
+        const sourceU=(u*rect.width+(image.naturalWidth*scale-rect.width)/2)/(image.naturalWidth*scale);
+        const sourceV=(v*rect.height+(image.naturalHeight*scale-rect.height)/2)/(image.naturalHeight*scale);
+        const value=imageTone(image,sourceU,sourceV),opacity=parseFloat(getComputedStyle(image).opacity);
+        if(value!==null){tone+=value*opacity;weight+=opacity;}
+      }
+      return weight>0&&tone/weight>.22&&tone/weight<.78;
+    }
+    return false;
+  };
   let pointerX=0,pointerY=0,pointerVisible=false,cursorFrame=0;
   const updateCursor=()=>{
     cursorFrame=0;
+    cursor.classList.toggle('on-midtone',pointerVisible&&onMidtone(pointerX,pointerY));
+    const navBounds=rail.getBoundingClientRect();
+    rail.classList.toggle('on-midtone',onMidtone(navBounds.left+navBounds.width/2,navBounds.top+navBounds.height/2));
     let nearest=null,nearestDistance=32;
     if(pointerVisible && !document.querySelector('.project-detail.is-open')){
       document.querySelectorAll('.film-track[data-roll="work"] .frame-image').forEach(image=>{
@@ -183,7 +248,7 @@
       });
     }
     const hovered=pointerVisible?document.elementFromPoint(pointerX,pointerY):null;
-    const cornerInteractive=!!hovered?.closest('.clock-trigger,.corner-music,.corner-linkedin');
+    const cornerInteractive=!!hovered?.closest('.intro-handle,.clock-trigger,.corner-music,.corner-linkedin,.corner-social-link[href]');
     if(hovered?.closest('.intro-profile')||cornerInteractive) label='';
     cursor.classList.toggle('is-near',!!label||cornerInteractive);
     cursorDate.textContent=label;
@@ -205,6 +270,8 @@
   window.addEventListener('resize',scheduleCursor,{passive:true});
   document.addEventListener('click',scheduleCursor);
   document.addEventListener('keydown',scheduleCursor);
+  document.addEventListener('load',scheduleCursor,true);
+  scheduleCursor();
   const petals=[...loader.querySelectorAll('.loader-petal')];
   const finishLoading=()=>{
     loader.classList.add('is-done');
@@ -519,7 +586,15 @@
     if(detailTransitionImage){ detailTransitionImage.remove(); detailTransitionImage=null; }
     detail.classList.remove('is-opening');
   };
-  const closeProject=()=>{
+  const setProjectURL=slug=>{
+    const url=new URL(location.href);
+    url.searchParams.delete('page');
+    if(slug) url.searchParams.set('project',slug);else url.searchParams.delete('project');
+    if(url.href!==location.href) history.pushState(null,'',url);
+  };
+  const closeProject=(updateURL=true)=>{
+    if(updateURL) setProjectURL(null);
+    document.title='Moira Huang — Film roll';
     clearDetailTransition();
     detail.querySelectorAll('video').forEach(video=>video.pause());
     rail.classList.remove('has-detail');
@@ -533,9 +608,11 @@
     const contentTop=Math.min(bounds.top,detail.querySelector('.detail-header').getBoundingClientRect().top);
     if(detailOpen && (event.clientX<bounds.left || event.clientX>bounds.right || event.clientY<contentTop)) closeProject();
   });
-  const openProject=(frame,fromNext=false)=>{
+  const openProject=(frame,fromNext=false,updateURL=true)=>{
     if(frame.hasAttribute('data-detail-disabled')) return;
     currentProject=frame;
+    if(updateURL) setProjectURL(frame.dataset.projectSlug);
+    document.title=frame.dataset.title+' — Moira Huang';
     const image=frame.querySelector('.image-hover')||frame.querySelector('.image-unhover');
     const from=image.getBoundingClientRect();
     clearDetailTransition();
@@ -622,21 +699,88 @@
     },()=>{});
   };
   detail.querySelectorAll('.detail-tab').forEach(tab=>tab.addEventListener('click',()=>{
+    if(tab.dataset.view==='case'&&currentProject?.dataset.caseStudyUrl){
+      window.open(currentProject.dataset.caseStudyUrl,'_blank','noopener,noreferrer');
+      return;
+    }
     detail.querySelectorAll('.detail-tab').forEach(item=>item.classList.toggle('is-active',item===tab));
     detail.scrollTop=0;
     setPasswordGate(tab.dataset.view==='case');
   }));
   window.addEventListener('keydown',event=>{if(event.key==='Escape'&&detailOpen) closeProject()});
 
+  const personalImage=document.querySelector('.personal-image');
+  const personalStage=document.createElement('div');personalStage.className='personal-stage';
+  personalImage.replaceWith(personalStage);
+  const personalWindow=document.createElement('div');personalWindow.className='personal-window';
+  personalWindow.tabIndex=0;personalWindow.setAttribute('role','region');personalWindow.setAttribute('aria-label','Personal photos — scroll to browse');
+  const photos=['images/personal/1.png','images/personal/2.jpg','images/personal/3.jpg'];
+  for(let cycle=0;cycle<3;cycle++) photos.forEach((src,index)=>{
+    const photo=document.createElement('img');photo.src=src;photo.alt=`Personal photo ${index+1}`;photo.draggable=false;
+    if(cycle!==1) photo.setAttribute('aria-hidden','true');
+    personalWindow.appendChild(photo);
+  });
+  personalImage.src='images/personal/frame.png';personalImage.alt='Personal photo frame';
+  personalStage.append(personalWindow,personalImage);
+  let personalStep=0;
+  const measurePersonal=()=>{
+    const frame=personalStage.getBoundingClientRect();
+    if(!frame.width||!frame.height) return;
+    const oldStep=personalStep;
+    const photoHeight=frame.height*1072/1106;
+    const openingTop=frame.top+frame.height*16/1106;
+    personalWindow.style.left=(frame.left+frame.width*374/1106)+'px';
+    personalWindow.style.width=(frame.width*714/1106)+'px';
+    personalWindow.style.setProperty('--personal-photo-height',photoHeight+'px');
+    personalWindow.style.paddingTop=openingTop+'px';
+    personalWindow.style.paddingBottom=Math.max(0,innerHeight-openingTop-photoHeight)+'px';
+    personalStep=photoHeight+8;
+    personalWindow.scrollTop=oldStep?personalWindow.scrollTop/oldStep*personalStep:3*personalStep;
+  };
+  const resetPersonal=()=>{measurePersonal();personalWindow.scrollTop=3*personalStep;};
+  let personalTimer=0,personalAnimation=0,personalSnapping=false,personalTouch=false;
+  const settlePersonal=()=>{
+    if(!personalStep||personalTouch) return;
+    const start=personalWindow.scrollTop,target=Math.round(start/personalStep)*personalStep;
+    const started=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:200;
+    personalSnapping=true;
+    const tick=now=>{
+      const progress=duration?Math.min(1,(now-started)/duration):1;
+      personalWindow.scrollTop=start+(target-start)*(1-Math.pow(1-progress,3));
+      if(progress<1) personalAnimation=requestAnimationFrame(tick);
+      else personalSnapping=false;
+    };
+    personalAnimation=requestAnimationFrame(tick);
+  };
+  personalWindow.addEventListener('scroll',()=>{
+    if(!personalStep||personalSnapping) return;
+    const cycle=3*personalStep;
+    if(personalWindow.scrollTop<cycle-personalStep/2) personalWindow.scrollTop+=cycle;
+    else if(personalWindow.scrollTop>=2*cycle-personalStep/2) personalWindow.scrollTop-=cycle;
+    clearTimeout(personalTimer);personalTimer=setTimeout(settlePersonal,120);
+  },{passive:true});
+  personalWindow.addEventListener('touchstart',()=>{personalTouch=true;cancelAnimationFrame(personalAnimation);personalSnapping=false;clearTimeout(personalTimer);},{passive:true});
+  for(const event of ['touchend','touchcancel']) personalWindow.addEventListener(event,()=>{personalTouch=false;clearTimeout(personalTimer);personalTimer=setTimeout(settlePersonal,90);},{passive:true});
+  // Route page-wide wheel input to the personal film strip exactly once.
+  document.addEventListener('wheel',event=>{
+    if(shell.dataset.roll!=='about'||detailOpen||event.ctrlKey||event.target.closest('.music-panel,.world-clock')) return;
+    event.preventDefault();
+    cancelAnimationFrame(personalAnimation);personalSnapping=false;
+    clearTimeout(personalTimer);
+    personalWindow.scrollBy({top:event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?personalWindow.clientHeight:1),behavior:'instant'});
+  },{passive:false});
+  new ResizeObserver(measurePersonal).observe(personalStage);
+  window.addEventListener('resize',measurePersonal);
   const controllers=new Map();
   document.querySelectorAll('.film-track').forEach(track=>{
     const originals=[...track.querySelectorAll('.film-frame')];
-    if(!originals.length){ controllers.set(track,()=>{track.scrollTop=0;}); return; }
+    if(!originals.length){ controllers.set(track,()=>{track.scrollTop=0;resetPersonal();}); return; }
     originals.forEach((frame,index) => {
       frame.dataset.rollOrder=index;
       const copy = frame.querySelector('.frame-copy');
       copy.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
       frame.dataset.title = copy.querySelector('h2').textContent;
+      frame.dataset.projectSlug=frame.dataset.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
       frame.dataset.subtitle = copy.querySelector('p').textContent;
       frame.dataset.category = copy.querySelector('.project-category').textContent;
       copy.classList.add('mobile-copy');
@@ -659,7 +803,7 @@
       }
     });
     // Every horizontal slice uses the same viewport-centered sphere.
-    const sphereLayers=originals.filter(frame=>!frame.classList.contains('welcome-frame')).map(frame=>{
+    const sphereLayers=originals.map(frame=>{
       const image=frame.querySelector('.frame-image');
       const layer=document.createElement('div');layer.className='sphere-surface';layer.setAttribute('aria-hidden','true');
       const slices=Array.from({length:40},(_,index)=>{
@@ -667,6 +811,11 @@
         for(const source of image.querySelectorAll('img')){
           const copy=source.cloneNode();copy.alt='';
           slice.appendChild(copy);
+        }
+        if(frame.classList.contains('welcome-frame')){
+          const text=document.createElement('div');text.className='sphere-text';
+          for(const paragraph of image.querySelectorAll(':scope > p')) text.appendChild(paragraph.cloneNode(true));
+          slice.appendChild(text);
         }
         layer.appendChild(slice);return slice;
       });
@@ -825,13 +974,35 @@
     controllers.set(track,reset);
     reset();
   });
-  buttons.forEach(button=>button.addEventListener('click',()=>{
-    if(detailOpen) closeProject();
+  const selectCollection=(collection,updateURL=true)=>{
+    if(detailOpen) closeProject(false);
     collapseNav();
-    buttons.forEach(item=>{item.classList.toggle('is-active',item===button);item.setAttribute('aria-pressed',String(item===button));});
-    shell.dataset.roll=button.dataset.roll;
-    const target=document.querySelector(`.film-track[data-roll="${button.dataset.roll}"]`);
-    target.hidden=false;
-    controllers.get(target)();
+    buttons.forEach(item=>{const active=item.dataset.roll===collection;item.classList.toggle('is-active',active);item.setAttribute('aria-pressed',String(active));});
+    shell.dataset.roll=collection;
+    const target=document.querySelector(`.film-track[data-roll="${collection}"]`);
+    target.hidden=false;controllers.get(target)();
+    document.title=collection==='about'?'Personal — Moira Huang':'Moira Huang — Film roll';
+    if(updateURL){
+      const url=new URL(location.href);url.searchParams.delete('project');
+      if(collection==='about') url.searchParams.set('page','personal');else url.searchParams.delete('page');
+      if(url.href!==location.href) history.pushState(null,'',url);
+    }
+  };
+  buttons.forEach(button=>button.addEventListener('click',()=>selectCollection(button.dataset.roll)));
+  const goHome=()=>selectCollection('work');
+  document.querySelectorAll('a.intro-handle').forEach(link=>link.addEventListener('click',event=>{
+    if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey) return;
+    event.preventDefault();goHome();
   }));
+  const restoreRoute=()=>{
+    const slug=new URL(location.href).searchParams.get('project');
+    const frame=[...document.querySelectorAll('.film-frame:not([data-detail-disabled])')].find(frame=>frame.dataset.projectSlug===slug);
+    if(frame){
+      shell.dataset.roll='work';
+      buttons.forEach(button=>{const active=button.dataset.roll==='work';button.classList.toggle('is-active',active);button.setAttribute('aria-pressed',String(active));});
+      openProject(frame,true,false);
+    }else selectCollection(new URL(location.href).searchParams.get('page')==='personal'?'about':'work',false);
+  };
+  window.addEventListener('popstate',restoreRoute);
+  restoreRoute();
 })();
