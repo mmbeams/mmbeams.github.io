@@ -5,43 +5,101 @@
   const roll=document.querySelector('.roll');
   const buttons=[...document.querySelectorAll('.rail-button')];
   document.body.appendChild(document.querySelector('.rail'));
-  // Scroll-linked letter motion uses stable offsets, so scrolling back reverses it exactly.
   const intro=document.querySelector('.intro-copy');
-  const introTrack=intro.closest('.film-track');
   const mobileIntro=intro.cloneNode(true);
   mobileIntro.classList.add('mobile-intro');
   roll.appendChild(mobileIntro);
-  const walker=document.createTreeWalker(intro,NodeFilter.SHOW_TEXT);
-  const introNodes=[];
-  while(walker.nextNode()) introNodes.push(walker.currentNode);
-  const introLetters=[];
-  introNodes.forEach(node=>{
-    const fragment=document.createDocumentFragment();
-    for(const character of node.textContent){
-      if(/\s/.test(character)){fragment.append(character);continue;}
-      const letter=document.createElement('span');
-      letter.className='intro-letter';
-      letter.textContent=character;
-      const index=introLetters.length;
-      introLetters.push({letter,delay:((index*37+13)%61)/100,distance:16+(index*19)%23});
-      fragment.appendChild(letter);
+  const oldSpacer=intro.closest('.film-spacer');
+  roll.appendChild(intro);oldSpacer.remove();
+  const welcome=document.createElement('article');
+  welcome.className='film-frame welcome-frame';welcome.dataset.detailDisabled='true';
+  welcome.innerHTML='<div class="frame-image welcome-content">'+intro.querySelector('.intro-popover').innerHTML+'<p>exploring ideas through design and code</p><p>making room for curiosity and play</p><p>from small experiments to everyday tools</p></div><div class="frame-copy"><h2></h2><p></p><p class="project-category"></p></div>';
+  document.querySelector('.film-track[data-roll="work"]').prepend(welcome);
+
+  const cornerLinks=document.createElement('div');cornerLinks.className='home-corners';
+  const music=document.createElement('button');music.type='button';music.className='corner-music';music.setAttribute('aria-label','Open music player');music.setAttribute('aria-expanded','false');
+  music.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17V5l11-2v12"/><path d="M9 5l11-2v3L9 8Z" fill="currentColor"/><ellipse cx="6" cy="17" rx="3" ry="2.5" fill="currentColor"/><ellipse cx="17" cy="15" rx="3" ry="2.5" fill="currentColor"/></svg>';
+  const musicPanel=document.createElement('div');musicPanel.className='music-panel';musicPanel.setAttribute('aria-hidden','true');musicPanel.inert=true;musicPanel.id='spotify-player';music.setAttribute('aria-controls',musicPanel.id);
+  let musicHideTimer;
+  const closeMusic=()=>{
+    clearTimeout(musicHideTimer);
+    musicPanel.inert=true;musicPanel.classList.remove('is-open');musicPanel.setAttribute('aria-hidden','true');music.setAttribute('aria-expanded','false');
+  };
+  const openMusic=()=>{
+    clearTimeout(musicHideTimer);
+    if(!musicPanel.firstElementChild){
+      const player=document.createElement('iframe');player.src='https://open.spotify.com/embed/playlist/2O2a0EjOAMLzZirBV7KEEo?utm_source=generator';player.title='Moira’s Spotify playlist';player.allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';player.loading='lazy';
+      musicPanel.appendChild(player);
     }
-    node.replaceWith(fragment);
+    musicPanel.inert=false;musicPanel.classList.add('is-open');musicPanel.setAttribute('aria-hidden','false');music.setAttribute('aria-expanded','true');
+  };
+  [music,musicPanel].forEach(element=>{
+    element.addEventListener('pointerenter',event=>{if(event.pointerType!=='touch') openMusic();});
+    element.addEventListener('pointerleave',event=>{if(event.pointerType!=='touch') musicHideTimer=setTimeout(closeMusic,120);});
+    element.addEventListener('focusout',event=>{if(!music.contains(event.relatedTarget)&&!musicPanel.contains(event.relatedTarget)) closeMusic();});
   });
-  const updateIntro=()=>{
-    const travel=Math.max(30,Math.min(80,introTrack.querySelector('.film-spacer').offsetHeight*.4));
-    const progress=mobile.matches?0:Math.min(1,Math.max(0,introTrack.scrollTop/travel));
-    const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    introLetters.forEach(({letter,delay,distance})=>{
-      const local=Math.max(0,Math.min(1,(progress-delay)/(1-delay)));
-      const eased=local*local*(3-2*local);
-      letter.style.opacity=1-eased;
-      letter.style.transform=`translateY(${reduced?0:-distance*eased}px)`;
+  music.addEventListener('click',event=>{
+    if(event.detail===0||matchMedia('(hover: none)').matches){if(!musicPanel.classList.contains('is-open')) openMusic();else closeMusic();}
+  });
+  document.addEventListener('pointerdown',event=>{if(!music.contains(event.target)&&!musicPanel.contains(event.target)) closeMusic();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&musicPanel.classList.contains('is-open')){closeMusic();music.focus();}});
+  cornerLinks.appendChild(musicPanel);
+  const linkedin=document.querySelector('.personal-links a[aria-label="LinkedIn"]').cloneNode(true);linkedin.className='corner-linkedin';
+  cornerLinks.append(music,linkedin);roll.appendChild(cornerLinks);
+
+  // Each corner owns its trigger and preview; the clock is not inside the name trigger.
+  const bindPreview=(wrapper,trigger,panel)=>{
+    const show=open=>{wrapper.classList.toggle('is-open',open);trigger.setAttribute('aria-expanded',String(open));panel.setAttribute('aria-hidden',String(!open));panel.inert=!open;};
+    show(false);
+    wrapper.addEventListener('pointerenter',event=>{if(event.pointerType!=='touch') show(true);});
+    wrapper.addEventListener('pointerleave',event=>{if(event.pointerType!=='touch') show(false);});
+    trigger.addEventListener('focus',()=>show(true));
+    wrapper.addEventListener('focusout',event=>{if(!wrapper.contains(event.relatedTarget)) show(false);});
+    trigger.addEventListener('click',event=>{if(trigger.tagName==='BUTTON'||matchMedia('(hover: none)').matches&&!wrapper.classList.contains('is-open')){event.preventDefault();show(!wrapper.classList.contains('is-open'));}});
+    document.addEventListener('pointerdown',event=>{if(!wrapper.contains(event.target)) show(false);});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape') show(false);});
+  };
+  const worldClocks=[];
+  [intro,mobileIntro].forEach(container=>{
+    const time=container.querySelector('.shanghai-clock');
+    const wrapper=document.createElement('div');wrapper.className='clock-corner';
+    const trigger=document.createElement('button');trigger.type='button';trigger.className='clock-trigger';trigger.setAttribute('aria-label','World clock');
+    trigger.appendChild(time);wrapper.appendChild(trigger);container.appendChild(wrapper);
+    const panel=document.createElement('div');panel.className='world-clock corner-preview';
+    [['Shanghai','Asia/Shanghai'],['New York','America/New_York'],['San Francisco','America/Los_Angeles']].forEach(([city,zone])=>{
+      const row=document.createElement('div');row.className='world-clock-row';
+      row.innerHTML='<div><small></small><div class="world-city"></div></div><div class="world-time"></div>';
+      row.querySelector('.world-city').textContent=city;panel.appendChild(row);worldClocks.push({row,zone});
+    });
+    wrapper.appendChild(panel);bindPreview(wrapper,trigger,panel);
+  });
+  const linkedinWrapper=document.createElement('div');linkedinWrapper.className='linkedin-corner';
+  linkedin.replaceWith(linkedinWrapper);linkedinWrapper.appendChild(linkedin);
+  const clockFormat=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+  const updateClock=()=>{
+    const now=new Date();
+    const partsFor=zone=>Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(now).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
+    const local=partsFor('Asia/Shanghai');
+    const stamp=p=>Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second);
+    const day=p=>Date.UTC(+p.year,+p.month-1,+p.day);
+    worldClocks.forEach(({row,zone})=>{
+      const p=partsFor(zone),difference=Math.round((stamp(p)-stamp(local))/3600000),dayDifference=Math.round((day(p)-day(local))/86400000);
+      row.querySelector('small').textContent=(dayDifference<0?'Yesterday':dayDifference>0?'Tomorrow':'Today')+(difference?', '+(difference>0?'+':'')+difference+'HRS':'');
+      row.querySelector('.world-time').innerHTML=(+p.hour%12||12)+':'+p.minute+'<span>'+ (+p.hour<12?'AM':'PM')+'</span>';
+    });
+    document.querySelectorAll('.shanghai-clock').forEach(clock=>{
+      clock.textContent=clockFormat.format(now).replace(/:/g,' : ')+' CST';
+      clock.dateTime=now.toISOString();
     });
   };
-  introTrack.addEventListener('scroll',updateIntro,{passive:true});
-  new ResizeObserver(updateIntro).observe(introTrack);
-  updateIntro();
+  updateClock();setInterval(updateClock,1000);
+  [intro,mobileIntro].forEach(container=>{
+    const profile=container.querySelector('.intro-profile');
+    const handle=profile.querySelector('button');
+    const name=document.createElement('span');name.className='intro-handle';name.textContent=handle.textContent;
+    handle.replaceWith(name);
+    profile.querySelector('.intro-popover').remove();
+  });
 
   const themeToggle=document.querySelector('.theme-toggle');
   const navLogo=themeToggle.querySelector('.rail-logo');
@@ -102,12 +160,14 @@
         if(distance<nearestDistance){nearest=image;nearestDistance=distance;}
       });
     }
-    let label=nearest?'CHECK':'';
+    let label=nearest?'→':'';
     const openDetail=document.querySelector('.project-detail.is-open');
     if(pointerVisible && openDetail){
       const bounds=openDetail.querySelector('.detail-inner').getBoundingClientRect();
-      if(pointerX<bounds.left || pointerX>bounds.right) label='BACK';
+      const contentTop=Math.min(bounds.top,openDetail.querySelector('.detail-header').getBoundingClientRect().top);
+      if(pointerX<bounds.left || pointerX>bounds.right || pointerY<contentTop) label='BACK';
       if(document.elementFromPoint(pointerX,pointerY)?.closest('.detail-next')) label='NEXT';
+      if(document.elementFromPoint(pointerX,pointerY)?.closest('.detail-tab')) label='→';
     }
     if(pointerVisible){
       let navDistance=8;
@@ -117,13 +177,18 @@
         if(distance<navDistance){
           navDistance=distance;
           label=control.classList.contains('theme-toggle')
-            ? (document.documentElement.dataset.theme==='dark'?'white':'black')
-            : (control.dataset.roll==='work'?'work':'personal');
+            ? (document.documentElement.dataset.theme==='dark'?'WHITE':'BLACK')
+            : (control.dataset.roll==='work'?'WORK':'PERSONAL');
         }
       });
     }
-    cursor.classList.toggle('is-near',!!label);
+    const hovered=pointerVisible?document.elementFromPoint(pointerX,pointerY):null;
+    const cornerInteractive=!!hovered?.closest('.clock-trigger,.corner-music,.corner-linkedin');
+    if(hovered?.closest('.intro-profile')||cornerInteractive) label='';
+    cursor.classList.toggle('is-near',!!label||cornerInteractive);
     cursorDate.textContent=label;
+    if(label==='→') cursorDate.innerHTML='<svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M6 6.5H18.5M12.5 .5L18.5 6.5L12.5 12.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
+    cursorDate.classList.toggle('is-arrow',label==='→');
   };
   const scheduleCursor=()=>{if(!cursorFrame) cursorFrame=requestAnimationFrame(updateCursor);};
   window.addEventListener('pointermove',e=>{
@@ -203,7 +268,7 @@
   // Keep the project end date visible while its digits reel during scrolling.
   const year = document.querySelector('.date-marker span');
   year.textContent = '';
-  const digits = [...'2612'].map((value,index) => {
+  const digits = [...'1226'].map((value,index) => {
     const slot = document.createElement('span');
     slot.className = 'year-digit';
     const strip = document.createElement('span');
@@ -217,7 +282,7 @@
     year.appendChild(slot);
     return {slot, strip, cells, value:Number(value), position:Number(value), finishDelay:0};
   });
-  year.setAttribute('aria-label', '2612');
+  year.setAttribute('aria-label', '12 / 26');
   digits.forEach(digit => digit.slot.setAttribute('aria-hidden', 'true'));
   let yearRaf = 0, yearMotion = 0, yearTick = 0, yearDirection = 1, yearFinish = 0;
   const renderYear = () => digits.forEach(digit => {
@@ -263,7 +328,7 @@
   let displayedDate = '';
   const syncDate = (frame, direction, animate) => {
     const match = (frame.dataset.date || '').match(/(\d{2})\/(\d{4})$/);
-    const date = match ? match[2].slice(-2)+match[1] : '';
+    const date = frame.dataset.displayDate || (match ? match[1]+match[2].slice(-2) : '');
     year.style.visibility = date ? 'visible' : 'hidden';
     if (!date || date === displayedDate) return;
     displayedDate = date;
@@ -354,10 +419,12 @@
       if (delta < distance) { nearest = frame; distance = delta; }
     }
     if (nearest) {
-      const empty=nearest.classList.contains('film-spacer');
+      const empty=nearest.classList.contains('film-spacer')||nearest.classList.contains('welcome-frame');
+      year.parentElement.style.visibility=nearest.classList.contains('film-spacer')?'hidden':'';
       fixedCopy.classList.toggle('is-empty',empty);
       fixedCopy.setAttribute('aria-hidden',String(empty));
-      if (!empty) { showCopy(nearest, direction, animate); syncDate(nearest, direction, animate); }
+      if (!empty) showCopy(nearest, direction, animate);
+      syncDate(nearest, direction, animate);
     }
   };
 
@@ -384,7 +451,7 @@
   detail.appendChild(nextFooter);
   nextFooter.querySelector('button').addEventListener('click',event=>{
     event.stopPropagation();
-    const projects=[...document.querySelectorAll('.film-track[data-roll="work"] .film-frame:not([data-detail-disabled])')];
+    const projects=[...document.querySelectorAll('.film-track[data-roll="work"] .film-frame:not([data-detail-disabled])')].sort((a,b)=>Number(a.dataset.rollOrder)-Number(b.dataset.rollOrder));
     const next=projects[(projects.indexOf(currentProject)+1)%projects.length];
     if(next) openProject(next,true);
   });
@@ -463,7 +530,8 @@
   detail.addEventListener('click',event=>{
     if(event.target.closest('.detail-next')) return;
     const bounds=detail.querySelector('.detail-inner').getBoundingClientRect();
-    if(detailOpen && (event.clientX<bounds.left || event.clientX>bounds.right)) closeProject();
+    const contentTop=Math.min(bounds.top,detail.querySelector('.detail-header').getBoundingClientRect().top);
+    if(detailOpen && (event.clientX<bounds.left || event.clientX>bounds.right || event.clientY<contentTop)) closeProject();
   });
   const openProject=(frame,fromNext=false)=>{
     if(frame.hasAttribute('data-detail-disabled')) return;
@@ -564,7 +632,8 @@
   document.querySelectorAll('.film-track').forEach(track=>{
     const originals=[...track.querySelectorAll('.film-frame')];
     if(!originals.length){ controllers.set(track,()=>{track.scrollTop=0;}); return; }
-    originals.forEach(frame => {
+    originals.forEach((frame,index) => {
+      frame.dataset.rollOrder=index;
       const copy = frame.querySelector('.frame-copy');
       copy.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
       frame.dataset.title = copy.querySelector('h2').textContent;
@@ -589,8 +658,53 @@
         openProject(frame);
       }
     });
+    // Every horizontal slice uses the same viewport-centered sphere.
+    const sphereLayers=originals.filter(frame=>!frame.classList.contains('welcome-frame')).map(frame=>{
+      const image=frame.querySelector('.frame-image');
+      const layer=document.createElement('div');layer.className='sphere-surface';layer.setAttribute('aria-hidden','true');
+      const slices=Array.from({length:40},(_,index)=>{
+        const slice=document.createElement('div');slice.className='sphere-slice';
+        for(const source of image.querySelectorAll('img')){
+          const copy=source.cloneNode();copy.alt='';
+          slice.appendChild(copy);
+        }
+        layer.appendChild(slice);return slice;
+      });
+      image.appendChild(layer);return {frame,image,slices};
+    });
+    let sphereRaf=0;
+    const renderSphere=()=>{
+      sphereRaf=0;
+      const bounds=track.getBoundingClientRect();
+      const center=bounds.top+bounds.height/2;
+      const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      sphereLayers.forEach(({frame,image,slices})=>{
+        const rect=frame.getBoundingClientRect();
+        if(rect.bottom<bounds.top-rect.height||rect.top>bounds.bottom+rect.height) return;
+        const radius=Math.max(bounds.height*.95,rect.height*1.4);
+        image.classList.toggle('has-sphere',!reducedMotion);
+        slices.forEach((slice,index)=>{
+          // Overlap rasterized edges without rescaling each slice's source image.
+          const pixel=1/(window.devicePixelRatio || 1);
+          const top=Math.max(0,Math.floor(rect.height*index/40/pixel)*pixel-pixel);
+          const bottom=Math.min(rect.height,Math.ceil(rect.height*(index+1)/40/pixel)*pixel+pixel);
+          slice.style.top=`${top}px`;
+          slice.style.height=`${bottom-top}px`;
+          for(const copy of slice.children){copy.style.height=`${rect.height}px`;copy.style.top=`${-top}px`;}
+          const y=rect.top+rect.height*(index+.5)/40-center;
+          const normalized=Math.min(.92,Math.abs(y)/radius);
+          const width=Math.sqrt(1-normalized*normalized);
+          slice.style.transform=`scaleX(${reducedMotion?1:width})`;
+        });
+      });
+    };
+    const scheduleSphere=()=>{if(!sphereRaf) sphereRaf=requestAnimationFrame(renderSphere);};
+    track.addEventListener('scroll',scheduleSphere,{passive:true});
+    new ResizeObserver(scheduleSphere).observe(track);
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',scheduleSphere);
     let yearPosition = track.scrollTop;
     track.addEventListener('scroll', () => {
+      normalizeLoop();
       const delta = track.scrollTop-yearPosition;
       yearPosition = track.scrollTop;
       if (delta && Math.abs(delta)<track.clientHeight*2) {
@@ -600,6 +714,15 @@
     }, {passive:true});
     let step=0,timer,animation=0,snapping=false,touchActive=false;
     let glide=0,gliding=false,destination=0,glidePosition=0,lastTick=0,lastInput=0;
+    // Recycle the actual cards, retaining media and project identity without duplicate galleries.
+    const normalizeLoop=()=>{
+      if(!step||snapping||!visible()) return;
+      let shift=0;
+      const lower=step*2,upper=step*(originals.length-3);
+      while(track.scrollTop+shift<lower){track.prepend(track.lastElementChild);shift+=step;}
+      while(track.scrollTop+shift>upper){track.appendChild(track.firstElementChild);shift-=step;}
+      if(shift){track.scrollTop+=shift;yearPosition+=shift;glidePosition+=shift;destination+=shift;}
+    };
     const reduced=matchMedia("(prefers-reduced-motion: reduce)");
     const visible=()=>track.getClientRects().length>0;
     const interrupt=()=>{
@@ -635,6 +758,7 @@
         else {
           track.scrollTop=target;
           snapping=false;
+          normalizeLoop();
           roll.classList.remove('is-scrolling');
         }
       };
@@ -653,6 +777,7 @@
       const remainder=destination-glidePosition;
       glidePosition+=remainder*(1-Math.exp(-dt/75));
       track.scrollTop=glidePosition;
+      normalizeLoop();
       if(now-lastInput>90 && (Math.abs(destination-glidePosition)<1 || now-lastInput>300)){
         track.scrollTop=destination;
         gliding=false;
@@ -673,13 +798,20 @@
     },{passive:false});
     const measure=()=>{
       if(!visible()) return;
-      step=originals.length>1 ? originals[1].getBoundingClientRect().top-originals[0].getBoundingClientRect().top : originals[0].getBoundingClientRect().height;
-      track.scrollTop=Math.max(0,Math.min(track.scrollTop,track.scrollHeight-track.clientHeight));
+      const previousStep=step;
+      const first=track.firstElementChild;
+      step=first.getBoundingClientRect().height+parseFloat(getComputedStyle(first).marginBottom);
+      if(previousStep) track.scrollTop=track.scrollTop/previousStep*step;
+
     };
     const reset=()=>{
       cancelAnimationFrame(animation);snapping=false;
       cancelAnimationFrame(glide);gliding=false;
-      measure();track.scrollTop=0;
+      track.append(...originals);
+      const lead=Math.floor(originals.length/2);
+      for(let i=0;i<lead;i++) track.prepend(track.lastElementChild);
+      measure();track.scrollTop=lead*step;yearPosition=track.scrollTop;
+      scheduleSphere();
       syncCopy(track, 1, !!copyKey);
       clearTimeout(timer);
       roll.classList.remove('is-scrolling');
