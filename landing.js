@@ -714,7 +714,7 @@
   personalImage.replaceWith(personalStage);
   const personalWindow=document.createElement('div');personalWindow.className='personal-window';
   personalWindow.tabIndex=0;personalWindow.setAttribute('role','region');personalWindow.setAttribute('aria-label','Personal photos — scroll to browse');
-  const photos=['images/personal/1.png','images/personal/2.jpg','images/personal/3.jpg'];
+  const photos=['images/personal/1.png','images/personal/2.jpg','images/personal/3.jpg','images/personal/4.jpg','images/personal/5.jpg','images/personal/6.jpg'];
   for(let cycle=0;cycle<3;cycle++) photos.forEach((src,index)=>{
     const photo=document.createElement('img');photo.src=src;photo.alt=`Personal photo ${index+1}`;photo.draggable=false;
     if(cycle!==1) photo.setAttribute('aria-hidden','true');
@@ -722,7 +722,16 @@
   });
   personalImage.src='images/personal/frame.png';personalImage.alt='Personal photo frame';
   personalStage.append(personalWindow,personalImage);
+  const personalPhotoMeta=document.createElement('p');personalPhotoMeta.className='personal-photo-meta';personalPhotoMeta.setAttribute('aria-live','polite');
+  personalStage.appendChild(personalPhotoMeta);
+  const photoLabels=['SF 01/24','NY 05/26','SF 02/26','SF 02/26','NY 01/26','NY 03/26'];
   let personalStep=0;
+  const syncPersonalMeta=()=>{
+    const index=personalStep?((Math.round(personalWindow.scrollTop/personalStep)%photos.length)+photos.length)%photos.length:0;
+    if(personalPhotoMeta.textContent!==photoLabels[index]) personalPhotoMeta.textContent=photoLabels[index];
+  };
+  personalWindow.addEventListener('scroll',syncPersonalMeta,{passive:true});
+  syncPersonalMeta();
   const measurePersonal=()=>{
     const frame=personalStage.getBoundingClientRect();
     if(!frame.width||!frame.height) return;
@@ -735,9 +744,10 @@
     personalWindow.style.paddingTop=openingTop+'px';
     personalWindow.style.paddingBottom=Math.max(0,innerHeight-openingTop-photoHeight)+'px';
     personalStep=photoHeight+8;
-    personalWindow.scrollTop=oldStep?personalWindow.scrollTop/oldStep*personalStep:3*personalStep;
+    personalWindow.scrollTop=oldStep?personalWindow.scrollTop/oldStep*personalStep:photos.length*personalStep;
+    syncPersonalMeta();
   };
-  const resetPersonal=()=>{measurePersonal();personalWindow.scrollTop=3*personalStep;};
+  const resetPersonal=()=>{measurePersonal();personalWindow.scrollTop=photos.length*personalStep;syncPersonalMeta();};
   let personalTimer=0,personalAnimation=0,personalSnapping=false,personalTouch=false;
   const settlePersonal=()=>{
     if(!personalStep||personalTouch) return;
@@ -754,7 +764,7 @@
   };
   personalWindow.addEventListener('scroll',()=>{
     if(!personalStep||personalSnapping) return;
-    const cycle=3*personalStep;
+    const cycle=photos.length*personalStep;
     if(personalWindow.scrollTop<cycle-personalStep/2) personalWindow.scrollTop+=cycle;
     else if(personalWindow.scrollTop>=2*cycle-personalStep/2) personalWindow.scrollTop-=cycle;
     clearTimeout(personalTimer);personalTimer=setTimeout(settlePersonal,120);

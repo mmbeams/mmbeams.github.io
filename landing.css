@@ -505,3 +505,5 @@ a.intro-handle:hover::after,a.intro-handle:focus-visible::after{transform:scaleX
   .detail-next.is-revealed:has(button:hover) .next-line,.detail-next.is-revealed:focus-within .next-line{transform:scaleX(1)}
 }
 @media(prefers-reduced-motion:reduce){a.intro-handle::after,.detail-next.is-revealed .next-line{transition:none}}
+
+.personal-photo-meta{position:absolute;left:calc(98.3725136% + 8px);bottom:1.6274864%;z-index:3;margin:0;white-space:nowrap;text-align:left;color:var(--ink);font:400 var(--subtitle-size)/1.35 "Cutive Mono",monospace;pointer-events:none}
